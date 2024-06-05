@@ -67,6 +67,8 @@ enum Artifact {
   fontSubset,
   constFinder,
 
+  /// the flutter engine runtime
+  flutterEngineHar,
   /// The location of file generators.
   flutterToolsFileGenerators,
 
@@ -238,6 +240,10 @@ String? _artifactToFileName(Artifact artifact, Platform hostPlatform, [ BuildMod
       return 'font-subset$exe';
     case Artifact.constFinder:
       return 'const_finder.dart.snapshot';
+    case Artifact.flutterEngineHar:
+      return 'flutter.har';
+    case Artifact.engineDartBinary:
+      return 'dart$exe';
     case Artifact.flutterToolsFileGenerators:
       return '';
     case Artifact.flutterPreviewDevice:
@@ -652,6 +658,7 @@ class CachedArtifacts implements Artifacts {
       case Artifact.vmSnapshotData:
       case Artifact.windowsCppClientWrapper:
       case Artifact.windowsDesktopPath:
+      case Artifact.flutterEngineHar:
       case Artifact.flutterToolsFileGenerators:
       case Artifact.flutterPreviewDevice:
         return _getHostArtifactPath(artifact, platform, mode);
@@ -694,6 +701,7 @@ class CachedArtifacts implements Artifacts {
       case Artifact.windowsDesktopPath:
       case Artifact.flutterToolsFileGenerators:
       case Artifact.flutterPreviewDevice:
+      case Artifact.flutterEngineHar:
         return _getHostArtifactPath(artifact, platform, mode);
     }
   }
@@ -746,6 +754,7 @@ class CachedArtifacts implements Artifacts {
       case Artifact.windowsDesktopPath:
       case Artifact.flutterToolsFileGenerators:
       case Artifact.flutterPreviewDevice:
+      case Artifact.flutterEngineHar:
         return _getHostArtifactPath(artifact, platform, mode);
     }
   }
@@ -833,6 +842,10 @@ class CachedArtifacts implements Artifacts {
       case Artifact.fuchsiaFlutterRunner:
       case Artifact.fuchsiaKernelCompiler:
         throw StateError('Artifact $artifact not available for platform $platform.');
+      case Artifact.flutterEngineHar:
+        return _fileSystem.path.join(
+                      _getEngineArtifactsPath(platform, mode)!,
+                     _artifactToFileName(artifact, _platform, mode));
       case Artifact.flutterToolsFileGenerators:
         return _getFileGeneratorsPath();
       case Artifact.flutterPreviewDevice:
@@ -869,6 +882,10 @@ class CachedArtifacts implements Artifacts {
       case TargetPlatform.android_arm64:
       case TargetPlatform.android_x64:
       case TargetPlatform.android_x86:
+      case TargetPlatform.ohos:
+      case TargetPlatform.ohos_arm:
+      case TargetPlatform.ohos_arm64:
+      case TargetPlatform.ohos_x64:
         assert(mode != null, 'Need to specify a build mode for platform $platform.');
         final String suffix = mode != BuildMode.debug ? '-${snakeCase(mode!.cliName, '-')}' : '';
         return _fileSystem.path.join(engineDir, platformName + suffix);
@@ -1177,6 +1194,7 @@ class CachedLocalEngineArtifacts implements Artifacts {
       case Artifact.linuxHeaders:
       case Artifact.windowsDesktopPath:
       case Artifact.windowsCppClientWrapper:
+      case Artifact.flutterEngineHar:
         return _fileSystem.path.join(_hostEngineOutPath, artifactFileName);
       case Artifact.engineDartSdkPath:
         return _getDartSdkPath();
@@ -1363,6 +1381,7 @@ class CachedLocalWebSdkArtifacts implements Artifacts {
         case Artifact.constFinder:
         case Artifact.flutterToolsFileGenerators:
         case Artifact.flutterPreviewDevice:
+        case Artifact.flutterEngineHar:
           break;
       }
     }

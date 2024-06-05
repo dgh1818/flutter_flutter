@@ -52,7 +52,8 @@ class DevelopmentArtifact {
   static const DevelopmentArtifact iOS = DevelopmentArtifact._('ios', feature: flutterIOSFeature);
 
   /// Artifacts required for OpenHarmony development.
-  static const DevelopmentArtifact ohos = DevelopmentArtifact._('ohos', feature: flutterOhosFeature);
+  static const DevelopmentArtifact ohosGenSnapshot = DevelopmentArtifact._('ohos_gen_snapshot', feature: flutterOhosFeature);
+  static const DevelopmentArtifact ohosInternalBuild = DevelopmentArtifact._('ohos_internal_build', feature: flutterOhosFeature);
 
   /// Artifacts required for web development.
   static const DevelopmentArtifact web = DevelopmentArtifact._('web', feature: flutterWebFeature);
@@ -84,7 +85,8 @@ class DevelopmentArtifact {
     androidMaven,
     androidInternalBuild,
     iOS,
-    ohos,
+    ohosGenSnapshot,
+    ohosInternalBuild,
     web,
     macOS,
     windows,

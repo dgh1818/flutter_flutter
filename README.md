@@ -35,7 +35,8 @@ Flutter SDK 仓库
 
      # Flutter pub国内镜像
      export PUB_HOSTED_URL=https://pub.flutter-io.cn
-     export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+     # Flutter 鸿蒙镜像
+     export FLUTTER_STORAGE_BASE_URL=https://flutter-ohos.obs.cn-south-1.myhuaweicloud.com
      ```
 
    3. 应用构建依赖flutter engine构建产物与engine host，均在 `src/out` 路径下。不同构建类型的产物分别在 `ohos_debug_unopt_arm64`、 `ohos_release_arm64` 和 `ohos_profile_arm64` 目录下。engine host 的构建类型也有三种，分别在 `host_debug_unopt` 、`host_release` 与 `host_profile` 目录中。构建需要根据不同的构建类型来指定不同的目录。
@@ -43,7 +44,8 @@ Flutter SDK 仓库
       ```sh
       # 国内镜像
       export PUB_HOSTED_URL=https://pub.flutter-io.cn
-      export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+      # Flutter 鸿蒙镜像
+      export FLUTTER_STORAGE_BASE_URL=https://flutter-ohos.obs.cn-south-1.myhuaweicloud.com
 
       # 拉取下来的flutter_flutter/bin目录
       export PATH=/home/<user>/ohos/flutter_flutter/bin:$PATH
@@ -121,20 +123,22 @@ Flutter SDK 仓库
 
 ## 常见问题
 
-1. 若出现报错：`The SDK license agreement is not accepted`，参考执行以下命令后再次编译：
+1. 切换FLUTTER_STORAGE_BASE_URL后需删除\<flutter\>/bin/cache 目录，并在项目中执行flutter clean后再运行
+
+2. 若出现报错：`The SDK license agreement is not accepted`，参考执行以下命令后再次编译：
 
    ```
    ./ohsdkmgr install ets:9 js:9 native:9 previewer:9 toolchains:9 --sdk-directory='/home/xc/code/sdk/ohos-sdk/' --accept-license
    ```
 
-2. 如果你使用的是DevEco Studio的Beta版本，编译工程时遇到“must have required property 'compatibleSdkVersion', location: demo/ohos/build-profile.json5:17:11"错误，请参考《DevEco Studio环境配置指导.docx》中的‘6 创建工程和运行Hello World’【配置插件】章节修改 hvigor/hvigor-config.json5文件。
+3. 如果你使用的是DevEco Studio的Beta版本，编译工程时遇到“must have required property 'compatibleSdkVersion', location: demo/ohos/build-profile.json5:17:11"错误，请参考《DevEco Studio环境配置指导.docx》中的‘6 创建工程和运行Hello World’【配置插件】章节修改 hvigor/hvigor-config.json5文件。
 
-3. 若提示安装报错：`fail to verify pkcs7 file` 请执行指令
+4. 若提示安装报错：`fail to verify pkcs7 file` 请执行指令
 
    ```
    hdc shell param set persist.bms.ohCert.verify true
    ```
-4. linux虚拟机通过hdc无法直接发现OpenHarmony设备
+5. linux虚拟机通过hdc无法直接发现OpenHarmony设备
 
    解决方案：在windows宿主机中，开启hdc server，具体指令如下：
    ```
@@ -149,7 +153,7 @@ Flutter SDK 仓库
 
    配置完成后flutter sdk可以通过hdc server完成设备连接，也可参考[官方指导](https://docs.openharmony.cn/pages/v4.0/zh-cn/device-dev/subsystems/subsys-toolchain-hdc-guide.md/#hdc-client%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AEhdc-server)。
 
-5. 构建Hap任务时报错：Error: The hvigor depends on the npmrc file. Configure the npmrc file first.
+6. 构建Hap任务时报错：Error: The hvigor depends on the npmrc file. Configure the npmrc file first.
 
 
    请在用户目录`~`下创建文件`.npmrc`，该配置也可参考[DevEco Studio官方文档](https://developer.harmonyos.com/cn/docs/documentation/doc-guides-V3/environment_config-0000001052902427-V3)，编辑内容如下：
@@ -159,7 +163,7 @@ Flutter SDK 仓库
    @ohos:registry=https://repo.harmonyos.com/npm/
    ```
 
-6. 查日志时，存在日志丢失现象。
+7. 查日志时，存在日志丢失现象。
     解决方案：关闭全局日志，只打开自己领域的日志
 
     ```
@@ -172,6 +176,8 @@ Flutter SDK 仓库
     打印A00000/XComFlutterOHOS_Native的日志，需要设置hdc shell hilog -b D -D A00000
     注：上面的设置在机器重启后会失效，如果要继续使用，需要重新设置。
     ```
-7. 若Api11 Beta1版本的机器上无法启动debug签名的应用，可以通过将签名换成正式签名，或在手机端打开开发者模式解决（步骤：设置->通用->开发者模式）
+8. 若Api11 Beta1版本的机器上无法启动debug签名的应用，可以通过将签名换成正式签名，或在手机端打开开发者模式解决（步骤：设置->通用->开发者模式）
 
-8. 如果报`Invalid CEN header (invalid zip64 extra data field size)`异常，请更换Jdk版本，参见[JDK-8313765](https://bugs.openjdk.org/browse/JDK-8313765)
+9. 如果报`Invalid CEN header (invalid zip64 extra data field size)`异常，请更换Jdk版本，参见[JDK-8313765](https://bugs.openjdk.org/browse/JDK-8313765)
+
+
