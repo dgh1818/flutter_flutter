@@ -554,6 +554,20 @@ class OHOSGenSnapshotArtifacts extends EngineCachedArtifact {
   @override
   String? get version => cache.getVersionFor('engine.ohos');
 
+  @override
+  Future<void> updateInner(
+    ArtifactUpdater artifactUpdater,
+    FileSystem fileSystem,
+    OperatingSystemUtils operatingSystemUtils,
+  ) async {
+    if (!await checkForArtifacts(version)) {
+      throwToolExit(
+            'do not have remote artifacts for ohos, please check your FLUTTER_STORAGE_BASE_URL.',
+          );
+      return;
+    }
+    await super.updateInner(artifactUpdater, fileSystem, operatingSystemUtils);
+  }
 }
 
 class OHOSInternalBuildArtifacts extends EngineCachedArtifact {
@@ -581,6 +595,20 @@ class OHOSInternalBuildArtifacts extends EngineCachedArtifact {
   @override
   String? get version => cache.getVersionFor('engine.ohos');
 
+  @override
+  Future<void> updateInner(
+    ArtifactUpdater artifactUpdater,
+    FileSystem fileSystem,
+    OperatingSystemUtils operatingSystemUtils,
+  ) async {
+    if (!await checkForArtifacts(version)) {
+      throwToolExit(
+            'do not have remote artifacts for ohos, please check your FLUTTER_STORAGE_BASE_URL.',
+          );
+      return;
+    }
+    await super.updateInner(artifactUpdater, fileSystem, operatingSystemUtils);
+  }
 }
 
 /// A cached artifact containing Gradle Wrapper scripts and binaries.
