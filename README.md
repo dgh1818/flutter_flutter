@@ -32,11 +32,8 @@ Flutter SDK 仓库
 
      ```sh
      export PATH=<flutter_flutter path>/bin:$PATH
-
-     # Flutter pub国内镜像
      export PUB_HOSTED_URL=https://pub.flutter-io.cn
-     # Flutter 鸿蒙镜像
-     export FLUTTER_STORAGE_BASE_URL=https://flutter-ohos.obs.cn-south-1.myhuaweicloud.com
+     export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
      ```
 
    3. 应用构建依赖flutter engine构建产物与engine host，均在 `src/out` 路径下。不同构建类型的产物分别在 `ohos_debug_unopt_arm64`、 `ohos_release_arm64` 和 `ohos_profile_arm64` 目录下。engine host 的构建类型也有三种，分别在 `host_debug_unopt` 、`host_release` 与 `host_profile` 目录中。构建需要根据不同的构建类型来指定不同的目录。
@@ -44,8 +41,7 @@ Flutter SDK 仓库
       ```sh
       # 国内镜像
       export PUB_HOSTED_URL=https://pub.flutter-io.cn
-      # Flutter 鸿蒙镜像
-      export FLUTTER_STORAGE_BASE_URL=https://flutter-ohos.obs.cn-south-1.myhuaweicloud.com
+      export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
 
       # 拉取下来的flutter_flutter/bin目录
       export PATH=/home/<user>/ohos/flutter_flutter/bin:$PATH

@@ -196,7 +196,7 @@ class Cache {
       httpClient: HttpClient(),
       allowedBaseUrls: <String>[
         storageBaseUrl,
-        realmlessStorageBaseUrl,
+        ohosStorageBaseUrl,
         cipdBaseUrl,
       ],
     );
@@ -503,6 +503,32 @@ class Cache {
     return storageRealm.isEmpty
       ? storageBaseUrl
       : storageBaseUrl.replaceAll('/$storageRealm', '');
+  }
+
+  /// The base for URLs that store Flutter engine ohos artifacts that are fetched
+  /// during the installation of the Flutter SDK.
+  ///
+  /// By default the base URL is https://flutter-ohos.obs.cn-south-1.myhuaweicloud.com. However, if
+  /// `FLUTTER_OHOS_STORAGE_BASE_URL` environment variable is provided, the
+  /// environment variable value is returned instead.
+  ///
+  /// See also:
+  ///
+  ///  * [cipdBaseUrl], which determines how CIPD artifacts are fetched.
+  ///  * [Cache] class-level dartdocs that explain how artifact mirrors work.
+  String get ohosStorageBaseUrl {
+    final String? overrideUrl = _platform.environment['FLUTTER_OHOS_STORAGE_BASE_URL'];
+    if (overrideUrl == null) {
+      return 'https://flutter-ohos.obs.cn-south-1.myhuaweicloud.com';
+    }
+    // verify that this is a valid URI.
+    try {
+      Uri.parse(overrideUrl);
+    } on FormatException catch (err) {
+      throwToolExit('"FLUTTER_OHOS_STORAGE_BASE_URL" contains an invalid URI:\n$err');
+    }
+    _maybeWarnAboutStorageOverride(overrideUrl);
+    return overrideUrl;
   }
 
   /// The base for URLs that store Flutter engine artifacts in CIPD.
@@ -901,6 +927,8 @@ abstract class EngineCachedArtifact extends CachedArtifact {
   /// A list of the dart package directories to download.
   List<String> getPackageDirs();
 
+  String get storageBaseUrl => cache.storageBaseUrl;
+
   @override
   bool isUpToDateInner(FileSystem fileSystem) {
     final Directory pkgDir = cache.getCacheDir('pkg');
@@ -933,7 +961,7 @@ abstract class EngineCachedArtifact extends CachedArtifact {
     FileSystem fileSystem,
     OperatingSystemUtils operatingSystemUtils,
   ) async {
-    final String url = '${cache.storageBaseUrl}/flutter_infra_release/flutter/$version/';
+    final String url = '$storageBaseUrl/flutter_infra_release/flutter/$version/';
 
     final Directory pkgDir = cache.getCacheDir('pkg');
     for (final String pkgName in getPackageDirs()) {
