@@ -42,9 +42,6 @@ import 'hvigor_utils.dart';
 import 'ohos_builder.dart';
 import 'ohos_plugins_manager.dart';
 
-/// if this constant set true , must config platform environment PUB_HOSTED_URL and FLUTTER_STORAGE_BASE_URL
-const bool NEED_PUB_CN = true;
-
 const String OHOS_DTA_FILE_NAME = 'icudtl.dat';
 
 const String FLUTTER_ASSETS_PATH = 'flutter_assets';
@@ -136,113 +133,6 @@ String getHvigorwPath(String ohosRootPath, {bool checkMod = false}) {
   } else {
     return 'hvigorw';
   }
-}
-
-/// 签名
-Future<void> signHap(LocalFileSystem localFileSystem, String unsignedFile,
-    String signedOutFile, Logger? logger, String bundleName) async {
-  const String PROFILE_TEMPLATE = 'profile_tmp_template.json';
-  const String PROFILE_TARGET = 'profile_tmp.json';
-  const String BUNDLE_NAME_KEY = '{{ohosId}}';
-  final String signToolHome = Platform.environment['SIGN_TOOL_HOME'] ?? '';
-  if (signToolHome == '') {
-    throwToolExit("can't find environment SIGN_TOOL_HOME");
-  }
-  //修改HarmonyAppProvision配置文件
-  final String provisionTemplatePath =
-      globals.fs.path.join(signToolHome, PROFILE_TEMPLATE);
-  final File provisionTemplateFile =
-      localFileSystem.file(provisionTemplatePath);
-  if (!provisionTemplateFile.existsSync()) {
-    throwToolExit(
-        '$PROFILE_TEMPLATE is not found,Please refer to the readme to create the file.');
-  }
-  final String provisionTargetPath =
-      globals.fs.path.join(signToolHome, PROFILE_TARGET);
-  final File provisionTargetFile = localFileSystem.file(provisionTargetPath);
-  if (provisionTargetFile.existsSync()) {
-    provisionTargetFile.deleteSync();
-  }
-  replaceKey(
-      provisionTemplateFile, provisionTargetFile, BUNDLE_NAME_KEY, bundleName);
-
-  //拷贝待签名文件
-  final String desFilePath =
-      globals.fs.path.join(signToolHome, 'app1-unsigned.hap');
-  final File unsignedHap = localFileSystem.file(unsignedFile);
-  final File desFile = localFileSystem.file(desFilePath);
-  if (desFile.existsSync()) {
-    desFile.deleteSync();
-  }
-  unsignedHap.copySync(desFilePath);
-
-  //执行create_appcert_sign_profile时，result需要是初始状态，所以备份和管理result
-  final Directory result =
-      localFileSystem.directory(globals.fs.path.join(signToolHome, 'result'));
-  if (!result.existsSync()) {
-    throwToolExit('请还原autosign/result目录到初始状态');
-  }
-  final Directory resultBackup = localFileSystem
-      .directory(globals.fs.path.join(signToolHome, 'result.bak'));
-
-  String projectHome = globals.fs.directory(getOhosBuildDirectory()).path;
-  final Directory projectSignHistory = localFileSystem
-      .directory(globals.fs.path.join(projectHome, 'signature'));
-
-  bool isNeedCopySignHistory = true;
-  // 如果result.bak不存在，代表是环境配置完成后第一次签名，拷贝result.bak。
-  if (!resultBackup.existsSync()) {
-    copyDirectory(result, resultBackup);
-  } else if (!projectSignHistory.existsSync()) {
-    // 如果projectSignHistory不存在，代表该工程从未进行过签名，此时从 result.bak 还原数据进行签名
-    result.deleteSync(recursive: true);
-    copyDirectory(resultBackup, result);
-  } else {
-    // 如果projectSignHistory存在，代表该工程之前进行过签名，此时拷贝历史签名数据进行签名
-    isNeedCopySignHistory = false;
-    copyDirectory(projectSignHistory, result);
-  }
-
-  if (isNeedCopySignHistory) {
-    final List<String> cmdCreateCertAndProfile = <String>[];
-    if (isWindows) {
-      cmdCreateCertAndProfile.add('py');
-      cmdCreateCertAndProfile.add('-3');
-    } else {
-      cmdCreateCertAndProfile.add('python3');
-    }
-    cmdCreateCertAndProfile
-        .add(globals.fs.path.join(signToolHome, 'autosign.py'));
-    cmdCreateCertAndProfile.add('createAppCertAndProfile');
-
-    await invokeCmd(
-        command: cmdCreateCertAndProfile,
-        workDirectory: signToolHome,
-        processManager: globals.processManager,
-        logger: logger);
-    copyDirectory(result, projectSignHistory);
-  }
-
-  final List<String> cmdSignHap = <String>[];
-  if (isWindows) {
-    cmdSignHap.add('py');
-    cmdSignHap.add('-3');
-  } else {
-    cmdSignHap.add('python3');
-  }
-  cmdSignHap.add(globals.fs.path.join(signToolHome, 'autosign.py'));
-  cmdSignHap.add('signHap');
-
-  await invokeCmd(
-      command: cmdSignHap,
-      workDirectory: signToolHome,
-      processManager: globals.processManager,
-      logger: logger);
-  final String signedFile =
-      globals.fs.path.join(signToolHome, 'result', 'app1-signed.hap');
-  // 拷贝到目标files
-  final File signedHap = globals.localFileSystem.file(signedFile);
-  signedHap.copySync(signedOutFile);
 }
 
 String getAbsolutePath(FlutterProject flutterProject, String path) {
@@ -407,15 +297,6 @@ Future<int> assembleHar(
       logger: logger);
 }
 
-/// 检查环境变量配置
-void checkFlutterEnv(Logger? logger) {
-  logger?.printStatus('check platform environment');
-  if (NEED_PUB_CN) {
-    checkPlatformEnvironment('PUB_HOSTED_URL', logger);
-    checkPlatformEnvironment('FLUTTER_STORAGE_BASE_URL', logger);
-  }
-}
-
 /// flutter构建
 Future<String> flutterAssemble(FlutterProject flutterProject, OhosBuildInfo ohosBuildInfo, String targetFile) async {
   late String targetName;
@@ -549,22 +430,12 @@ void cleanAndCopyFlutterRuntime(
   ohosDta.copySync(copyDes);
 
   // 复制 flutter.har
-  String? localEngineHarPath = globals.artifacts?.getArtifactPath(
-      Artifact.flutterEngineHar,
-      platform: getTargetPlatformForName(getPlatformNameForOhosArch(ohosBuildInfo.targetArchs.first)),
-      mode: ohosBuildInfo.buildInfo.mode);
-
-  if (!globals.fs.file(localEngineHarPath).existsSync()) {
-    // 如果不存在缓存也不存在localengine, 使用模板预置har
-    localEngineHarPath = getOriginHarPath(ohosBuildInfo.buildInfo, ohosBuildData);
-  }
-
-  String desHarPath = '';
-  if (ohosProject.isModule) {
-    desHarPath = globals.fs.path.join(ohosRootPath, 'har', HAR_FILE_NAME);
-  } else {
-    desHarPath = globals.fs.path.join(ohosRootPath, 'har', HAR_FILE_NAME);
-  }
+  final String localEngineHarPath = globals.artifacts!.getArtifactPath(
+    Artifact.flutterEngineHar,
+    platform: getTargetPlatformForName(getPlatformNameForOhosArch(ohosBuildInfo.targetArchs.first)),
+    mode: ohosBuildInfo.buildInfo.mode,
+  );
+  final String desHarPath = globals.fs.path.join(ohosRootPath, 'har', HAR_FILE_NAME);
   ensureParentExists(desHarPath);
   final File originHarFile = globals.localFileSystem.file(localEngineHarPath);
   originHarFile.copySync(desHarPath);
@@ -577,47 +448,6 @@ void ensureParentExists(String path) {
   if (!directory.existsSync()) {
     directory.createSync(recursive: true);
   }
-}
-
-String getEmbeddingHarFileSuffix(
-    BuildInfo buildInfo, OhosBuildData ohosBuildData) {
-  final int apiVersion = ohosBuildData.apiVersion;
-  return '${buildInfo.isDebug ? 'debug' : buildInfo.isProfile ? 'profile' : 'release'}.$apiVersion';
-}
-
-
-String? getLocalEnginePath() {
-  final Artifacts artifacts = globals.artifacts!;
-  final LocalEngineInfo? localEngineInfo = artifacts.localEngineInfo;
-  if (artifacts.isLocalEngine && localEngineInfo != null) {
-    return localEngineInfo.targetOutPath;
-  }
-  return null;
-}
-
-String getTmplPath() {
-  final String flutterSdk = Cache.flutterRoot!;
-  final String path = globals.fs.path.join(
-      flutterSdk,
-      'packages',
-      'flutter_tools',
-      'templates',
-      'app_shared',
-      'ohos.tmpl',
-      'har',
-      'har_product.tmpl');
-  return path;
-}
-
-String getOriginHarPath(BuildInfo buildInfo, OhosBuildData ohosBuildData) {
-  final String suffix = getEmbeddingHarFileSuffix(buildInfo, ohosBuildData);
-  final String target =
-      globals.fs.path.join(getTmplPath(), '$HAR_FILE_NAME.$suffix');
-  if (globals.fs.file(target).existsSync()) {
-    return target;
-  }
-
-  throwToolExit('File $HAR_FILE_NAME not found in [$target]');
 }
 
 class OhosHvigorBuilder implements OhosBuilder {
@@ -739,13 +569,11 @@ class OhosHvigorBuilder implements OhosBuilder {
 
   Future<void> flutterBuildPre(FlutterProject flutterProject, OhosBuildInfo ohosBuildInfo, String target) async {
     /**
-     * 0. checkEnv
      * 1. execute flutter assemble
      * 2. copy flutter asset to flutter module
      * 3. copy flutter runtime
      * 4. ohpm install
      */
-    checkFlutterEnv(_logger);
 
     final String output = await flutterAssemble(flutterProject, ohosBuildInfo, target);
 
