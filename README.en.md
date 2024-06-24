@@ -171,3 +171,11 @@ Attachment: [Flutter third-party library adaptation plan](https://docs.qq.com/sh
     registry=https://repo.huaweicloud.com/repository/npm/
     @ohos:registry=https://repo.harmonyos.com/npm/
     ```
+11. An error occurs when running a debug version of the Flutter application on a HarmonyOS device (release and profile versions are normal)
+    1. Error message: `Error while initializing the Dart VM: Wrong full snapshot version, expected '8af474944053df1f0a3be6e6165fa7cf' found 'adb4292f3ec25074ca70abcd2d5c7251'`
+    2. Solution: Perform the following actions in sequence
+        1. Set environment variables `export FLUTTER_STORAGE_BASE_URL=https://flutter-ohos.obs.cn-south-1.myhuaweicloud.com`
+        1. Delete the cache in the<Flutter>/bin/cache directory
+        2. Execute `fluent clean` to clear the project compilation cache
+        3. Execute `flutter run -d $DEVICE --debug`
+    3. Additional information: If a similar error occurs while running Android or iOS, you can also try restoring the environment variable FLUTTER_STORAGE_BASE_URL , clearing the cache, and then running again.

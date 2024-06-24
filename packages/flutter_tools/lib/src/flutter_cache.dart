@@ -535,14 +535,14 @@ class OHOSGenSnapshotArtifacts extends EngineCachedArtifact {
         ..._osxBinaryDirsForOhos,
         ..._linuxBinaryDirsForOhos,
         ..._windowsBinaryDirsForOhos,
-        ..._dartSdks,
-        ..._ohosBinaryDirs,
+        ..._dartSdks
       ] else if (_platform.isWindows)
         ..._windowsBinaryDirsForOhos
       else if (_platform.isMacOS)
         ..._osxBinaryDirsForOhos
       else if (_platform.isLinux)
-        ..._linuxBinaryDirsForOhos
+        ..._linuxBinaryDirsForOhos,
+      ..._ohosBinaryDirs,
     ];
   }
 
@@ -570,9 +570,7 @@ class OHOSInternalBuildArtifacts extends EngineCachedArtifact {
 
   @override
   List<List<String>> getBinaryDirs() {
-    return <List<String>>[
-      ..._ohosBinaryDirs,
-    ];
+    return _ohosBinaryDirs;
   }
 
   @override
