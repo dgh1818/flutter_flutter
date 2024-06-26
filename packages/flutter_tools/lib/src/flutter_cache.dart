@@ -42,6 +42,7 @@ class FlutterCache extends Cache {
     registerArtifact(FlutterWebSdk(this));
     registerArtifact(LegacyCanvasKitRemover(this));
     registerArtifact(FlutterSdk(this, platform: platform));
+    registerArtifact(FlutterSdkOhos(this, platform: platform));
     registerArtifact(WindowsEngineArtifacts(this, platform: platform));
     registerArtifact(MacOSEngineArtifacts(this, platform: platform));
     registerArtifact(LinuxEngineArtifacts(this, platform: platform));
@@ -242,6 +243,33 @@ class FlutterSdk extends EngineCachedArtifact {
     return <List<String>>[
       <String>['common', 'flutter_patched_sdk.zip'],
       <String>['common', 'flutter_patched_sdk_product.zip'],
+    ];
+  }
+
+  @override
+  List<String> getLicenseDirs() => const <String>[];
+}
+
+class FlutterSdkOhos extends EngineCachedArtifact {
+  FlutterSdkOhos(Cache cache, {
+    required Platform platform,
+  }) : _platform = platform,
+      super(
+        'flutter_sdk_ohos',
+        cache,
+        DevelopmentArtifact.universal,
+      );
+
+  final Platform _platform;
+
+  @override
+  List<String> getPackageDirs() => const <String>[];
+
+  @override
+  List<List<String>> getBinaryDirs() {
+    // Currently only Linux supports both arm64 and x64.
+    final String arch = cache.getHostPlatformArchName();
+    return <List<String>>[
       if (cache.includeAllPlatforms) ...<List<String>>[
         <String>['windows-$arch', 'windows-$arch/artifacts.zip'],
         <String>['linux-$arch', 'linux-$arch/artifacts.zip'],
@@ -258,6 +286,12 @@ class FlutterSdk extends EngineCachedArtifact {
 
   @override
   List<String> getLicenseDirs() => const <String>[];
+
+    @override
+  String get storageBaseUrl => cache.ohosStorageBaseUrl;
+
+  @override
+  String? get version => cache.getVersionFor('engine.ohos');
 }
 
 class MacOSEngineArtifacts extends EngineCachedArtifact {
