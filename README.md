@@ -95,6 +95,12 @@ Flutter SDK 仓库
    flutter run --debug [--local-engine=/home/user/engine_make/src/out/ohos_debug_unopt_arm64 -d <device-id> --local-engine-host=src/out/<engine host目录>/]
 ```
 
+5. 构建app包命令：
+```
+   # 示例：flutter build app --release [--local-engine=<DIR>/src/out/ohos_release_arm64]  local-engine为可选项
+   flutter build app --release
+```
+
 
 ## 已兼容OpenHarmony开发的指令列表
 | 指令名称 | 指令描述 | 使用说明                                                              |
