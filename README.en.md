@@ -18,7 +18,8 @@ This repository is a compatible extension of Flutter SDK for the OpenHarmony pla
     *The following environment variable configuration is for Unix-like systems (Linux, Mac). You can directly refer to the configuration below. For environment variable configuration under Windows, please set it in ‘Edit System Environment Variables’*
 
    1. Download OpenHarmony SDK and configure environment variables
-    * API12, deveco-studio-5.0.0.300 or command-line-tools-5.0.0.300
+    * API12, deveco-studio-5.0.3.300 or command-line-tools-5.0.3.300
+    * Configure Java17
     * Configure environment variables (SDK, node, ohpm, hvigor)
 
        ```sh

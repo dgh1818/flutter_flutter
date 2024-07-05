@@ -142,7 +142,7 @@ String getAbsolutePath(FlutterProject flutterProject, String path) {
   return path;
 }
 
-Future<void> invokeCmd(
+Future<Process> invokeCmd(
     {required List<String> command,
     required String workDirectory,
     required ProcessManager processManager,
@@ -157,11 +157,7 @@ Future<void> invokeCmd(
       .transform<String>(utf8.decoder)
       .transform<String>(const LineSplitter())
       .listen((String line) {
-    if (line.contains('error')) {
-      throwToolExit('command {$command} invoke error!:$line');
-    } else {
-      logger?.printStatus(line);
-    }
+    logger?.printStatus(line);
   });
   final int exitCode = await server.exitCode;
   if (exitCode == 0) {
@@ -169,7 +165,7 @@ Future<void> invokeCmd(
   } else {
     logger?.printError('$cmd invoke error.');
   }
-  return;
+  return server;
 }
 
 /// ohpm should init first
@@ -177,29 +173,18 @@ Future<void> ohpmInstall(
     {required ProcessManager processManager,
     required String workingDirectory,
     Logger? logger}) async {
-  final List<String> command = <String>[
-    'ohpm',
-    'install',
-    '--all',
-  ];
-  logger?.printTrace('invoke at:$workingDirectory ,command: ${command.join(' ')}');
-  final Process server =
-      await processManager.start(command, workingDirectory: workingDirectory);
-
-  server.stderr.transform<String>(utf8.decoder).listen(logger?.printError);
-  final StdoutHandler stdoutHandler =
-      StdoutHandler(logger: logger!, fileSystem: globals.localFileSystem);
-  server.stdout
-      .transform<String>(utf8.decoder)
-      .transform<String>(const LineSplitter())
-      .listen(stdoutHandler.handler);
-  final int exitCode = await server.exitCode;
-  if (exitCode == 0) {
-    logger.printStatus('ohpm install success.');
-  } else {
-    logger.printError('ohpm install error.');
-  }
-  return;
+  final List<String> cleanCmd = <String>['ohpm', 'clean'];
+  final List<String> installCmd = <String>['ohpm', 'install', '--all'];
+  await invokeCmd(
+      command: cleanCmd,
+      workDirectory: workingDirectory,
+      processManager: processManager,
+      logger: logger);
+  await invokeCmd(
+      command: installCmd,
+      workDirectory: workingDirectory,
+      processManager: processManager,
+      logger: logger);
 }
 
 /// 根据来源，替换关键字，输出target文件
@@ -215,23 +200,12 @@ Future<int> hvigorwTask(List<String> taskCommand,
     required String workPath,
     required String hvigorwPath,
     Logger? logger}) async {
-  final String taskStr = taskCommand.join(' ');
-  logger?.printTrace('invoke hvigorw task: $taskStr');
-  final Process server =
-      await processManager.start(taskCommand, workingDirectory: workPath);
-  server.stderr.transform<String>(utf8.decoder).listen(logger?.printError);
-  final StdoutHandler stdoutHandler =
-      StdoutHandler(logger: logger!, fileSystem: globals.localFileSystem);
-  server.stdout
-      .transform<String>(utf8.decoder)
-      .transform<String>(const LineSplitter())
-      .listen(stdoutHandler.handler);
-  final int exitCode = await server.exitCode;
-  if (exitCode == 0) {
-    logger.printStatus('success! when invoke: $taskStr.');
-  } else {
-    logger.printError('error! when invoke: $taskStr ,exitCode = $exitCode. ');
-  }
+  final Process process = await invokeCmd(
+      command: taskCommand,
+      workDirectory: workPath,
+      processManager: processManager,
+      logger: logger);
+  int exitCode = await process.exitCode;
   return exitCode;
 }
 
