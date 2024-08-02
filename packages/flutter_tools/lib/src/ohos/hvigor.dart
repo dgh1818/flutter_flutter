@@ -632,7 +632,6 @@ class OhosHvigorBuilder implements OhosBuilder {
 
       "overrides" {
         "@ohos/flutter_ohos": "file:path/to/har/flutter.har",
-        "plugin_xxx":'file:path/to/har/plugin_xxx.har',
       }
   ''');
   }
