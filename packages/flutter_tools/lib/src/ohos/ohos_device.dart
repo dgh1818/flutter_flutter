@@ -129,42 +129,41 @@ class OhosDevice extends Device {
       throwToolExit('this project or file is not contain(a) Hap file');
     }
     final OhosHap hap = app;
-    final List<String> installAppCommand =
-        hdcCommandForDevice(<String>['install', '-r', hap.applicationPackage.path]);
     final File file = globals.fs.file(hap.applicationPackage.path);
     if (!file.existsSync()) {
       throwToolExit('Failed to get the hap file: ${file.path}');
     }
-    try {
-      _logger.printStatus('installing hap. bundleName: ${app.id} ');
-      final ProcessResult result = await _processManager.run(
-        installAppCommand,
-        stdoutEncoding: latin1,
-        stderrEncoding: latin1,
-      );
-      final String? errMsg = getErrorMsg(result);
-      if (errMsg == null) {
-        _logger.printStatus('install hap finish. bundleName: ${app.id} ');
-        return true;
-      } else {
-        _logger.printError(errMsg);
+
+    _logger.printStatus('installing hap. bundleName: ${app.id} ');
+    const String targetPath = 'data/local/tmp/flutterInstallTemp';
+    final List<List<String>> hspCmds = app.ohosBuildData.moduleInfo.moduleList
+        .where((OhosModule module) => module.type == OhosModuleType.shared)
+        .map((OhosModule module) => OhosProject.getSignedFile(
+              modulePath: module.srcPath,
+              moduleName: module.name,
+              flavor: module.flavor,
+              type: OhosFileType.hsp,
+            ))
+        .map((File file) => <String>['file', 'send', file.path, targetPath])
+        .toList();
+    final List<List<String>> cmds = <List<String>>[
+      <String>['shell', 'rm', '-rf', targetPath],
+      <String>['shell', 'mkdir', targetPath],
+      ...hspCmds,
+      <String>['file', 'send', hap.applicationPackage.path, targetPath],
+      <String>['shell', 'bm', 'install', '-p', targetPath],
+      <String>['shell', 'rm', '-rf', targetPath],
+    ].map((List<String> cmd) => hdcCommandForDevice(cmd)).toList();
+
+    RunResult? result;
+    for (final List<String> cmd in cmds) {
+      result = _processUtils.runSync(cmd, throwOnError: true);
+      if (result.exitCode != 0 || result.stdout.contains('error')) {
+        _logger.printError('_installApp: cmd=$cmd\n  code=${result.exitCode}, stdout=${result.stdout}, stderr=${result.stderr}');
         return false;
       }
-    } on ProcessException catch (error) {
-      _logger.printError('Error when install hap, $error');
     }
-    return false;
-  }
-
-  String? getErrorMsg(ProcessResult result) {
-    if (result.exitCode != 0) {
-      return 'install hap error';
-    }
-    final String out = result.stdout as String;
-    if (out.contains('failed')) {
-      return out;
-    }
-    return null;
+    return result != null && result.exitCode == 0;
   }
 
   @override
@@ -174,29 +173,16 @@ class OhosDevice extends Device {
     final List<String> propCommand =
         hdcCommandForDevice(<String>['shell', '"bm dump -n $bundleName"']);
     _logger.printTrace(propCommand.join(' '));
-    try {
-      final ProcessResult result = await _processManager.run(
-        propCommand,
-        stdoutEncoding: latin1,
-        stderrEncoding: latin1,
-      );
-      if (result.exitCode == 0) {
-        final String cmdResult = result.stdout as String;
-        if (cmdResult.contains(bundleName)) {
-          return true;
-        } else if (cmdResult.contains('error: failed to get information')) {
-          return false;
-        } else {
-          throw ToolExit('unknown result for bm dump.');
-        }
+    final RunResult result = _processUtils.runSync(propCommand);
+    if (result.exitCode == 0) {
+      final String cmdResult = result.stdout;
+      if (cmdResult.contains(bundleName)) {
+        return true;
+      } else if (cmdResult.contains('error: failed to get information')) {
+        return false;
       } else {
-        _logger.printError(
-            'Error ${result.exitCode} retrieving device properties for $name:');
-        _logger.printError(result.stderr as String);
+        throw ToolExit('unknown result for bm dump.');
       }
-    } on ProcessException catch (error) {
-      _logger
-          .printError('Error retrieving device properties for $name: $error');
     }
     return false;
   }
@@ -353,7 +339,7 @@ class OhosDevice extends Device {
     ];
     final String result = (await runHdcCheckedAsync(cmd)).stdout;
     // This invocation returns 0 even when it fails.
-    if (result.contains('Error: ')) {
+    if (result.toLowerCase().contains('error')) {
       _logger.printError(result.trim(), wrap: false);
       return LaunchResult.failed();
     }
@@ -371,9 +357,7 @@ class OhosDevice extends Device {
       if (debuggingOptions.buildInfo.isDebug ||
           debuggingOptions.buildInfo.isProfile) {
         observatoryUri = await observatoryDiscovery?.uri;
-        _logger.printWarning(
-            'waiting for a debug connection: $observatoryUri'
-          );
+        _logger.printWarning('waiting for a debug connection: $observatoryUri');
         if (observatoryUri == null) {
           _logger.printError(
             'Error waiting for a debug connection: '
@@ -394,7 +378,8 @@ class OhosDevice extends Device {
   @override
   Future<bool> installApp(covariant ApplicationPackage app,
       {String? userIdentifier}) async {
-    final bool wasInstalled = await isAppInstalled(app, userIdentifier: userIdentifier);
+    final bool wasInstalled =
+        await isAppInstalled(app, userIdentifier: userIdentifier);
     _logger.printTrace('Installing Hap.');
     if (await _installApp(app, userIdentifier: userIdentifier)) {
       return true;
@@ -421,24 +406,10 @@ class OhosDevice extends Device {
     if (app == null) {
       return false;
     }
-    final List<String> stopAppCommand =
-        hdcCommandForDevice(<String>['shell', 'aa', 'force-stop', app.id]);
-    try {
-      final ProcessResult result = await _processManager.run(
-        stopAppCommand,
-        stdoutEncoding: latin1,
-        stderrEncoding: latin1,
-      );
-      if (result.exitCode == 0) {
-        return true;
-      } else {
-        _logger.printError('stop hap error');
-        return false;
-      }
-    } on ProcessException catch (error) {
-      _logger.printError('Error when stop hap, $error');
-    }
-    return false;
+    final RunResult result = _processUtils.runSync(
+      hdcCommandForDevice(<String>['shell', 'aa', 'force-stop', app.id]),
+    );
+    return result.exitCode == 0;
   }
 
   @override
@@ -461,22 +432,9 @@ class OhosDevice extends Device {
       {String? userIdentifier}) async {
     final List<String> uninstallCommand =
         hdcCommandForDevice(<String>['uninstall', app.id]);
-    try {
-      final ProcessResult result = await _processManager.run(
-        uninstallCommand,
-        stdoutEncoding: latin1,
-        stderrEncoding: latin1,
-      );
-      if (result.exitCode == 0) {
-        return true;
-      } else {
-        _logger.printError('uninstall hap error');
-        return false;
-      }
-    } on ProcessException catch (error) {
-      _logger.printError('Error when uninstall hap, $error');
-    }
-    return false;
+    final RunResult result =
+        _processUtils.runSync(uninstallCommand, throwOnError: true);
+    return result.exitCode == 0;
   }
 
   Future<String?> _getProperty(String name) async {
@@ -506,23 +464,11 @@ class OhosDevice extends Device {
     final List<String> propCommand =
         hdcCommandForDevice(<String>['shell', 'param', 'get']);
     _logger.printTrace(propCommand.join(' '));
+    final RunResult result =
+        _processUtils.runSync(propCommand, throwOnError: true);
 
-    try {
-      final ProcessResult result = await _processManager.run(
-        propCommand,
-        stdoutEncoding: latin1,
-        stderrEncoding: latin1,
-      );
-      if (result.exitCode == 0) {
-        properties = parseHdcDeviceProperties(result.stdout as String);
-      } else {
-        _logger.printError(
-            'Error ${result.exitCode} retrieving device properties for $name:');
-        _logger.printError(result.stderr as String);
-      }
-    } on ProcessException catch (error) {
-      _logger
-          .printError('Error retrieving device properties for $name: $error');
+    if (result.exitCode == 0) {
+      properties = parseHdcDeviceProperties(result.stdout);
     }
     return properties;
   }();

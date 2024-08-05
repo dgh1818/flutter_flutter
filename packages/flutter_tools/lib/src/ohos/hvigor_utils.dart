@@ -12,6 +12,10 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+import 'dart:convert';
+
+import 'package:json5/json5.dart';
+
 import '../base/common.dart';
 import '../base/file_system.dart';
 
@@ -26,6 +30,10 @@ import '../globals.dart' as globals;
 import '../project.dart';
 import '../reporting/reporting.dart';
 import 'ohos_sdk.dart';
+
+const String FLAVOR_DEFAULT = 'default';
+const String BUILD_NUMBER_DEFAULT = '1000000';
+const String BUILD_NAME_DEFAULT = '1.0.0';
 
 class HvigorUtils {}
 
@@ -106,4 +114,67 @@ void exitWithNoSdkMessage() {
       .send();
   throwToolExit('${globals.logger.terminal.warningMark} No Hmos SDK found. '
       'Try setting the HOS_SDK_HOME environment variable.');
+}
+
+String getFlavor(File buildProfileFile, String? flavor) {
+  if (flavor == null) {
+    return FLAVOR_DEFAULT;
+  }
+  if (buildProfileFile.existsSync()) {
+    final Map<String, dynamic> config = JSON5
+        .parse(buildProfileFile.readAsStringSync()) as Map<String, dynamic>;
+    final List<dynamic> targetList;
+    // ignore: avoid_dynamic_calls
+    if (config['app'] != null && config['app']['products'] != null) {
+      // ohos/build-profile.json5
+      // ignore: avoid_dynamic_calls
+      targetList = config['app']['products'] as List<dynamic>;
+    } else if (config['targets'] != null) {
+      // ohos/entry/build-profile.json5
+      targetList = config['targets'] as List<dynamic>;
+    } else {
+      // ignore: always_specify_types
+      targetList = [];
+    }
+    for (final dynamic item in targetList) {
+      final Map<String, dynamic> map = item as Map<String, dynamic>;
+      if (flavor == (map['name'] as String)) {
+        return flavor;
+      }
+    }
+  }
+  globals.logger.printWarning(
+      'Flavor "$flavor" not exists in file ${buildProfileFile.path}, use "$FLAVOR_DEFAULT" instead.');
+  return FLAVOR_DEFAULT;
+}
+
+void updateProjectVersion(FlutterProject project, BuildInfo? buildInfo) {
+  final File targetFile = project.ohos.getAppJsonFile();
+  if (targetFile.existsSync() && buildInfo != null) {
+    final String? buildNumber = validatedBuildNumberForPlatform(
+      TargetPlatform.ohos_arm,
+      buildInfo.buildNumber,
+      globals.logger,
+    );
+    final String? buildName = validatedBuildNameForPlatform(
+      TargetPlatform.ohos_arm,
+      buildInfo.buildName,
+      globals.logger,
+    );
+
+    final Map<String, dynamic> config =
+        JSON5.parse(targetFile.readAsStringSync()) as Map<String, dynamic>;
+    if (config['app'] != null) {
+      final Map<String, dynamic> map = config['app'] as Map<String, dynamic>;
+      if (buildNumber != null) {
+        map['versionCode'] = int.parse(buildNumber);
+      }
+      if (buildName != null) {
+        map['versionName'] = buildName;
+      }
+      final String configNew =
+          const JsonEncoder.withIndent('  ').convert(config);
+      targetFile.writeAsStringSync(configNew, flush: true);
+    }
+  }
 }

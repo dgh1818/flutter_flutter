@@ -25,6 +25,7 @@ import '../base/user_messages.dart';
 import '../build_info.dart';
 import '../globals.dart' as globals;
 import '../project.dart';
+import 'hvigor_utils.dart';
 import 'ohos_plugins_manager.dart';
 import 'ohos_sdk.dart';
 
@@ -62,10 +63,14 @@ class OhosHap extends ApplicationPackage implements PrebuiltApplicationPackage {
     /// parse the build data
     final OhosBuildData ohosBuildData =
         OhosBuildData.parseOhosBuildData(ohosProject, logger);
+    final String flavor = getFlavor(ohosProject.getBuildProfileFile(), buildInfo?.flavor);
     final String bundleName = ohosBuildData.appInfo!.bundleName;
+    for (final OhosModule element in ohosBuildData.moduleInfo.moduleList) {
+      element.flavor = flavor;
+    }
     return OhosHap(
         id: bundleName,
-        applicationPackage: ohosProject.getSignedHapFile(),
+        applicationPackage: ohosProject.getSignedHapFile(flavor),
         ohosBuildData: ohosBuildData);
   }
 
@@ -215,6 +220,7 @@ class OhosModule {
     required this.isEntry,
     required this.mainElement,
     required this.type,
+    required this.flavor,
   });
 
   final String name;
@@ -222,6 +228,7 @@ class OhosModule {
   final String? mainElement;
   final OhosModuleType type;
   final String srcPath;
+  String flavor;
 
   static List<OhosModule> fromOhosProject(OhosProject ohosProject) {
     final File buildProfileFile = ohosProject.ohosRoot.childFile('build-profile.json5');
@@ -233,12 +240,16 @@ class OhosModule {
     return modules.map((dynamic e) {
       final Map<String, dynamic> module = e as Map<String, dynamic>;
       final String srcPath = module['srcPath'] as String;
-      return OhosModule._fromModulePath(ohosProject, globals.fs.path.join(ohosProject.ohosRoot.path, srcPath));
+      return OhosModule.fromModulePath(
+        modulePath: globals.fs.path.join(ohosProject.ohosRoot.path, srcPath));
     }).toList();
   }
 
-  static OhosModule _fromModulePath(OhosProject ohosProject, String srcPath) {
-    final String moduleJsonPath = globals.fs.path.join(srcPath, 'src', 'main', 'module.json5');
+  static OhosModule fromModulePath({
+    required String modulePath,
+    String? flavor,
+  }) {
+    final String moduleJsonPath = globals.fs.path.join(modulePath, 'src', 'main', 'module.json5');
     final File moduleJsonFile = globals.fs.file(moduleJsonPath);
     if (!moduleJsonFile.existsSync()) {
       throwToolExit('Can not found module.json5 at $moduleJsonPath . \n'
@@ -253,10 +264,12 @@ class OhosModule {
       final bool isEntry = type == OhosModuleType.entry.name;
       return OhosModule(
           name: name,
-          srcPath: srcPath,
+          srcPath: modulePath,
           isEntry: isEntry,
           mainElement: isEntry ? module['mainElement'] as String : null,
-          type: OhosModuleType.fromName(type));
+          type: OhosModuleType.fromName(type),
+          flavor: flavor ?? FLAVOR_DEFAULT);
+
     } on Exception catch (e) {
       throwToolExit('parse module.json5 error , $moduleJsonPath . error: $e');
     }
