@@ -12,13 +12,16 @@ class FlutterFeatureFlags implements FeatureFlags {
     required FlutterVersion flutterVersion,
     required Config config,
     required Platform platform,
-  }) : _flutterVersion = flutterVersion,
-       _config = config,
-       _platform = platform;
+  })  : _flutterVersion = flutterVersion,
+        _config = config,
+        _platform = platform;
 
   final FlutterVersion _flutterVersion;
   final Config _config;
   final Platform _platform;
+
+  @override
+  bool get isOhosEnabled => isEnabled(flutterOhosFeature);
 
   @override
   bool get isLinuxEnabled => isEnabled(flutterLinuxDesktopFeature);
@@ -61,19 +64,22 @@ class FlutterFeatureFlags implements FeatureFlags {
   @override
   bool isEnabled(Feature feature) {
     final String currentChannel = _flutterVersion.channel;
-    final FeatureChannelSetting featureSetting = feature.getSettingForChannel(currentChannel);
+    final FeatureChannelSetting featureSetting =
+        feature.getSettingForChannel(currentChannel);
     if (!featureSetting.available) {
       return false;
     }
     bool isEnabled = featureSetting.enabledByDefault;
     if (feature.configSetting != null) {
-      final bool? configOverride = _config.getValue(feature.configSetting!) as bool?;
+      final bool? configOverride =
+          _config.getValue(feature.configSetting!) as bool?;
       if (configOverride != null) {
         isEnabled = configOverride;
       }
     }
     if (feature.environmentOverride != null) {
-      if (_platform.environment[feature.environmentOverride]?.toLowerCase() == 'true') {
+      if (_platform.environment[feature.environmentOverride]?.toLowerCase() ==
+          'true') {
         isEnabled = true;
       }
     }

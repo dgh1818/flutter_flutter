@@ -28,6 +28,7 @@ void main() {
     final SelectableRegion region = tester.widget<SelectableRegion>(find.byType(SelectableRegion));
 
     switch (defaultTargetPlatform) {
+      case TargetPlatform.ohos:
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
         expect(region.selectionControls, materialTextSelectionHandleControls);

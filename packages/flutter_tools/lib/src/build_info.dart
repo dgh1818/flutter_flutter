@@ -355,6 +355,26 @@ class AndroidBuildInfo {
   final bool fastStart;
 }
 
+/// Information about an Ohos build to be performed or used.
+class OhosBuildInfo {
+  const OhosBuildInfo(
+    this.buildInfo, {
+    this.targetArchs = const <OhosArch>[
+      OhosArch.armeabi_v7a,
+      OhosArch.arm64_v8a,
+      OhosArch.x86_64,
+    ],
+  });
+
+  // The build info containing the mode and flavor.
+  final BuildInfo buildInfo;
+
+  /// The target platforms for the build.
+  final Iterable<OhosArch> targetArchs;
+
+}
+
+
 /// A summary of the compilation strategy used for Dart.
 enum BuildMode {
   /// Built in JIT mode with no optimizations, enabled asserts, and a VM service.
@@ -525,7 +545,12 @@ enum TargetPlatform {
   android_arm,
   android_arm64,
   android_x64,
-  android_x86;
+  android_x86,
+  //ohos platform
+  ohos,
+  ohos_arm,
+  ohos_arm64,
+  ohos_x64;
 
   String get fuchsiaArchForTargetPlatform {
     switch (this) {
@@ -546,6 +571,10 @@ enum TargetPlatform {
       case TargetPlatform.web_javascript:
       case TargetPlatform.windows_x64:
       case TargetPlatform.windows_arm64:
+      case TargetPlatform.ohos:
+      case TargetPlatform.ohos_arm:
+      case TargetPlatform.ohos_arm64:
+      case TargetPlatform.ohos_x64:
         throw UnsupportedError('Unexpected Fuchsia platform $this');
     }
   }
@@ -569,6 +598,10 @@ enum TargetPlatform {
       case TargetPlatform.ios:
       case TargetPlatform.tester:
       case TargetPlatform.web_javascript:
+      case TargetPlatform.ohos:
+      case TargetPlatform.ohos_arm:
+      case TargetPlatform.ohos_arm64:
+      case TargetPlatform.ohos_x64:
         throw UnsupportedError('Unexpected target platform $this');
     }
   }
@@ -621,6 +654,23 @@ enum AndroidArch {
       AndroidArch.x86 => 'android-x86'
     };
   }
+}
+
+enum OhosArch {
+  armeabi_v7a,
+  arm64_v8a,
+  x86_64,
+}
+
+
+bool isOhosPlatform(TargetPlatform? targetPlatform) {
+  if (targetPlatform == TargetPlatform.ohos ||
+      targetPlatform == TargetPlatform.ohos_arm ||
+      targetPlatform == TargetPlatform.ohos_arm64 ||
+      targetPlatform == TargetPlatform.ohos_x64) {
+    return true;
+  }
+  return false;
 }
 
 /// The default set of iOS device architectures to build for.
@@ -728,6 +778,14 @@ String getNameForTargetPlatform(TargetPlatform platform, {DarwinArch? darwinArch
       return 'web-javascript';
     case TargetPlatform.android:
       return 'android';
+    case TargetPlatform.ohos:
+      return 'ohos';
+    case TargetPlatform.ohos_arm:
+      return 'ohos-arm';
+    case TargetPlatform.ohos_arm64:
+      return 'ohos-arm64';
+    case TargetPlatform.ohos_x64:
+      return 'ohos-x86';
   }
 }
 
@@ -757,7 +815,7 @@ TargetPlatform getTargetPlatformForName(String platform) {
       return TargetPlatform.darwin;
     case 'linux-x64':
       return TargetPlatform.linux_x64;
-   case 'linux-arm64':
+    case 'linux-arm64':
       return TargetPlatform.linux_arm64;
     case 'windows-x64':
       return TargetPlatform.windows_x64;
@@ -765,6 +823,14 @@ TargetPlatform getTargetPlatformForName(String platform) {
       return TargetPlatform.windows_arm64;
     case 'web-javascript':
       return TargetPlatform.web_javascript;
+    case 'ohos':
+      return TargetPlatform.ohos;
+    case 'ohos-arm':
+      return TargetPlatform.ohos_arm;
+    case 'ohos-arm64':
+      return TargetPlatform.ohos_arm64;
+    case 'ohos-x64':
+      return TargetPlatform.ohos_x64;
     case 'flutter-tester':
       return TargetPlatform.tester;
   }
@@ -785,11 +851,42 @@ AndroidArch getAndroidArchForName(String platform) {
   throw Exception('Unsupported Android arch name "$platform"');
 }
 
-HostPlatform getCurrentHostPlatform() {
-  if (globals.platform.isMacOS) {
-    return HostPlatform.darwin_x64;
+OhosArch getOhosArchForName(String platform) {
+  switch (platform) {
+    case 'ohos-arm':
+      return OhosArch.armeabi_v7a;
+    case 'ohos-arm64':
+      return OhosArch.arm64_v8a;
+    case 'ohos-x86':
+      return OhosArch.x86_64;
   }
-  if (globals.platform.isLinux) {
+  throw Exception('Unsupported Ohos arch name "$platform"');
+}
+
+String getNameForOhosArch(OhosArch arch) {
+  switch (arch) {
+    case OhosArch.armeabi_v7a:
+      return 'armeabi-v7a';
+    case OhosArch.arm64_v8a:
+      return 'arm64-v8a';
+    case OhosArch.x86_64:
+      return 'x86_64';
+  }
+}
+
+String getPlatformNameForOhosArch(OhosArch arch) {
+  switch (arch) {
+    case OhosArch.armeabi_v7a:
+      return 'ohos-arm';
+    case OhosArch.arm64_v8a:
+      return 'ohos-arm64';
+    case OhosArch.x86_64:
+      return 'ohos-x86';
+  }
+}
+
+HostPlatform getCurrentHostPlatform() {
+  if (globals.platform.isLinux || globals.platform.isMacOS) {
     // support x64 and arm64 architecture.
     return globals.os.hostPlatform;
   }
@@ -848,6 +945,11 @@ String getMacOSBuildDirectory() {
 /// Returns the web build output directory.
 String getWebBuildDirectory() {
   return globals.fs.path.join(getBuildDirectory(), 'web');
+}
+
+/// Returns the ohos build output directory.
+String getOhosBuildDirectory(){
+  return globals.fs.path.join(getBuildDirectory(), 'ohos');
 }
 
 /// Returns the Linux build output directory.

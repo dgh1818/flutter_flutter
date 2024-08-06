@@ -31,6 +31,7 @@ const String kUserBranch = '[user-branch]';
 /// users to the "beta" channel.
 const Map<String, String> kObsoleteBranches = <String, String>{
   'dev': 'beta',
+  'oh-3.22.0': 'beta',
 };
 
 /// The names of each channel/branch in order of increasing stability.
@@ -986,6 +987,13 @@ class GitTagVersion {
       }
     }
 
+    final RegExp ohosTagPattern = RegExp(r'^\d+\.\d+\.\d+-ohos$');
+    for (final String tag in tags) {
+      if (ohosTagPattern.hasMatch(tag.trim())) {
+        return parse(tag);
+      }
+    }
+
     // If we're not currently on a tag, use git describe to find the most
     // recent tag and number of commits past.
     return parse(
@@ -1040,6 +1048,34 @@ class GitTagVersion {
     );
   }
 
+  static GitTagVersion parseOhosVersion(String version) {
+    final RegExp versionPattern = RegExp(
+      r'^(\d+)\.(\d+)\.(\d+)(-ohos)?(?:-(\d+)-g([a-f0-9]+))?$');
+    final Match? match = versionPattern.firstMatch(version.trim());
+    if (match == null) {
+      return const GitTagVersion.unknown();
+    }
+
+    final List<String?> matchGroups = match.groups(<int>[1, 2, 3, 4, 5, 6]);
+    final int? x = matchGroups[0] == null ? null : int.tryParse(matchGroups[0]!);
+    final int? y = matchGroups[1] == null ? null : int.tryParse(matchGroups[1]!);
+    final int? z = matchGroups[2] == null ? null : int.tryParse(matchGroups[2]!);
+    final String? devString = matchGroups[3];
+
+    // count of commits past last tagged version
+    final int? commits = matchGroups[4] == null ? 0 : int.tryParse(matchGroups[4]!);
+    final String hash = matchGroups[5] ?? '';
+
+    return GitTagVersion(
+      x: x,
+      y: y,
+      z: z,
+      commits: commits,
+      hash: hash,
+      gitTag: '$x.$y.$z${devString ?? ''}', // e.g. 1.2.3-ohos
+    );
+  }
+
   static GitTagVersion parse(String version) {
     GitTagVersion gitTagVersion;
 
@@ -1047,6 +1083,12 @@ class GitTagVersion {
     if (gitTagVersion != const GitTagVersion.unknown()) {
       return gitTagVersion;
     }
+
+    gitTagVersion = parseOhosVersion(version);
+    if (gitTagVersion != const GitTagVersion.unknown()) {
+      return gitTagVersion;
+    }
+
     globals.printTrace('Could not interpret results of "git describe": $version');
     return const GitTagVersion.unknown();
   }
@@ -1056,6 +1098,9 @@ class GitTagVersion {
       return _unknownFrameworkVersion;
     }
     if (commits == 0 && gitTag != null) {
+      return gitTag!;
+    }
+    if (gitTag != null && gitTag!.contains('ohos')) {
       return gitTag!;
     }
     if (hotfix != null) {

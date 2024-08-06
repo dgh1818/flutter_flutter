@@ -519,7 +519,7 @@ void main() {
     expect(state.showToolbarCalled, isTrue);
     expect(renderEditable.selectWordCalled, isTrue);
     expect(renderEditable.lastCause, SelectionChangedCause.longPress);
-  }, variant: TargetPlatformVariant.all(excluding: <TargetPlatform>{ TargetPlatform.iOS, TargetPlatform.macOS }));
+  }, variant: TargetPlatformVariant.all(excluding: <TargetPlatform>{ TargetPlatform.iOS, TargetPlatform.macOS TargetPlatform.ohos}));
 
   testWidgets('TextSelectionGestureDetectorBuilder right click Apple platforms', (WidgetTester tester) async {
     // Regression test for https://github.com/flutter/flutter/issues/80119
@@ -633,6 +633,7 @@ void main() {
       case TargetPlatform.iOS:
         expect(renderEditable.selectWordEdgeCalled, isTrue);
         expect(renderEditable.lastCause, SelectionChangedCause.tap);
+      case TargetPlatform.ohos:
       case TargetPlatform.macOS:
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
@@ -641,7 +642,7 @@ void main() {
         expect(renderEditable.selectPositionAtCalled, isTrue);
         expect(renderEditable.lastCause, SelectionChangedCause.tap);
     }
-  }, variant: TargetPlatformVariant.all());
+  }, variant: TargetPlatformVariant.all(excluding: <TargetPlatform>{ TargetPlatform.ohos }));
 
   testWidgets('test TextSelectionGestureDetectorBuilder toggles toolbar on single tap on previous selection iOS', (WidgetTester tester) async {
     await pumpTextSelectionGestureDetectorBuilder(tester);
@@ -664,6 +665,7 @@ void main() {
       case TargetPlatform.iOS:
         expect(renderEditable.selectWordEdgeCalled, isFalse);
         expect(state.toggleToolbarCalled, isTrue);
+      case TargetPlatform.ohos:
       case TargetPlatform.macOS:
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
@@ -672,7 +674,7 @@ void main() {
         expect(renderEditable.selectPositionAtCalled, isTrue);
         expect(renderEditable.lastCause, SelectionChangedCause.tap);
     }
-  }, variant: TargetPlatformVariant.all());
+  }, variant: TargetPlatformVariant.all(excluding: <TargetPlatform>{ TargetPlatform.ohos }));
 
 
   testWidgets('test TextSelectionGestureDetectorBuilder shows spell check toolbar on single tap on Android', (WidgetTester tester) async {

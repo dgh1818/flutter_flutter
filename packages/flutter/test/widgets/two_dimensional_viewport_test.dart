@@ -36,6 +36,7 @@ void main() {
         switch (defaultTargetPlatform) {
           case TargetPlatform.android:
           case TargetPlatform.fuchsia:
+          case TargetPlatform.ohos:
             expect(find.byType(RepaintBoundary), findsNWidgets(7));
           case TargetPlatform.iOS:
           case TargetPlatform.linux:
@@ -67,6 +68,7 @@ void main() {
         switch (defaultTargetPlatform) {
           case TargetPlatform.android:
           case TargetPlatform.fuchsia:
+          case TargetPlatform.ohos:
             expect(find.byType(RepaintBoundary), findsNWidgets(6));
           case TargetPlatform.iOS:
           case TargetPlatform.linux:
@@ -551,6 +553,7 @@ void main() {
           case TargetPlatform.linux:
           case TargetPlatform.macOS:
           case TargetPlatform.windows:
+          case TargetPlatform.ohos:
             expectModalRoute();
             expect(find.byType(RepaintBoundary), findsNWidgets(3));
         }
@@ -578,6 +581,7 @@ void main() {
           case TargetPlatform.linux:
           case TargetPlatform.macOS:
           case TargetPlatform.windows:
+          case TargetPlatform.ohos:
             expectModalRoute();
             expect(find.byType(RepaintBoundary), findsNWidgets(2));
         }

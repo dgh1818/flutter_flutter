@@ -54,6 +54,7 @@ class TextMagnifier extends StatefulWidget {
             magnifierInfo: magnifierInfo,
           );
         case TargetPlatform.android:
+        case TargetPlatform.ohos:
           return TextMagnifier(
               magnifierInfo: magnifierInfo,
           );

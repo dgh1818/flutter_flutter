@@ -31,6 +31,7 @@ abstract final class SystemNavigator {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         return;
       case TargetPlatform.android:
         return SystemChannels.platform.invokeMethod<void>(

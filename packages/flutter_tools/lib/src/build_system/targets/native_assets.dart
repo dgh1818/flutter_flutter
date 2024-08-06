@@ -167,6 +167,14 @@ class NativeAssets extends Target {
           // Write the file we claim to have in the [outputs].
           await writeNativeAssetsYaml(KernelAssets(), environment.buildDir.uri, fileSystem);
           dependencies = <Uri>[];
+        case TargetPlatform.ohos:
+        case TargetPlatform.ohos_arm:
+        case TargetPlatform.ohos_arm64:
+        case TargetPlatform.ohos_x64:
+          // TODO(gengfei): adapt to ohos
+          // throw UnimplementedError('This function is not yet implemented');
+          await writeNativeAssetsYaml(KernelAssets(), environment.buildDir.uri, fileSystem);
+          dependencies = <Uri>[];
       }
     }
 
@@ -361,6 +369,10 @@ class NativeAssets extends Target {
       case TargetPlatform.web_javascript:
       case TargetPlatform.windows_x64:
       case TargetPlatform.windows_arm64:
+      case TargetPlatform.ohos:
+      case TargetPlatform.ohos_arm:
+      case TargetPlatform.ohos_arm64:
+      case TargetPlatform.ohos_x64:
         throwToolExit('Unsupported Android target platform: $targetPlatform.');
     }
   }

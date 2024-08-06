@@ -21,6 +21,7 @@ void main() {
         case TargetPlatform.android:
         case TargetPlatform.iOS:
         case TargetPlatform.macOS:
+        case TargetPlatform.ohos:
           expect(
             theme.builders[platform],
             isNotNull,

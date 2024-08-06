@@ -219,6 +219,10 @@ class KernelSnapshot extends Target {
       case TargetPlatform.linux_arm64:
       case TargetPlatform.tester:
       case TargetPlatform.web_javascript:
+      case TargetPlatform.ohos:
+      case TargetPlatform.ohos_arm:
+      case TargetPlatform.ohos_arm64:
+      case TargetPlatform.ohos_x64:
         forceLinkPlatform = false;
     }
 
@@ -234,6 +238,7 @@ class KernelSnapshot extends Target {
       TargetPlatform.ios => 'ios',
       TargetPlatform.linux_arm64 || TargetPlatform.linux_x64 => 'linux',
       TargetPlatform.windows_arm64 || TargetPlatform.windows_x64 => 'windows',
+      TargetPlatform.ohos || TargetPlatform.ohos_arm || TargetPlatform.ohos_arm64 || TargetPlatform.ohos_x64 => 'ohos',
       TargetPlatform.tester || TargetPlatform.web_javascript => null,
     };
 

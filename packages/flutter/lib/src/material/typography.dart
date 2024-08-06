@@ -228,6 +228,11 @@ class Typography with Diagnosticable {
       case TargetPlatform.linux:
         black ??= blackHelsinki;
         white ??= whiteHelsinki;
+        break;
+      case TargetPlatform.ohos:
+        black ??= blackHelsinki;
+        white ??= whiteHelsinki;
+        break;
       case null:
         break;
     }

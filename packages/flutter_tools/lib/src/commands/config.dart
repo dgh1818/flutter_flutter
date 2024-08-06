@@ -35,6 +35,9 @@ class ConfigCommand extends FlutterCommand {
       '    1) the JDK bundled with the latest installation of Android Studio,\n'
       '    2) the JDK found at the directory found in the JAVA_HOME environment variable, and\n'
       "    3) the directory containing the java binary found in the user's path.");
+    argParser.addOption('ohos-sdk', help: 'The OpenHarmony SDK directory.');
+    argParser.addOption('ohpm-home', help: 'The ohpm tool directory.');
+    argParser.addOption('signTool-home', help: 'The sign tool directory.');
     argParser.addOption('build-dir', help: 'The relative path to override a projects build directory.',
         valueHelp: 'out/');
     argParser.addFlag('machine',
@@ -148,6 +151,18 @@ class ConfigCommand extends FlutterCommand {
 
     if (argResults!.wasParsed('jdk-dir')) {
       _updateConfig('jdk-dir', stringArg('jdk-dir')!);
+    }
+
+    if (argResults!.wasParsed('ohos-sdk')) {
+      _updateConfig('ohos-sdk', stringArg('ohos-sdk')!);
+    }
+
+    if (argResults!.wasParsed('ohpm-home')) {
+      _updateConfig('ohpm-home', stringArg('ohpm-home')!);
+    }
+
+    if (argResults!.wasParsed('signTool-home')) {
+      _updateConfig('signTool-home', stringArg('signTool-home')!);
     }
 
     if (argResults!.wasParsed('clear-ios-signing-cert')) {

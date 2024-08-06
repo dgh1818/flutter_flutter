@@ -51,6 +51,9 @@ def flutter_additional_ios_build_settings(target)
   # ARC code targeting iOS 8 does not build on Xcode 14.3.
   force_to_arc_supported_min = target.deployment_target[/\d+/].to_i < 9
 
+  # ARC code targeting iOS 8 does not build on Xcode 14.3.
+  force_to_arc_supported_min = target.deployment_target[/\d+/].to_i < 9
+
   # This podhelper script is at $FLUTTER_ROOT/packages/flutter_tools/bin.
   # Add search paths from $FLUTTER_ROOT/bin/cache/artifacts/engine.
   artifacts_dir = File.join('..', '..', '..', '..', 'bin', 'cache', 'artifacts', 'engine')

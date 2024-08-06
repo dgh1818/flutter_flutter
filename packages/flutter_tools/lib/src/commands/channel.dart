@@ -45,6 +45,7 @@ class ChannelCommand extends FlutterCommand {
 
   @override
   Future<FlutterCommandResult> runCommand() async {
+    throwToolExit('It will be supported later.', exitCode: 1);
     final List<String> rest = argResults?.rest ?? <String>[];
     switch (rest.length) {
       case 0:

@@ -734,9 +734,11 @@ class AppBar extends StatefulWidget implements PreferredSizeWidget {
     bool platformCenter() {
       switch (theme.platform) {
         case TargetPlatform.android:
+        case TargetPlatform.ohos:
         case TargetPlatform.fuchsia:
         case TargetPlatform.linux:
         case TargetPlatform.windows:
+        case TargetPlatform.ohos:
           return false;
         case TargetPlatform.iOS:
         case TargetPlatform.macOS:
@@ -973,7 +975,7 @@ class _AppBarState extends State<AppBar> {
       if (!widget.excludeHeaderSemantics) {
         title = Semantics(
           namesRoute: switch (theme.platform) {
-            TargetPlatform.android || TargetPlatform.fuchsia || TargetPlatform.linux || TargetPlatform.windows => true,
+            TargetPlatform.android || TargetPlatform.fuchsia || TargetPlatform.linux || TargetPlatform.windows || TargetPlatform.ohos => true,
             TargetPlatform.iOS || TargetPlatform.macOS => null,
           },
           header: true,

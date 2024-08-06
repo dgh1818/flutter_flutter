@@ -116,7 +116,7 @@ class _SelectionAreaState extends State<SelectionArea> {
   Widget build(BuildContext context) {
     assert(debugCheckHasMaterialLocalizations(context));
     final TextSelectionControls controls = widget.selectionControls ?? switch (Theme.of(context).platform) {
-      TargetPlatform.android || TargetPlatform.fuchsia => materialTextSelectionHandleControls,
+      TargetPlatform.android || TargetPlatform.fuchsia || TargetPlatform.ohos => materialTextSelectionHandleControls,
       TargetPlatform.linux || TargetPlatform.windows   => desktopTextSelectionHandleControls,
       TargetPlatform.iOS                               => cupertinoTextSelectionHandleControls,
       TargetPlatform.macOS                             => cupertinoDesktopTextSelectionHandleControls,

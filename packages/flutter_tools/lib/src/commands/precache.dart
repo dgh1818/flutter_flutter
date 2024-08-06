@@ -43,6 +43,8 @@ class PrecacheCommand extends FlutterCommand {
         hide: !verboseHelp);
     argParser.addFlag('ios',
         help: 'Precache artifacts for iOS development.');
+    argParser.addFlag('ohos',
+        help: 'Precache artifacts for ohos development.');
     argParser.addFlag('web',
         help: 'Precache artifacts for web development.');
     argParser.addFlag('linux',

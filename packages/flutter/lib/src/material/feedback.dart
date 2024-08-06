@@ -100,6 +100,7 @@ abstract final class Feedback {
       case TargetPlatform.linux:
       case TargetPlatform.macOS:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         return Future<void>.value();
     }
   }
@@ -143,6 +144,7 @@ abstract final class Feedback {
       case TargetPlatform.linux:
       case TargetPlatform.macOS:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         return Future<void>.value();
     }
   }

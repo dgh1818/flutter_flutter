@@ -328,6 +328,7 @@ class _MaterialScrollbarState extends RawScrollbarState<_MaterialScrollbar> {
     switch (theme.platform) {
       case TargetPlatform.android:
         _useAndroidScrollbar = true;
+      case TargetPlatform.ohos:
       case TargetPlatform.iOS:
       case TargetPlatform.linux:
       case TargetPlatform.fuchsia:

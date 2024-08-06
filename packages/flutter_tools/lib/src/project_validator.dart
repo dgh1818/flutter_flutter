@@ -178,6 +178,11 @@ class VariableDumpMachineProjectValidator extends MachineProjectValidator {
       status: StatusProjectValidator.info,
     ));
     result.add(ProjectValidatorResult(
+      name: 'Platform.isOhos',
+      value: _toJsonValue(platform.isOhos),
+      status: StatusProjectValidator.info,
+    ));
+    result.add(ProjectValidatorResult(
       name: 'Platform.pathSeparator',
       value: _toJsonValue(platform.pathSeparator),
       status: StatusProjectValidator.info,

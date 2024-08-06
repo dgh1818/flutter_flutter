@@ -13,6 +13,7 @@ const Set<TargetPlatform> _kMobilePlatforms = <TargetPlatform>{
   TargetPlatform.android,
   TargetPlatform.iOS,
   TargetPlatform.fuchsia,
+  TargetPlatform.ohos,
 };
 
 /// Associates a [ScrollController] with a subtree.

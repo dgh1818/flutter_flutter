@@ -515,7 +515,6 @@ class FlutterPlatform extends PlatformPlugin {
           initializeExpressionCompiler(mainDart);
         }
       }
-
       globals.printTrace('test $ourTestCount: starting test device');
       final TestDevice testDevice = _createTestDevice(ourTestCount);
       final Stopwatch? testTimeRecorderStopwatch = testTimeRecorder?.start(TestTimePhases.Run);

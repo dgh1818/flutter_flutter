@@ -2166,6 +2166,7 @@ class _HighlightModeManager {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.iOS:
+      case TargetPlatform.ohos:
         if (WidgetsBinding.instance.mouseTracker.mouseIsConnected) {
           return FocusHighlightMode.traditional;
         }

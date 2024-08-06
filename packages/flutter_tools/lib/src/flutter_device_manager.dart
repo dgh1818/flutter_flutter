@@ -28,6 +28,9 @@ import 'macos/macos_ipad_device.dart';
 import 'macos/macos_workflow.dart';
 import 'macos/xcdevice.dart';
 import 'preview_device.dart';
+import 'ohos/ohos_device_discovery.dart';
+import 'ohos/ohos_sdk.dart';
+import 'ohos/ohos_workflow.dart';
 import 'tester/flutter_tester.dart';
 import 'version.dart';
 import 'web/web_device.dart';
@@ -43,10 +46,12 @@ class FlutterDeviceManager extends DeviceManager {
     required ProcessManager processManager,
     required FileSystem fileSystem,
     required AndroidSdk? androidSdk,
+    required HarmonySdk? ohosSdk,
     required FeatureFlags featureFlags,
     required IOSSimulatorUtils iosSimulatorUtils,
     required XCDevice xcDevice,
     required AndroidWorkflow androidWorkflow,
+    required OhosWorkflow ohosWorkflow,
     required IOSWorkflow iosWorkflow,
     required FuchsiaWorkflow fuchsiaWorkflow,
     required FlutterVersion flutterVersion,
@@ -66,6 +71,15 @@ class FlutterDeviceManager extends DeviceManager {
       fileSystem: fileSystem,
       platform: platform,
       userMessages: userMessages,
+    ),
+    OhosDevices(
+      logger: logger,
+      ohosSdk: ohosSdk,
+      processManager: processManager,
+      fileSystem: fileSystem,
+      platform: platform,
+      userMessages: userMessages,
+      ohosWorkflow: ohosWorkflow,
     ),
     IOSDevices(
       platform: platform,

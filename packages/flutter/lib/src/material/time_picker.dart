@@ -563,6 +563,7 @@ class _DayPeriodControl extends StatelessWidget {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         _announceToAccessibility(context, MaterialLocalizations.of(context).anteMeridiemAbbreviation);
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
@@ -581,6 +582,7 @@ class _DayPeriodControl extends StatelessWidget {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         _announceToAccessibility(context, MaterialLocalizations.of(context).postMeridiemAbbreviation);
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
@@ -2658,6 +2660,7 @@ class _TimePickerState extends State<_TimePicker> with RestorationMixin {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         _vibrateTimer?.cancel();
         _vibrateTimer = Timer(_kVibrateCommitDelay, () {
           HapticFeedback.vibrate();

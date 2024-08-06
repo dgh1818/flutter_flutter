@@ -1940,6 +1940,11 @@ DevelopmentArtifact? artifactFromTargetPlatform(TargetPlatform targetPlatform) {
       return DevelopmentArtifact.web;
     case TargetPlatform.ios:
       return DevelopmentArtifact.iOS;
+    case TargetPlatform.ohos:
+    case TargetPlatform.ohos_arm:
+    case TargetPlatform.ohos_arm64:
+    case TargetPlatform.ohos_x64:
+      return DevelopmentArtifact.ohos;
     case TargetPlatform.darwin:
       if (featureFlags.isMacOSEnabled) {
         return DevelopmentArtifact.macOS;
