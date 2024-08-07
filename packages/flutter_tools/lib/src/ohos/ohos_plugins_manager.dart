@@ -47,7 +47,12 @@ Future<void> checkOhosPluginsDependencies(FlutterProject flutterProject) async {
       }
     }
     final String absolutePath = globals.fs.path.join(flutterProject.ohos.ohosRoot.path, 'har/${plugin.name}.har');
-    dependencies[plugin.name] = 'file:$absolutePath';
+    if (flutterProject.isModule) {
+      dependencies[plugin.name] = 'file:$absolutePath';
+    } else {
+      final String relativePath = globals.fs.path.relative(absolutePath, from: globals.fs.path.dirname(packageFile.path));
+      dependencies[plugin.name] = 'file:$relativePath';
+    }
   }
   for (final String key in removeList) {
     globals.printStatus(
@@ -171,7 +176,11 @@ Future<void> addFlutterModuleAndPluginsOverrides(FlutterProject flutterProject) 
 
   for (final Plugin plugin in plugins) {
     final String absolutePath = globals.fs.path.join(flutterProject.ohos.ohosRoot.path, 'har/${plugin.name}.har');
-    overrides[plugin.name] = 'file:$absolutePath';
+    if (flutterProject.isModule) {
+      overrides[plugin.name] = 'file:$absolutePath';
+    } else {
+      overrides[plugin.name] = 'file:./har/${plugin.name}.har';
+    }
   }
   final String configNew = const JsonEncoder.withIndent('  ').convert(config);
   packageFile.writeAsStringSync(configNew, flush: true);
