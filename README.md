@@ -192,3 +192,29 @@ Flutter SDK 仓库
         4. 运行 `flutter run -d $DEVICE --debug`
     3. 补充信息: 运行android或ios出现类似错误，也可以尝试还原环境变量 FLUTTER_STORAGE_BASE_URL ，清除缓存后重新运行。
 
+11. Beta2版本的ROM更新后，不再支持申请有执行权限的匿名内存，导致debug运行闪退。
+    1. 解决方案：更新 flutter_flutter 到 a44b8a6d (2024-07-25) 之后的版本。
+    2. 关键日志：
+
+   ```
+   #20 at attachToNative (oh_modules/.ohpm/@ohos+flutter_ohos@g8zhdaqwu8gotysbmqcstpfpcpy=/oh_modules/@ohos/flutter_ohos/src/main/ets/embedding/engine/FlutterNapi.ets:78:32)
+   #21 at attachToNapi (oh_modules/.ohpm/@ohos+flutter_ohos@g8zhdaqwu8gotysbmqcstpfpcpy=/oh_modules/@ohos/flutter_ohos/src/main/ets/embedding/engine/FlutterEngine.ets:144:5)
+   #22 at init (oh_modules/.ohpm/@ohos+flutter_ohos@g8zhdaqwu8gotysbmqcstpfpcpy=/oh_modules/@ohos/flutter_ohos/src/main/ets/embedding/engine/FlutterEngine.ets:133:7)
+   ```
+
+12. DevEco-Studio(5.0.3.600 Beta3)，windows版本编译flutter应用报错
+    1.  解决方案：更新 flutter_flutter 到 c6fbac2b (2024-08-09) 之后的版本。
+    2.  关键日志：
+
+   ```
+   hvigor ERROR: Schema validate failed.
+      Detail: Please check the following fields.
+      {
+         instancePath: 'modules[2].srcPath',
+         keyword: 'pattern',
+         params: { pattern: '^(\\./|\\.\\./)[\\s\\S]+$' },
+         message: 'must match pattern "^(\\./|\\.\\./)[\\s\\S]+$"',
+      }
+   ```
+
+[更多FAQ](https://gitee.com/openharmony-sig/flutter_samples/blob/master/ohos/docs/08_FAQ/README.md)

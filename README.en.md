@@ -180,3 +180,30 @@ Attachment: [Flutter third-party library adaptation plan](https://docs.qq.com/sh
         2. Execute `fluent clean` to clear the project compilation cache
         3. Execute `flutter run -d $DEVICE --debug`
     3. Additional information: If a similar error occurs while running Android or iOS, you can also try restoring the environment variable FLUTTER_STORAGE_BASE_URL , clearing the cache, and then running again.
+
+12. After the ROM update of Beta 2 version, it no longer supports requesting anonymous memory with execution permission, resulting in debug crashing.
+    1. Solution: Update flutter_flutter to a version after a44b8a6d (2024-07-25).
+    2. Key logs:
+
+   ```
+   #20 at attachToNative (oh_modules/.ohpm/@ohos+flutter_ohos@g8zhdaqwu8gotysbmqcstpfpcpy=/oh_modules/@ohos/flutter_ohos/src/main/ets/embedding/engine/FlutterNapi.ets:78:32)
+   #21 at attachToNapi (oh_modules/.ohpm/@ohos+flutter_ohos@g8zhdaqwu8gotysbmqcstpfpcpy=/oh_modules/@ohos/flutter_ohos/src/main/ets/embedding/engine/FlutterEngine.ets:144:5)
+   #22 at init (oh_modules/.ohpm/@ohos+flutter_ohos@g8zhdaqwu8gotysbmqcstpfpcpy=/oh_modules/@ohos/flutter_ohos/src/main/ets/embedding/engine/FlutterEngine.ets:133:7)
+   ```
+
+13. DevEco-Studio(5.0.3.600 Beta3)，windows版本编译flutter应用报错
+    1. Solution: Update flutter_flutter to a version after c6fbac2b (2024-08-09).
+    2. Key logs:
+
+   ```
+   hvigor ERROR: Schema validate failed.
+      Detail: Please check the following fields.
+      {
+         instancePath: 'modules[2].srcPath',
+         keyword: 'pattern',
+         params: { pattern: '^(\\./|\\.\\./)[\\s\\S]+$' },
+         message: 'must match pattern "^(\\./|\\.\\./)[\\s\\S]+$"',
+      }
+   ```
+
+[More FAQ](https://gitee.com/openharmony-sig/flutter_samples/blob/master/ohos/docs/08_FAQ/README.md)
