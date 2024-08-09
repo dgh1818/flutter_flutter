@@ -150,15 +150,15 @@ String getFlavor(File buildProfileFile, String? flavor) {
 
 void updateProjectVersion(FlutterProject project, BuildInfo? buildInfo) {
   final File targetFile = project.ohos.getAppJsonFile();
-  if (targetFile.existsSync() && buildInfo != null) {
+  if (targetFile.existsSync()) {
     final String? buildNumber = validatedBuildNumberForPlatform(
       TargetPlatform.ohos_arm,
-      buildInfo.buildNumber,
+      buildInfo?.buildNumber ?? project.manifest.buildNumber,
       globals.logger,
     );
     final String? buildName = validatedBuildNameForPlatform(
       TargetPlatform.ohos_arm,
-      buildInfo.buildName,
+      buildInfo?.buildName ?? project.manifest.buildName,
       globals.logger,
     );
 
