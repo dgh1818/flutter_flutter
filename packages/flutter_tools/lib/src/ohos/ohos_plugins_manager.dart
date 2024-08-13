@@ -50,7 +50,7 @@ Future<void> checkOhosPluginsDependencies(FlutterProject flutterProject) async {
     if (flutterProject.isModule) {
       dependencies[plugin.name] = 'file:$absolutePath';
     } else {
-      final String relativePath = _relative(absolutePath, from: globals.fs.path.dirname(packageFile.path));
+      final String relativePath = globals.fs.path.relative(absolutePath, from: globals.fs.path.dirname(packageFile.path));
       dependencies[plugin.name] = 'file:$relativePath';
     }
   }
@@ -85,14 +85,13 @@ Future<void> addPluginsModules(FlutterProject flutterProject) async {
     }
     modules.add(<String, dynamic>{
       'name': plugin.name,
-      'srcPath': _relative(
-        globals.fs.path.join(plugin.path, OhosPlugin.kConfigKey),
-        from: flutterProject.ohos.ohosRoot.path,
-      ),
+      'srcPath': globals.fs.path.join(plugin.path, OhosPlugin.kConfigKey),
       'targets': <Map<String, dynamic>>[
         <String, dynamic>{
           'name': 'default',
-          'applyToProducts': <dynamic>['default']
+          'applyToProducts': <dynamic>[
+            'default'
+          ]
         }
       ],
     });
@@ -118,12 +117,9 @@ Future<void> addFlutterModuleAndPluginsSrcOverrides(FlutterProject flutterProjec
   final Map<String, dynamic> overrides = config['overrides'] as Map<String, dynamic>? ?? <String, dynamic>{};
 
   for (final Plugin plugin in plugins) {
-    overrides[plugin.name] = _relative(
-      globals.fs.path.join(plugin.path, OhosPlugin.kConfigKey),
-      from: flutterProject.ohos.ohosRoot.path,
-    );
+    overrides[plugin.name] = globals.fs.path.join(plugin.path, OhosPlugin.kConfigKey);
   }
-  final String relativePath = _relative(flutterProject.ohos.flutterModuleDirectory.path, from: flutterProject.ohos.ohosRoot.path);
+  final String relativePath = globals.fs.path.relative(flutterProject.ohos.flutterModuleDirectory.path, from: flutterProject.ohos.ohosRoot.path);
   overrides['@ohos/flutter_module'] = 'file:./$relativePath';
   overrides['@ohos/flutter_ohos'] = 'file:./har/flutter.har';
   final String configNew = const JsonEncoder.withIndent('  ').convert(config);
@@ -188,8 +184,4 @@ Future<void> addFlutterModuleAndPluginsOverrides(FlutterProject flutterProject) 
   }
   final String configNew = const JsonEncoder.withIndent('  ').convert(config);
   packageFile.writeAsStringSync(configNew, flush: true);
-}
-
-String _relative(String path, {String? from}) {
-  return globals.fs.path.relative(path, from: from).replaceAll(r'\', '/');
 }

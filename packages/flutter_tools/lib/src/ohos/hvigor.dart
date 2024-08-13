@@ -70,7 +70,7 @@ void checkPlatformEnvironment(String environment, Logger? logger) {
 }
 
 void copyFlutterAssets(String orgPath, String desPath, Logger? logger) {
-  logger?.printStatus('copy from "$orgPath" to "$desPath"');
+  logger?.printTrace('copy from "$orgPath" to "$desPath"');
   final LocalFileSystem localFileSystem = globals.localFileSystem;
   copyDirectory(
       localFileSystem.directory(orgPath), localFileSystem.directory(desPath));
@@ -467,7 +467,7 @@ void cleanAndCopyFlutterRuntime(
   ensureParentExists(desHarPath);
   final File originHarFile = globals.localFileSystem.file(localEngineHarPath);
   originHarFile.copySync(desHarPath);
-  logger?.printStatus('copy from "$localEngineHarPath" to "$desHarPath"');
+  logger?.printTrace('copy from "$localEngineHarPath" to "$desHarPath"');
   logger?.printTrace('copy flutter runtime to project end');
 }
 
