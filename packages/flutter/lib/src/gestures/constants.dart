@@ -58,7 +58,7 @@ const Duration kZoomControlsTimeout = Duration(milliseconds: 3000);
 /// be a drag.
 // This value was empirically derived. We started at 8.0 and increased it to
 // 18.0 after getting complaints that it was too difficult to hit targets.
-const double kTouchSlop = 4.0; // Logical pixels
+const double kTouchSlop = 18.0; // Logical pixels
 
 /// The distance a touch has to travel for the framework to be confident that
 /// the gesture is a paging gesture. (Currently not used, because paging uses a

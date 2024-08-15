@@ -385,7 +385,7 @@ class ScrollDragController implements Drag {
             ) * offset.sign;
           }
         } else {
-          return 0.0;
+          return offset < 0 ? offset - 1.0 : offset + 1.0;
         }
       }
     }
