@@ -6,6 +6,9 @@ Flutter SDK 仓库
 ## 仓库说明
 本仓库是基于Flutter SDK对于OpenHarmony平台的兼容拓展，可支持IDE或者终端使用Flutter Tools指令编译和构建OpenHarmony应用程序。
 
+## 开发文档
+文档入口：https://gitee.com/openharmony-sig/flutter_samples/tree/master/ohos/docs
+
 ## 环境依赖
 
 * 开发系统
@@ -37,7 +40,9 @@ Flutter SDK 仓库
      export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
      ```
 
-   3. 应用构建依赖flutter engine构建产物与engine host，均在 `src/out` 路径下。不同构建类型的产物分别在 `ohos_debug_unopt_arm64`、 `ohos_release_arm64` 和 `ohos_profile_arm64` 目录下。engine host 的构建类型也有三种，分别在 `host_debug_unopt` 、`host_release` 与 `host_profile` 目录中。构建需要根据不同的构建类型来指定不同的目录。
+   3. 应用构建依赖flutter engine构建产物与engine host，默认从云端获取。也可以手工指定
+      - 使用示例：`--local-engine=src/out/<engine产物目录> --local-engine-host=src/our/<host产物目录>`
+      均在 `src/out` 路径下。不同构建类型的产物分别在 `ohos_debug_unopt_arm64`、 `ohos_release_arm64` 和 `ohos_profile_arm64` 目录下。engine host 的构建类型也有三种，分别在 `host_debug_unopt` 、`host_release` 与 `host_profile` 目录中。构建需要根据不同的构建类型来指定不同的目录。
 
       ```sh
       # 国内镜像
@@ -202,7 +207,9 @@ Flutter SDK 仓库
    #22 at init (oh_modules/.ohpm/@ohos+flutter_ohos@g8zhdaqwu8gotysbmqcstpfpcpy=/oh_modules/@ohos/flutter_ohos/src/main/ets/embedding/engine/FlutterEngine.ets:133:7)
    ```
 
-12. DevEco-Studio(5.0.3.600 Beta3)，windows版本编译flutter应用报错
+12. 构建Hap命令直接执行`flutter build hap`即可，不再需要`--local-engine`参数，直接从云端获取编译产物。
+
+13. DevEco-Studio(5.0.3.600 Beta3)，windows版本编译flutter应用报错
     1.  解决方案：更新 flutter_flutter 到 c6fbac2b (2024-08-09) 之后的版本。
     2.  关键日志：
 
