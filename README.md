@@ -7,7 +7,7 @@ Flutter SDK 仓库
 本仓库是基于Flutter SDK对于OpenHarmony平台的兼容拓展，可支持IDE或者终端使用Flutter Tools指令编译和构建OpenHarmony应用程序。
 
 ## 开发文档
-文档入口：https://gitee.com/openharmony-sig/flutter_samples/tree/master/ohos/docs
+[参考文档](https://gitee.com/openharmony-sig/flutter_samples/tree/master/ohos/docs)
 
 ## 环境依赖
 
@@ -16,28 +16,29 @@ Flutter SDK 仓库
   Flutter Tools指令目前已支持在Linux、Mac和Windows下使用。
 
 * 环境配置
-   **请优先从[鸿蒙套件列表](https://developer.harmonyos.com/deveco-developer-suite/enabling/kit?currentPage=1&pageSize=100)下载配套开发工具，暂不支持非该渠道下载的套件**
+   **请从[鸿蒙SDK](https://developer.huawei.com/consumer/cn/develop)下载配套开发工具**
    *下列环境变量配置，类Unix系统（Linux、Mac），下可直接参照配置，Windows下环境变量配置请在‘编辑系统环境变量’中设置*
 
   1. 配置HarmonyOS SDK和环境变量
-   * API12, deveco-studio-5.0.3.300 或 command-line-tools-5.0.3.300
+   * API12, deveco-studio-5.0 或 command-line-tools-5.0
    * 配置 Java17
    * 配置环境变量 (SDK, node, ohpm, hvigor)
 
       ```sh
-      export TOOL_HOME=/Applications/DevEco-Studio-5.0.3.300.app/Contents # mac环境
-      export DEVECO_SDK_HOME=$TOOL_HOME/sdk # command-line-tools/sdk
-      export PATH=$TOOL_HOME/tools/ohpm/bin:$PATH # command-line-tools/ohpm/bin
-      export PATH=$TOOL_HOME/tools/hvigor/bin:$PATH # command-line-tools/hvigor/bin
-      export PATH=$TOOL_HOME/tools/node/bin:$PATH # command-line-tools/tool/node/bin
+       export TOOL_HOME=/Applications/DevEco-Studio.app/Contents # mac环境
+       export DEVECO_SDK_HOME=$TOOL_HOME/sdk # command-line-tools/sdk
+       export PATH=$TOOL_HOME/tools/ohpm/bin:$PATH # command-line-tools/ohpm/bin
+       export PATH=$TOOL_HOME/tools/hvigor/bin:$PATH # command-line-tools/hvigor/bin
+       export PATH=$TOOL_HOME/tools/node/bin:$PATH # command-line-tools/tool/node/bin
       ```
 
   2. 通过代码工具下载当前仓库代码`git clone https://gitee.com/openharmony-sig/flutter_flutter.git`，指定dev或master分支，并配置环境
 
      ```sh
-     export PATH=<flutter_flutter path>/bin:$PATH
-     export PUB_HOSTED_URL=https://pub.flutter-io.cn
-     export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+      export PUB_CACHE=D:/PUB
+      export PATH=<flutter_flutter path>/bin:$PATH
+      export PUB_HOSTED_URL=https://pub.flutter-io.cn
+      export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
      ```
 
    3. 应用构建依赖flutter engine构建产物与engine host，默认从云端获取。也可以手工指定
@@ -45,19 +46,22 @@ Flutter SDK 仓库
       均在 `src/out` 路径下。不同构建类型的产物分别在 `ohos_debug_unopt_arm64`、 `ohos_release_arm64` 和 `ohos_profile_arm64` 目录下。engine host 的构建类型也有三种，分别在 `host_debug_unopt` 、`host_release` 与 `host_profile` 目录中。构建需要根据不同的构建类型来指定不同的目录。
 
       ```sh
-      # 国内镜像
-      export PUB_HOSTED_URL=https://pub.flutter-io.cn
-      export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+       #依赖缓存
+       export PUB_CACHE=D:/PUB(自定义路径)
 
-      # 拉取下来的flutter_flutter/bin目录
-      export PATH=/home/<user>/ohos/flutter_flutter/bin:$PATH
+       # 国内镜像
+       export PUB_HOSTED_URL=https://pub.flutter-io.cn
+       export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
 
-      # HamonyOS SDK
-      export TOOL_HOME=/Applications/DevEco-Studio-5.0.3.300.app/Contents # mac环境
-      export DEVECO_SDK_HOME=$TOOL_HOME/sdk # command-line-tools/sdk
-      export PATH=$TOOL_HOME/tools/ohpm/bin:$PATH # command-line-tools/ohpm/bin
-      export PATH=$TOOL_HOME/tools/hvigor/bin:$PATH # command-line-tools/hvigor/bin
-      export PATH=$TOOL_HOME/tools/node/bin:$PATH # command-line-tools/tool/node/bin
+       # 拉取下来的flutter_flutter/bin目录
+       export PATH=/home/<user>/ohos/flutter_flutter/bin:$PATH
+
+       # HamonyOS SDK
+       export TOOL_HOME=/Applications/DevEco-Studio.app/Contents # mac环境
+       export DEVECO_SDK_HOME=$TOOL_HOME/sdk # command-line-tools/sdk
+       export PATH=$TOOL_HOME/tools/ohpm/bin:$PATH # command-line-tools/ohpm/bin
+       export PATH=$TOOL_HOME/tools/hvigor/bin:$PATH # command-line-tools/hvigor/bin
+       export PATH=$TOOL_HOME/tools/node/bin:$PATH # command-line-tools/tool/node/bin
       ```
    4. Flutter 默认使用自己sdk中的har包，不会使用flutter engine中的har包，如果需要使用flutter engine的har包，需要手工将flutter engine中的 `src/out/ohos_<build_type>_arm64/har/flutter.har` 复制到flutter sdk路径下的 `packages/flutter_tools/templates/app_shared/ohos.tmpl/har/har_product.tmpl/` 并加上构建类型与HarmonyOS SDK版本的后缀，如 `flutter.har.release.12`。
 
@@ -68,9 +72,13 @@ Flutter SDK 仓库
 2. 创建工程与编译命令，编译产物在\<projectName\>/ohos/entry/build/default/outputs/default/entry-default-signed.hap下。
 
    ```
-   # 创建工程
-   flutter create --platforms ohos <projectName>
+    # 创建工程
+    flutter create --platforms ohos <projectName>
 
+    # 进入工程根目录编译
+    # 示例：flutter build hap [--target-platform ohos-arm64] [--local-engine=<DIR>/src/out/ohos_release_arm64] --release
+    flutter build hap --release
+   ```
    # 进入工程根目录编译
    # 示例：flutter build hap [--target-platform ohos-arm64] [--local-engine=<DIR>/src/out/ohos_release_arm64] --release
    flutter build hap --target-platform ohos-arm64 --<debug|release|profile> [--local-engine=src/out/<engine产物目录> --local-engine-host=src/out/<engine host目录>/]
@@ -102,10 +110,10 @@ Flutter SDK 仓库
 ```
 
 5. 构建app包命令：
-```
-   # 示例：flutter build app --release [--local-engine=<DIR>/src/out/ohos_release_arm64]  local-engine为可选项
-   flutter build app --release
-```
+   ```
+    # 示例：flutter build app --release [--local-engine=<DIR>/src/out/ohos_release_arm64]  local-engine为可选项
+    flutter build app --release
+   ```
 
 
 ## 已兼容OpenHarmony开发的指令列表
@@ -136,7 +144,7 @@ Flutter SDK 仓库
 2. 若出现报错：`The SDK license agreement is not accepted`，参考执行以下命令后再次编译：
 
    ```
-   ./ohsdkmgr install ets:9 js:9 native:9 previewer:9 toolchains:9 --sdk-directory='/home/xc/code/sdk/ohos-sdk/' --accept-license
+    ./ohsdkmgr install ets:9 js:9 native:9 previewer:9 toolchains:9 --sdk-directory='/home/xc/code/sdk/ohos-sdk/' --accept-license
    ```
 
 3. 如果你使用的是DevEco Studio的Beta版本，编译工程时遇到“must have required property 'compatibleSdkVersion', location: demo/ohos/build-profile.json5:17:11"错误，请参考《DevEco Studio环境配置指导.docx》中的‘6 创建工程和运行Hello World’【配置插件】章节修改 hvigor/hvigor-config.json5文件。
@@ -144,19 +152,19 @@ Flutter SDK 仓库
 4. 若提示安装报错：`fail to verify pkcs7 file` 请执行指令
 
    ```
-   hdc shell param set persist.bms.ohCert.verify true
+    hdc shell param set persist.bms.ohCert.verify true
    ```
 5. linux虚拟机通过hdc无法直接发现OpenHarmony设备
 
    解决方案：在windows宿主机中，开启hdc server，具体指令如下：
    ```
-   hdc kill
-   hdc -s serverIP:8710 -m
+    hdc kill
+    hdc -s serverIP:8710 -m
    ```
-   在linux中配置环境变量：
+    在linux中配置环境变量：
    ```
-   HDC_SERVER=<serverIP>
-   HDC_SERVER_PORT=8710
+    HDC_SERVER=<serverIP>
+    HDC_SERVER_PORT=8710
    ```
 
    配置完成后flutter sdk可以通过hdc server完成设备连接，也可参考[官方指导](https://docs.openharmony.cn/pages/v4.0/zh-cn/device-dev/subsystems/subsys-toolchain-hdc-guide.md/#hdc-client%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AEhdc-server)。
@@ -167,22 +175,22 @@ Flutter SDK 仓库
    请在用户目录`~`下创建文件`.npmrc`，该配置也可参考[DevEco Studio官方文档](https://developer.harmonyos.com/cn/docs/documentation/doc-guides-V3/environment_config-0000001052902427-V3)，编辑内容如下：
 
    ```
-   registry=https://repo.huaweicloud.com/repository/npm/
-   @ohos:registry=https://repo.harmonyos.com/npm/
+    registry=https://repo.huaweicloud.com/repository/npm/
+    @ohos:registry=https://repo.harmonyos.com/npm/
    ```
 
 7. 查日志时，存在日志丢失现象。
     解决方案：关闭全局日志，只打开自己领域的日志
 
     ```
-    步骤一：关闭所有领域的日志打印（部分特殊日志无法关闭）
-    hdc shell hilog -b X
-    步骤二：只打开自己领域的日志
-    hdc shell hilog <level> -D <domain>
-    其中<level>为日志打印的级别：D/I/W/E/F,<domain>为Tag前面的数字
-    举例：
-    打印A00000/XComFlutterOHOS_Native的日志，需要设置hdc shell hilog -b D -D A00000
-    注：上面的设置在机器重启后会失效，如果要继续使用，需要重新设置。
+     步骤一：关闭所有领域的日志打印（部分特殊日志无法关闭）
+     hdc shell hilog -b X
+     步骤二：只打开自己领域的日志
+     hdc shell hilog <level> -D <domain>
+     其中<level>为日志打印的级别：D/I/W/E/F,<domain>为Tag前面的数字
+     举例：
+     打印A00000/XComFlutterOHOS_Native的日志，需要设置hdc shell hilog -b D -D A00000
+     注：上面的设置在机器重启后会失效，如果要继续使用，需要重新设置。
     ```
 8. 若Api11 Beta1版本的机器上无法启动debug签名的应用，可以通过将签名换成正式签名，或在手机端打开开发者模式解决（步骤：设置->通用->开发者模式）
 
@@ -202,14 +210,66 @@ Flutter SDK 仓库
     2. 关键日志：
 
    ```
-   #20 at attachToNative (oh_modules/.ohpm/@ohos+flutter_ohos@g8zhdaqwu8gotysbmqcstpfpcpy=/oh_modules/@ohos/flutter_ohos/src/main/ets/embedding/engine/FlutterNapi.ets:78:32)
-   #21 at attachToNapi (oh_modules/.ohpm/@ohos+flutter_ohos@g8zhdaqwu8gotysbmqcstpfpcpy=/oh_modules/@ohos/flutter_ohos/src/main/ets/embedding/engine/FlutterEngine.ets:144:5)
-   #22 at init (oh_modules/.ohpm/@ohos+flutter_ohos@g8zhdaqwu8gotysbmqcstpfpcpy=/oh_modules/@ohos/flutter_ohos/src/main/ets/embedding/engine/FlutterEngine.ets:133:7)
+    #20 at attachToNative (oh_modules/.ohpm/@ohos+flutter_ohos@g8zhdaqwu8gotysbmqcstpfpcpy=/oh_modules/@ohos/flutter_ohos/src/main/ets/embedding/engine/FlutterNapi.ets:78:32)
+    #21 at attachToNapi (oh_modules/.ohpm/@ohos+flutter_ohos@g8zhdaqwu8gotysbmqcstpfpcpy=/oh_modules/@ohos/flutter_ohos/src/main/ets/embedding/engine/FlutterEngine.ets:144:5)
+    #22 at init (oh_modules/.ohpm/@ohos+flutter_ohos@g8zhdaqwu8gotysbmqcstpfpcpy=/oh_modules/@ohos/flutter_ohos/src/main/ets/embedding/engine/FlutterEngine.ets:133:7)
    ```
 
 12. 构建Hap命令直接执行`flutter build hap`即可，不再需要`--local-engine`参数，直接从云端获取编译产物。
 
-13. DevEco-Studio(5.0.3.600 Beta3)，windows版本编译flutter应用报错
+13. 配置环境完成后执行 flutter 命令 出现闪退。
+    1. 解决方案：windows环境中添加git环境变量配置。
+    ```
+     export PATH=<git path>/cmd:$PATH
+    ```
+
+14. 执行`flutter pub cache clean` 正常 执行`flutter clean` 报错，按照报错信息执行 update 命令也没有效果。
+    1. 解决方案：通过注释掉 build.json5 文件中的配置规避。
+    2. 报错信息:
+    ```
+     #Parse ohos module. json5 error: Exception: Can not found module.json5 at
+     #D:\pub_cache\git\flutter_packages-b00939bb44d018f0710d1b080d91dcf4c34ed06\packages\video_player\video_player_ohos\ohossrc\main\module.json5.
+     #You need to update the Flutter plugin project structure.
+     #See
+     #https://gitee.com/openharmony-sig/flutter_samples/tree/master/ohos/docs/09_specifications/update_flutter_plugin_structure.md
+    ```
+
+15. 执行`flutter build hap` 时遇到路径校验报错。
+    1. 解决方案：
+      ·打开 deveco 安装路径 D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\res\schemas 下的 ohos-project-build-profile-schema.json文件。
+      ·在该文件中找到包含："pattern": "^(\\./|\\.\\./)[\\s\\S]+$"的行,并删除此行。
+    2. 报错信息:
+    ```
+     #hvigor  ERROR: Schema validate failed.
+     #        Detail: Please check the following fields.
+     #instancePath: 'modules[1].scrPath',
+     #keyword: 'pattern'
+     #params: { pattern:'^(\\./|\\.\\./)[\\s\\S]+$' },
+     #message: 'must match pattern "^(\\./|\\.\\./)[\\s\\S]+$"',
+     #location: 'D:/work/videoplayerdemo/video_cannot_stop_at_background/ohos/build-profile.json:42:146'
+    ```
+
+16. 执行`flutter build hap` 报错。
+    1. 解决方案：打开 deveco 安装路径 D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\src\model\module 下的 core-module-model-impl.js,
+       修改 findBelongProjectPath 方法（需要管理员权限，可另存为后替换）
+       ```
+        findBelongProjectPath(e) {
+          if (e === path_1.default.dirname(e)) {
+             return this.parentProject.getProjectDir()
+          }
+        }
+       ```
+    2. 报错信息:
+      ```
+       # hvigor  ERROR: Cannot find belonging project path for module at D:\.
+       # hvigor  ERROR:  BUILD FAILED in 2s 556ms.
+       #Running Hvigor task assembleHap...
+       #Oops; flutter has exited unexpectedly: "ProcessException: The command failed
+       #  <Command: hvigorw --mode module -p module=video_player_ohos@default -p product=default assmbleHar --no-daemon"
+       #A crash report has been written to D:\work\videoplayerdemo\video_cannot_stop_at_background\flutter_03.log.
+      ```
+
+17. DevEco-Studio(5.0.3.600 Beta3)，windows版本编译flutter应用报错
     1.  解决方案：更新 flutter_flutter 到 c6fbac2b (2024-08-09) 之后的版本。
     2.  关键日志：
 
