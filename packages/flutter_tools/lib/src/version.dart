@@ -1050,7 +1050,7 @@ class GitTagVersion {
 
   static GitTagVersion parseOhosVersion(String version) {
     final RegExp versionPattern = RegExp(
-      r'^(\d+)\.(\d+)\.(\d+)(-ohos)?(?:-(\d+)-g([a-f0-9]+))?$');
+      r'^(\d+)\.(\d+)\.(\d+)(-ohos-\d+\.\d+\.\d+)?(?:-(\d+)-g([a-f0-9]+))?$');
     final Match? match = versionPattern.firstMatch(version.trim());
     if (match == null) {
       return const GitTagVersion.unknown();
@@ -1072,7 +1072,7 @@ class GitTagVersion {
       z: z,
       commits: commits,
       hash: hash,
-      gitTag: '$x.$y.$z${devString ?? ''}', // e.g. 1.2.3-ohos
+      gitTag: '$x.$y.$z${devString ?? ''}', // e.g. 3.7.12-ohos-1.0.0
     );
   }
 
