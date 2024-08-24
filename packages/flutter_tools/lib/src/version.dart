@@ -1050,21 +1050,21 @@ class GitTagVersion {
 
   static GitTagVersion parseOhosVersion(String version) {
     final RegExp versionPattern = RegExp(
-      r'^(\d+)\.(\d+)\.(\d+)(-ohos-\d+\.\d+\.\d+)?(?:-(\d+)-g([a-f0-9]+))?$');
+      r'^(\d+)\.(\d+)\.(\d+)(-ohos(-\d+\.\d+\.\d+)?)?(?:-(\d+)-g([a-f0-9]+))?$');
     final Match? match = versionPattern.firstMatch(version.trim());
     if (match == null) {
       return const GitTagVersion.unknown();
     }
 
-    final List<String?> matchGroups = match.groups(<int>[1, 2, 3, 4, 5, 6]);
+    final List<String?> matchGroups = match.groups(<int>[1, 2, 3, 4, 5, 6, 7]);
     final int? x = matchGroups[0] == null ? null : int.tryParse(matchGroups[0]!);
     final int? y = matchGroups[1] == null ? null : int.tryParse(matchGroups[1]!);
     final int? z = matchGroups[2] == null ? null : int.tryParse(matchGroups[2]!);
     final String? devString = matchGroups[3];
 
     // count of commits past last tagged version
-    final int? commits = matchGroups[4] == null ? 0 : int.tryParse(matchGroups[4]!);
-    final String hash = matchGroups[5] ?? '';
+    final int? commits = matchGroups[5] == null ? 0 : int.tryParse(matchGroups[5]!);
+    final String hash = matchGroups[6] ?? '';
 
     return GitTagVersion(
       x: x,
