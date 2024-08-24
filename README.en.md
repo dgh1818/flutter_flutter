@@ -190,7 +190,7 @@ Attachment: [Flutter third-party library adaptation plan](https://docs.qq.com/sh
     Solution：Disable global logs and enable only logs in your domain
 
     ```
-     Step one：Disable log printing for all fields（Some special logs cannot be closed）
+     Step one：Disable log printing for all fields(Some special logs cannot be closed)
      hdc shell hilog -b X
      Step two：Open logs for your domain only
      hdc shell hilog <level> -D <domain>
@@ -276,7 +276,7 @@ Attachment: [Flutter third-party library adaptation plan](https://docs.qq.com/sh
        #A crash report has been written to D:\work\videoplayerdemo\video_cannot_stop_at_background\flutter_03.log.
       ```
 
-13. DevEco-Studio(5.0.3.600 Beta3)，windows版本编译flutter应用报错
+17. DevEco-Studio(5.0.3.600 Beta3)，windows版本编译flutter应用报错
     1. Solution: Update flutter_flutter to a version after c6fbac2b (2024-08-09).
     2. Key logs:
 
@@ -290,5 +290,14 @@ Attachment: [Flutter third-party library adaptation plan](https://docs.qq.com/sh
          message: 'must match pattern "^(\\./|\\.\\./)[\\s\\S]+$"',
       }
    ```
+      ```
+
+18. Executing `flutter clean` in .ohos's project reported an error, and then executing `flutter pub get` also reported an error。
+    1. Solution：Delete the .ohos folder and execute `flutter pub get` again
+    2. Error message：
+      ```
+       Oops; flutter has exited unexpectedly: "PathNotFoundException: Cannot open file, path = 'D:\code\.ohos\build-profile.json5' (OS Error:  The system cannot find the specified file。，error = 2)".
+       A crash report has been written to D:\code\flutter_01.log.
+      ```
 
 [More FAQ](https://gitee.com/openharmony-sig/flutter_samples/blob/master/ohos/docs/08_FAQ/README.md)

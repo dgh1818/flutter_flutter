@@ -284,4 +284,12 @@ Flutter SDK 仓库
       }
    ```
 
+18. 在.ohos的项目执行`flutter clean` 报错，然后再执行`flutter pub get`也报错。
+    1. 解决方案：删除.ohos文件夹，重新flutter pub get 即可
+    2.报错信息：
+      ```
+       Oops; flutter has exited unexpectedly: "PathNotFoundException: Cannot open file, path = 'D:\code\.ohos\build-profile.json5' (OS Error: 系统找不到指定的文件。，error = 2)".
+       A crash report has been written to D:\code\flutter_01.log.
+      ```
+
 [更多FAQ](https://gitee.com/openharmony-sig/flutter_samples/blob/master/ohos/docs/08_FAQ/README.md)
