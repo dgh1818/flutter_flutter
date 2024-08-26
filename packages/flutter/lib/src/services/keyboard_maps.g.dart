@@ -602,7 +602,7 @@ const Map<int, LogicalKeyboardKey> kOhosToLogicalKey = <int, LogicalKeyboardKey>
  2060: LogicalKeyboardKey.bracketRight,
  2061: LogicalKeyboardKey.backslash,
  2062: LogicalKeyboardKey.semicolon,
-//  2063: LogicalKeyboardKey.apostrophe,
+ 2063: LogicalKeyboardKey.quote,
  2064: LogicalKeyboardKey.slash,
  2067: LogicalKeyboardKey.contextMenu,
  2466: LogicalKeyboardKey.compose,
