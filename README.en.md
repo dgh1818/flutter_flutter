@@ -75,6 +75,22 @@ This repository is a compatible extension of Flutter SDK for the OpenHarmony pla
     # Example: flutter build hap [--target-platform ohos-arm64] --local-engine=<DIR>/src/out/ohos_release_arm64 --release
     flutter build hap --target-platform ohos-arm64 --<debug|release|profile> --local-engine=<DIR>/src/out/<engine> --local-engine-host=src/out/<engine_host>/
     ```
+    2.1 Create a Project and Enable the Impeller
+    Currently, the Flutter OHOS platform supports the impeller-vulkan rendering mode, which can be controlled via a switch. The switch is located in the 'buildinfo.json5' file. If you choose to disable the Impeller rendering, you can change the value in the JSON file to false. The next time you run the project, the Impeller will be disabled.
+    File path: `ohos/entry/src/main/resources/rawfile/buildinfo.json5`
+    File content:
+    ```json
+    {
+        "string": [
+            {
+                "name": "enable_impeller",
+                "value": "true"
+            }
+        ]
+    }
+    ```
+    By default, the Impeller option is enabled in new projects.
+    For existing projects, you can copy the above buildinfo.json5 file to the corresponding directory in your project and modify the value to enable or disable the switch. If the switch does not exist, then will set enable-impeller by default.
 
 3. After discovering the ohos device through the `flutter devices` command, use `hdc -t <deviceId> install <hap file path>` to install it.
 

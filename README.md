@@ -71,6 +71,23 @@ Flutter SDK 仓库
    # 示例：flutter build hap [--target-platform ohos-arm64] --local-engine=<DIR>/src/out/ohos_release_arm64 --release
    flutter build hap --target-platform ohos-arm64 --<debug|release|profile> --local-engine=src/out/<engine产物目录> --local-engine-host=src/out/<engine host目录>/
    ```
+   2.1 创建工程并打开impeller开关
+   当前Flutter ohos平台中支持impeller-vulkan渲染模式，可通过开关控制是否打开。
+   开关位于`buildinfo.json5`文件中，如果选择关闭impeller渲染，可将json文件中的value改为false。下一次运行时即可关闭。
+   文件路径：`ohos/entry/src/main/resources/rawfile/buildinfo.json5`
+   文件内容：
+   ```json
+   {
+      "string": [
+         {
+            "name": "enable_impeller",
+            "value": "true"
+         }
+      ]
+   }
+   ```
+   新建工程默认打开impeller选项。
+   对于旧工程，可将以上buildinfo.json5文件复制到工程目录的对应路径下，并修改value值即可实现开关功能。如果不添加开关，则默认打开enable-impeller。
 
 3. 通过`flutter devices`指令发现ohos设备之后，使用 `hdc -t <deviceId> install <hap file path>`进行安装。
 
