@@ -55,6 +55,8 @@ const String APP_SO = 'libapp.so';
 
 const String HAR_FILE_NAME = 'flutter.har';
 
+const String BUILD_INFO_JSON_PATH = 'src/main/resources/base/profile/buildinfo.json5';
+
 final bool isWindows = globals.platform.isWindows;
 
 String getHvigorwFile() => isWindows ? 'hvigorw.bat' : 'hvigorw';
@@ -75,6 +77,33 @@ void copyFlutterAssets(String orgPath, String desPath, Logger? logger) {
   final LocalFileSystem localFileSystem = globals.localFileSystem;
   copyDirectory(
       localFileSystem.directory(orgPath), localFileSystem.directory(desPath));
+}
+
+Future<void> copyFlutterBuildInfoFile(OhosProject ohosProject) async {
+  final String rawfilePath = globals.fs.path.join(ohosProject.flutterModuleDirectory.path,
+      'src/main/resources/rawfile');
+  final Directory rawfileDirectory = globals.localFileSystem.directory(rawfilePath);
+  if (!await rawfileDirectory.exists()) {
+    return;
+  }
+
+  final String buildinfoFilePath = globals.fs.path.join(ohosProject.flutterModuleDirectory.path, BUILD_INFO_JSON_PATH);
+  final File sourceFile = globals.localFileSystem.file(buildinfoFilePath);
+  final String fileName = globals.fs.path.basename(buildinfoFilePath);
+  final String destinationFilePath = globals.fs.path.join(rawfilePath, fileName);
+  final File destinationFile = globals.localFileSystem.file(destinationFilePath);
+
+  if (!await sourceFile.exists()) {
+    return;
+  }
+
+  if (!await destinationFile.exists()) {
+    await sourceFile.copy(destinationFilePath);
+  } else {
+    return;
+  }
+  // delete sourceFile
+  await sourceFile.delete();
 }
 
 /// eg:entry/src/main/resources/rawfile
@@ -479,6 +508,7 @@ void cleanAndCopyFlutterAsset(
 
   /// copy flutter assets
   copyFlutterAssets(globals.fs.path.join(output, FLUTTER_ASSETS_PATH), desFlutterAssetsPath, logger);
+  copyFlutterBuildInfoFile(ohosProject);
 
   final String desAppSoPath = getAppSoPath(ohosRootPath, ohosBuildInfo.targetArchs.first, ohosProject);
   if (ohosBuildInfo.buildInfo.isRelease || ohosBuildInfo.buildInfo.isProfile) {

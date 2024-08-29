@@ -160,6 +160,7 @@
         "templates/app_shared/ohos.tmpl/entry/src/main/resources/base/element/string.json.tmpl",
         "templates/app_shared/ohos.tmpl/entry/src/main/resources/base/media/icon.png",
         "templates/app_shared/ohos.tmpl/entry/src/main/resources/base/profile/main_pages.json",
+        "templates/app_shared/ohos.tmpl/entry/src/main/resources/base/profile/buildinfo.json5",
         "templates/app_shared/ohos.tmpl/entry/src/main/resources/en_US/element/string.json.tmpl",
         "templates/app_shared/ohos.tmpl/entry/src/main/resources/zh_CN/element/string.json.tmpl",
         "templates/app_shared/ohos.tmpl/entry/src/ohosTest/module.json5.tmpl",
@@ -266,7 +267,7 @@
         "templates/module/ios/library/Flutter.tmpl/AppFrameworkInfo.plist",
         "templates/module/ios/library/Flutter.tmpl/podhelper.rb.tmpl",
         "templates/module/ios/library/Flutter.tmpl/README.md",
-        
+
         "templates/module/ohos/host_app_common/entry.tmpl/.gitignore",
         "templates/module/ohos/host_app_common/entry.tmpl/build-profile.json5.tmpl",
         "templates/module/ohos/host_app_common/entry.tmpl/hvigorfile.ts.tmpl",
@@ -297,7 +298,7 @@
         "templates/module/ohos/host_config/.gitignore.tmpl",
         "templates/module/ohos/host_config/build-profile.json5.tmpl",
         "templates/module/ohos/host_config/oh-package.json5.tmpl",
-   
+
         "templates/module/ohos/hvigor_plugin/hvigor/hvigor-config.json5.tmpl",
         "templates/module/ohos/hvigor_plugin/hvigor/hvigor-wrapper.js.tmpl",
         "templates/module/ohos/hvigor_plugin/hvigorfile.ts.tmpl",
