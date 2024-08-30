@@ -42,8 +42,6 @@ import 'hvigor_utils.dart';
 import 'ohos_builder.dart';
 import 'ohos_plugins_manager.dart';
 
-const String OHOS_DTA_FILE_NAME = 'icudtl.dat';
-
 const String FLUTTER_ASSETS_PATH = 'flutter_assets';
 
 const String APP_SO_ORIGIN = 'app.so';
@@ -107,12 +105,6 @@ Future<void> copyFlutterBuildInfoFile(OhosProject ohosProject) async {
 String getProjectAssetsPath(String ohosRootPath, OhosProject ohosProject) {
   return globals.fs.path.join(ohosProject.flutterModuleDirectory.path,
       'src/main/resources/rawfile', FLUTTER_ASSETS_PATH);
-}
-
-/// eg:entry/src/main/resources/rawfile/flutter_assets/
-String getDatPath(String ohosRootPath, OhosProject ohosProject) {
-  return globals.fs.path.join(
-      getProjectAssetsPath(ohosRootPath, ohosProject), OHOS_DTA_FILE_NAME);
 }
 
 /// eg:entry/libs/arm64-v8a/libapp.so
@@ -443,20 +435,6 @@ void cleanAndCopyFlutterRuntime(
     String ohosRootPath,
     OhosBuildData ohosBuildData) {
   logger?.printTrace('copy flutter runtime to project start');
-  // copy ohos font-family support
-  final String flutterSdk = Cache.flutterRoot!;
-  final File ohosDta = globals.localFileSystem.file(globals.fs.path.join(
-      flutterSdk,
-      'packages',
-      'flutter_tools',
-      'templates',
-      'app_shared',
-      'ohos.tmpl',
-      'dta',
-      OHOS_DTA_FILE_NAME));
-  final String copyDes = getDatPath(ohosRootPath, ohosProject);
-  ohosDta.copySync(copyDes);
-
   // 复制 flutter.har
   final String localEngineHarPath = globals.artifacts!.getArtifactPath(
     Artifact.flutterEngineHar,

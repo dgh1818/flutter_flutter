@@ -93,17 +93,14 @@
                 <filteritem type="filepath" name="packages/integration_test/example/ohos/ohos/libs/.*" desc="libs files"/>
                 <filteritem type="filepath" name="packages/integration_test/example/ohos/dependencies/.*" desc="dependencies files"/>
                 <filteritem type="filepath" name="packages/integration_test/example/ohos/entry/libs/arm64-v8a/libc++_shared.so" desc="libs files"/>
-                <filteritem type="filepath" name="packages/integration_test/example/ohos/dta/icudtl.dat" desc="libs files"/>
                 <filteritem type="filepath" name="dev/benchmarks/macrobenchmarks/ohos/hvigor/hvigor-wrapper.js" desc="hvigor files"/>
                 <filteritem type="filepath" name="dev/benchmarks/macrobenchmarks/ohos/entry/libs/arm64-v8a/libc++_shared.so" desc="libs files"/>
                 <filteritem type="filepath" name="dev/benchmarks/macrobenchmarks/ohos/hvigorw.bat" desc="hvigor files"/>
                 <filteritem type="filepath" name="dev/benchmarks/macrobenchmarks/ohos/entry/src/main/ets/plugins/GeneratedPluginRegistrant.ets" desc="libs files"/>
-                <filteritem type="filepath" name="dev/benchmarks/macrobenchmarks/ohos/dta/icudtl.dat" desc="libs files"/>
                 <filteritem type="filepath" name="dev/benchmarks/complex_layout/ohos/hvigor/hvigor-wrapper.js" desc="hvigor files"/>
                 <filteritem type="filepath" name="dev/benchmarks/complex_layout/ohos/entry/libs/arm64-v8a/libc++_shared.so" desc="libs files"/>
                 <filteritem type="filepath" name="dev/benchmarks/complex_layout/ohos/hvigorw.bat" desc="hvigor files"/>
                 <filteritem type="filepath" name="dev/benchmarks/complex_layout/ohos/entry/src/main/ets/plugins/GeneratedPluginRegistrant.ets" desc="libs files"/>
-                <filteritem type="filepath" name="dev/benchmarks/complex_layout/ohos/dta/icudtl.dat" desc="libs files"/>
             </filefilter>
             <filefilter name="defaultPolicyFilter" desc="Filters for compatibility，license header policies">
                 <filteritem type="filepath" name="dev/bots/test/analyze-test-input/root/packages/foo/foo.dart"
@@ -115,11 +112,11 @@
                 <filteritem type="filepath" name="packages/integration_test/integration_test_macos/ios/integration_test_macos.podspec"
                         desc="三方库下文件，不参与编译，不影响兼容性"/>
                 <filteritem type="filepath" name="/examples/flutter_view/macos/Main.storyboard"
-                        desc="三方库下文件，不参与编译，不影响兼容性"/> 
+                        desc="三方库下文件，不参与编译，不影响兼容性"/>
                 <filteritem type="filepath" name="packages/flutter_tools/gradle/.dartignore"
-                        desc="三方库下文件，不参与编译，不影响兼容性"/> 
+                        desc="三方库下文件，不参与编译，不影响兼容性"/>
                 <filteritem type="filepath" name="examples/flutter_view/macos/Main.storyboard"
-                        desc="三方库下文件，不参与编译，不影响兼容性"/> 
+                        desc="三方库下文件，不参与编译，不影响兼容性"/>
             </filefilter>
             <filefilter name="copyrightPolicyFilter" desc="Filters for copyright header policies">
             </filefilter>
