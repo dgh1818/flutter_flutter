@@ -243,10 +243,10 @@ class HmosSdk implements HarmonySdk {
       String? hmosHomeDir;
       if (globals.config.containsKey('ohos-sdk')) {
         hmosHomeDir = globals.config.getValue('ohos-sdk') as String?;
-      } else if (globals.platform.environment.containsKey(kHmosHome)) {
-        hmosHomeDir = globals.platform.environment[kHmosHome];
       } else if (globals.platform.environment.containsKey(kDevecoSdk)) {
         hmosHomeDir = globals.platform.environment[kDevecoSdk];
+      } else if (globals.platform.environment.containsKey(kHmosHome)) {
+        hmosHomeDir = globals.platform.environment[kHmosHome];
       }
 
       if (hmosHomeDir != null) {

@@ -45,6 +45,12 @@ class PrecacheCommand extends FlutterCommand {
         help: 'Precache artifacts for iOS development.');
     argParser.addFlag('ohos',
         help: 'Precache artifacts for ohos development.');
+    argParser.addFlag('ohos_gen_snapshot',
+        help: 'Precache gen_snapshot for ohos development.',
+        hide: !verboseHelp);
+    argParser.addFlag('ohos_internal_build',
+        help: 'Precache dependencies for internal ohos development.',
+        hide: !verboseHelp);
     argParser.addFlag('web',
         help: 'Precache artifacts for web development.');
     argParser.addFlag('linux',
@@ -88,6 +94,10 @@ class PrecacheCommand extends FlutterCommand {
       'android_gen_snapshot',
       'android_maven',
       'android_internal_build',
+    ],
+    'ohos': <String>[
+      'ohos_gen_snapshot',
+      'ohos_internal_build',
     ],
   };
 

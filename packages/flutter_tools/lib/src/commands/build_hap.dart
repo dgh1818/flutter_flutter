@@ -57,6 +57,15 @@ class BuildHapCommand extends BuildSubCommand {
   String get name => 'hap';
 
   @override
+  bool get reportNullSafety => false;
+
+  @override
+  Future<Set<DevelopmentArtifact>> get requiredArtifacts async => <DevelopmentArtifact>{
+    DevelopmentArtifact.ohosGenSnapshot,
+    DevelopmentArtifact.ohosInternalBuild,
+  };
+
+  @override
   Future<FlutterCommandResult> runCommand() async {
     if (globals.hmosSdk == null) {
       exitWithNoSdkMessage();

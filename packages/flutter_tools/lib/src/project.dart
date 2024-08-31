@@ -1190,13 +1190,60 @@ class OhosProject extends FlutterProjectPlatform {
       .childDirectory('main')
       .childFile('module.json5');
 
-  // entry/build/default/outputs/default/entry-default-signed.hap
-  File getSignedHapFile() => mainModuleDirectory
-      .childDirectory('build')
-      .childDirectory('default')
-      .childDirectory('outputs')
-      .childDirectory('default')
-      .childFile('$mainModuleName-default-signed.hap');
+  // macos: entry/build/{flavor}/outputs/{flavor}/entry-{flavor}-signed.hap
+  // windows: entry/build/default/outputs/{flavor}/entry-{flavor}-signed.hap
+  File getSignedHapFile(String flavor) {
+    return OhosProject.getSignedFile(
+      modulePath: mainModuleDirectory.path,
+      moduleName: mainModuleName,
+      flavor: flavor,
+    );
+  }
+
+  static File getSignedFile({
+    required String modulePath,
+    String moduleName = 'entry',
+    String flavor = 'default',
+    OhosFileType type = OhosFileType.hap,
+    bool throwOnMissing = false,
+  }) {
+    final Directory moduleDir = globals.fs.directory(modulePath);
+    final List<File> findFiles = <File>[
+      moduleDir
+          .childDirectory('build')
+          .childDirectory(flavor)
+          .childDirectory('outputs')
+          .childDirectory(flavor)
+          .childFile('$moduleName-$flavor-signed.${type.name}'),
+      moduleDir
+          .childDirectory('build')
+          .childDirectory('default')
+          .childDirectory('outputs')
+          .childDirectory(flavor)
+          .childFile('$moduleName-$flavor-signed.${type.name}'),
+    ];
+    if (type == OhosFileType.app) {
+      findFiles.add(moduleDir
+          .childDirectory('build')
+          .childDirectory(flavor)
+          .childDirectory('outputs')
+          .childDirectory(flavor)
+          .childDirectory('app')
+          .childFile('$moduleName-$flavor.hap'));
+    }
+    for (final File file in findFiles) {
+      if (file.existsSync()) {
+        return file;
+      }
+    }
+
+    if (throwOnMissing) {
+      throwToolExit('Hvigor build failed to produce an ${type.name} file. '
+        "It's likely that this file was generated under $modulePath, "
+        "but the tool couldn't find it.");
+    }
+    return findFiles[0];
+  }
 
   File get flutterModulePackageFile =>
       flutterModuleDirectory.childFile('oh-package.json5');
@@ -1206,8 +1253,8 @@ class OhosProject extends FlutterProjectPlatform {
   File get ephemeralLocalPropertiesFile =>
       ephemeralDirectory.childFile('local.properties');
 
-  bool hasSignedHapBuild() {
-    return getSignedHapFile().existsSync();
+  bool hasSignedHapBuild(flavor) {
+    return getSignedHapFile(flavor).existsSync();
   }
 
   Future<void> ensureReadyForPlatformSpecificTooling(
@@ -1272,4 +1319,11 @@ class OhosProject extends FlutterProjectPlatform {
       printStatusWhenWriting: false,
     );
   }
+}
+
+enum OhosFileType {
+  app,
+  hap,
+  har,
+  hsp,
 }

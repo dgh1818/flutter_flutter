@@ -126,20 +126,22 @@
             <filefilter name="licenseFileNamePolicyFilter" desc="Filters for LICENSE file policies">
             </filefilter>
             <filefilter name="readmeFileNamePolicyFilter" desc="Filters for README file policies">
-		        <filteritem type="filepath" name="*README.md|*README.en.md" desc="README文件，不参与编译"/>
+                <filteritem type="filepath" name="*README.md|*README.en.md" desc="README文件，不参与编译"/>
             </filefilter>
             <filefilter name="readmeOpenSourcefileNamePolicyFilter" desc="Filters for README.OpenSource file policies">
                 <filteritem type="filepath" name="README.md|README.en.md" desc="README文件，不参与编译"/>
             </filefilter>
             <filefilter name="binaryFileTypePolicyFilter" desc="Filters for binary file policies">
-            	<filteritem type="filename" name="*.iml|*.json|*.txt|*.png" desc="desc files"/>
+                <filteritem type="filename" name="*.iml|*.json|*.txt|*.png" desc="desc files"/>
             </filefilter>
 
             <filefilter name="copyrightPolicyFilter" desc="Filters for copyright header policies">
                 <filteritem type="filename" name="packages/integration_test/ohos/hvigorw*" desc="Build Files"/>
+                <filteritem type="filename" name="*.version" desc="version Files"/>
             </filefilter>
             <filefilter name="defaultPolicyFilter" desc="Filters for LICENSE file policies">
                 <filteritem type="filename" name="packages/integration_test/ohos/hvigorw" desc="Build Files"/>
+                <filteritem type="filename" name="*.version" desc="version Files"/>
             </filefilter>
         </filefilterlist>
     </oatconfig>
