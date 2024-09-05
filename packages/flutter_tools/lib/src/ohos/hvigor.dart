@@ -539,6 +539,7 @@ class OhosHvigorBuilder implements OhosBuilder {
         hvigorwPath: hvigorwPath,
         buildMode: ohosBuildInfo.buildInfo.modeName,
         logger: _logger);
+    status.stop();
     if (errorCode1 != 0) {
       throwToolExit('assembleHap error! please check log.');
     }
@@ -784,7 +785,7 @@ class OhosHvigorBuilder implements OhosBuilder {
         throwToolExit('Oops! Failed to find: ${originHar.path}');
       }
       final String desPath = globals.fs.path
-          .join(ohosRootPath, 'har', '${ohosProject.flutterModuleName}.har');
+          .join(ohosRootPath, 'har', '${module.name}.har');
       ensureParentExists(desPath);
       originHar.copySync(desPath);
 
