@@ -472,6 +472,24 @@ String? validatedBuildNumberForPlatform(TargetPlatform targetPlatform, String? b
     }
     return tmpBuildNumberStr;
   }
+  if (targetPlatform == TargetPlatform.ohos ||
+      targetPlatform == TargetPlatform.ohos_arm ||
+      targetPlatform == TargetPlatform.ohos_arm64 ||
+      targetPlatform == TargetPlatform.ohos_x64) {
+    final RegExp disallowed = RegExp(r'[^\d]');
+    String tmpBuildNumberStr = buildNumber.replaceAll(disallowed, '');
+    int tmpBuildNumberInt = int.tryParse(tmpBuildNumberStr) ?? 0;
+    if (tmpBuildNumberInt < 1) {
+      tmpBuildNumberInt = 1;
+    }
+    tmpBuildNumberStr = tmpBuildNumberInt.toString();
+    if (tmpBuildNumberStr != buildNumber) {
+      logger.printTrace(
+          'Invalid build-number: $buildNumber for Ohos, overridden by $tmpBuildNumberStr.\n'
+          'See versionCode at https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/app-configuration-file-V5');
+    }
+    return tmpBuildNumberStr;
+  }
   return buildNumber;
 }
 
@@ -508,6 +526,29 @@ String? validatedBuildNameForPlatform(TargetPlatform targetPlatform, String? bui
       targetPlatform == TargetPlatform.android_x86) {
     // See versionName at https://developer.android.com/studio/publish/versioning
     return buildName;
+  }
+  if (targetPlatform == TargetPlatform.ohos ||
+      targetPlatform == TargetPlatform.ohos_arm ||
+      targetPlatform == TargetPlatform.ohos_arm64 ||
+      targetPlatform == TargetPlatform.ohos_x64) {
+    final RegExp disallowed = RegExp(r'[^\d\.]');
+    String tmpBuildName = buildName.replaceAll(disallowed, '');
+    if (tmpBuildName.isEmpty) {
+      return null;
+    }
+    final List<String> segments = tmpBuildName
+        .split('.')
+        .where((String segment) => segment.isNotEmpty)
+        .toList();
+    while (segments.length < 3) {
+      segments.add('0');
+    }
+    tmpBuildName = segments.join('.');
+    if (tmpBuildName != buildName) {
+      logger.printTrace('Invalid build-name: $buildName for Ohos, overridden by $tmpBuildName.\n'
+          'See versionName at https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/app-configuration-file-V5');
+    }
+    return tmpBuildName;
   }
   return buildName;
 }

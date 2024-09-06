@@ -1121,7 +1121,8 @@ class OhosProject extends FlutterProjectPlatform {
         };
         final List<dynamic> modules = buildProfile['modules'] as List<dynamic>;
         modules.add(module);
-        final String buildProfileNew = const JsonEncoder.withIndent('  ').convert(buildProfile);
+        final String buildProfileNew =
+            const JsonEncoder.withIndent('  ').convert(buildProfile);
         buildProfileFile.writeAsStringSync(buildProfileNew, flush: true);
       }
 
