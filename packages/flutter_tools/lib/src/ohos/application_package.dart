@@ -64,7 +64,18 @@ class OhosHap extends ApplicationPackage implements PrebuiltApplicationPackage {
     final OhosBuildData ohosBuildData =
         OhosBuildData.parseOhosBuildData(ohosProject, logger);
     final String flavor = getFlavor(ohosProject.getBuildProfileFile(), buildInfo?.flavor);
-    final String bundleName = ohosBuildData.appInfo!.bundleName;
+    String bundleName = ohosBuildData.appInfo!.bundleName;
+    final List<dynamic>? products = ohosBuildData.products;
+    if (products != null) {
+      for (final dynamic item in products) {
+        final Map<String, dynamic> productItem = item as Map<String, dynamic>;
+        if (flavor == productItem['name'] && productItem['bundleName'] != null) {
+          bundleName = productItem['bundleName'] as String;
+          ohosBuildData.appInfo!.bundleName = bundleName;
+          break;
+        }
+      }
+    }
     for (final OhosModule element in ohosBuildData.moduleInfo.moduleList) {
       element.flavor = flavor;
     }
@@ -89,11 +100,12 @@ class OhosHap extends ApplicationPackage implements PrebuiltApplicationPackage {
 
 /// OpenHarmony的构建信息
 class OhosBuildData {
-  OhosBuildData(this.appInfo, this.moduleInfo, this.apiVersion);
+  OhosBuildData(this.appInfo, this.moduleInfo, this.apiVersion, this.products);
 
   late AppInfo? appInfo;
   late ModuleInfo moduleInfo;
   late int apiVersion;
+  List<dynamic>? products;
 
   bool get hasEntryModule => false;
 
@@ -108,6 +120,7 @@ class OhosBuildData {
     late AppInfo appInfo;
     late ModuleInfo moduleInfo;
     late int apiVersion;
+    List<dynamic>? products;
     try {
       final File appJson = ohosProject.getAppJsonFile();
       if (appJson.existsSync()) {
@@ -115,7 +128,7 @@ class OhosBuildData {
         final dynamic obj = JSON5.parse(json);
         appInfo = AppInfo.getAppInfo(obj);
       } else {
-        appInfo = AppInfo('', 0, '');
+        appInfo = AppInfo('', 1, '');
       }
     } on Exception catch (err) {
       throwToolExit('Parse ohos app.json5 error: $err');
@@ -128,22 +141,31 @@ class OhosBuildData {
     }
 
     try {
-      apiVersion = getApiVersion(ohosProject.getBuildProfileFile());
-    } on Exception catch(err) {
+      final File buildProfileFile = ohosProject.getBuildProfileFile();
+      if (buildProfileFile.existsSync()) {
+        final String buildProfileConfig = buildProfileFile.readAsStringSync();
+        final dynamic obj = JSON5.parse(buildProfileConfig);
+        apiVersion = getApiVersion(obj);
+        // ignore: avoid_dynamic_calls
+        if (obj['app'] != null && obj['app']['products'] != null) {
+          // ignore: avoid_dynamic_calls
+          products = obj['app']['products'] as List<dynamic>;
+        }
+      } else {
+        apiVersion = OHOS_SDK_INT_DEFAULT;
+      }
+    } on Exception catch (err) {
       throwToolExit('Parse ohos build-profile.json5 error: $err');
     }
-    return OhosBuildData(appInfo, moduleInfo, apiVersion);
+    return OhosBuildData(appInfo, moduleInfo, apiVersion, products);
   }
 }
 
-int getApiVersion(File buildProfile) {
-  if (!buildProfile.existsSync()) {
-    return OHOS_SDK_INT_DEFAULT;
-  }
-  final String buildProfileConfig = buildProfile.readAsStringSync();
-  final dynamic obj = JSON5.parse(buildProfileConfig);
-  dynamic sdkObj = obj['app']['compatibleSdkVersion'];
-  sdkObj ??= obj['app']['products'][0]['compatibleSdkVersion'];
+int getApiVersion(dynamic obj) {
+  // ignore: avoid_dynamic_calls
+  dynamic sdkObj = obj['app']?['compatibleSdkVersion'];
+  // ignore: avoid_dynamic_calls
+  sdkObj ??= obj['app']?['products'][0]['compatibleSdkVersion'];
   if (sdkObj is int) {
     return sdkObj;
   } else if (sdkObj is String && sdkObj != null) { // 4.1.0(11)
@@ -236,6 +258,9 @@ class OhosModule {
       return <OhosModule>[];
     }
     final Map<String, dynamic> buildProfile = JSON5.parse(buildProfileFile.readAsStringSync()) as Map<String, dynamic>;
+    if (!buildProfile.containsKey('modules')) {
+      return <OhosModule>[];
+    }
     final List<dynamic> modules = buildProfile['modules'] as List<dynamic>;
     return modules.map((dynamic e) {
       final Map<String, dynamic> module = e as Map<String, dynamic>;

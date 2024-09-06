@@ -19,13 +19,8 @@ import 'package:json5/json5.dart';
 import '../base/common.dart';
 import '../base/file_system.dart';
 
-import '../base/logger.dart';
-import '../base/os.dart';
-import '../base/platform.dart';
 import '../base/utils.dart';
-import '../base/version.dart';
 import '../build_info.dart';
-import '../cache.dart';
 import '../globals.dart' as globals;
 import '../project.dart';
 import '../reporting/reporting.dart';

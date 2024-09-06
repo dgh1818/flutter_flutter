@@ -21,11 +21,11 @@ import '../flutter_manifest.dart';
 import '../flutter_project_metadata.dart';
 import '../globals.dart' as globals;
 import '../ios/code_signing.dart';
+import '../ohos/hvigor_utils.dart' as hvigor;
 import '../project.dart';
 import '../reporting/reporting.dart';
 import '../runner/flutter_command.dart';
 import 'create_base.dart';
-import '../ohos/hvigor_utils.dart' as hvigor;
 
 const String kPlatformHelp =
   'The platforms supported by this project. '
