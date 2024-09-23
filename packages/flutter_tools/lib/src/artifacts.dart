@@ -776,6 +776,9 @@ class CachedArtifacts implements Artifacts {
   String _getHostArtifactPath(Artifact artifact, TargetPlatform platform, BuildMode? mode) {
     switch (artifact) {
       case Artifact.genSnapshot:
+        if (platform == TargetPlatform.ohos_arm64) {
+          return _getAndroidArtifactPath(artifact, TargetPlatform.ohos_arm64, mode!);
+        }
         // For script snapshots any gen_snapshot binary will do. Returning gen_snapshot for
         // android_arm in profile mode because it is available on all supported host platforms.
         return _getAndroidArtifactPath(artifact, TargetPlatform.android_arm, BuildMode.profile);
@@ -891,12 +894,6 @@ class CachedArtifacts implements Artifacts {
         return _fileSystem.path.join(engineDir, platformName + suffix);
       case TargetPlatform.android:
         assert(false, 'cannot use TargetPlatform.android to look up artifacts');
-        return null;
-      case TargetPlatform.ohos:
-      case TargetPlatform.ohos_arm:
-      case TargetPlatform.ohos_arm64:
-      case TargetPlatform.ohos_x64:
-        assert(false, 'cannot use TargetPlatform.ohos_(xx) to look up artifacts');
         return null;
     }
   }
