@@ -412,6 +412,12 @@ enum TextInputAction {
   /// Thus, [TextInputAction.newline] is a convenience term that alleviates the
   /// need to understand the underlying platforms to achieve this common behavior.
   newline,
+  /// Logical meaning: Remove focus of a textinput,
+  ///
+  /// OHOS: Only works for OHOS to remove focus of textinput hiding soft keyboard.
+  ///
+  /// Android & iOS: Not work for these two platforms.
+  removeFocus,
 }
 
 /// Configures how the platform keyboard will select an uppercase or
@@ -1540,6 +1546,7 @@ TextInputAction _toTextInputAction(String action) {
     'TextInputAction.emergencyCall'  => TextInputAction.emergencyCall,
     'TextInputAction.done'           => TextInputAction.done,
     'TextInputAction.newline'        => TextInputAction.newline,
+    'TextInputAction.removeFocus'    => TextInputAction.removeFocus,
     _ => throw FlutterError.fromParts(<DiagnosticsNode>[ErrorSummary('Unknown text input action: $action')]),
   };
 }
