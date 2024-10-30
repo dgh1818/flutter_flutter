@@ -1254,6 +1254,14 @@ class OhosProject extends FlutterProjectPlatform {
   File get ephemeralLocalPropertiesFile =>
       ephemeralDirectory.childFile('local.properties');
 
+  SettingsFile get settings => isModule
+      ? (ephemeralLocalPropertiesFile.existsSync()
+          ? SettingsFile.parseFromFile(ephemeralLocalPropertiesFile)
+          : SettingsFile())
+      : (localPropertiesFile.existsSync()
+          ? SettingsFile.parseFromFile(localPropertiesFile)
+          : SettingsFile());
+
   bool hasSignedHapBuild(flavor) {
     return getSignedHapFile(flavor).existsSync();
   }

@@ -19,11 +19,14 @@ import 'package:json5/json5.dart';
 
 import '../base/common.dart';
 import '../base/file_system.dart';
+import '../base/utils.dart';
 import '../flutter_plugins.dart';
 import '../globals.dart' as globals;
 import '../platform_plugins.dart';
 import '../plugins.dart';
 import '../project.dart';
+
+const String kUseAbsolutePathOfHar = 'useAbsolutePathOfHar';
 
 /// 检查 ohos plugin 依赖
 Future<void> checkOhosPluginsDependencies(FlutterProject flutterProject) async {
@@ -35,6 +38,9 @@ Future<void> checkOhosPluginsDependencies(FlutterProject flutterProject) async {
     globals.logger.printTrace('check if oh-package.json5 file:($packageFile) exist ?');
     return;
   }
+
+  final SettingsFile settings = flutterProject.ohos.settings;
+  final bool useAbsolutePathOfHar = settings.values[kUseAbsolutePathOfHar] == 'true';
 
   final String packageConfig = packageFile.readAsStringSync();
   final Map<String, dynamic> config = JSON5.parse(packageConfig) as Map<String, dynamic>;
@@ -48,10 +54,10 @@ Future<void> checkOhosPluginsDependencies(FlutterProject flutterProject) async {
       }
     }
     final String absolutePath = globals.fs.path.join(flutterProject.ohos.ohosRoot.path, 'har/${plugin.name}.har');
-    if (flutterProject.isModule) {
+    if (useAbsolutePathOfHar && flutterProject.isModule) {
       dependencies[plugin.name] = 'file:$absolutePath';
     } else {
-      final String relativePath = _relative(absolutePath, from: globals.fs.path.dirname(packageFile.path));
+      final String relativePath = _relative(absolutePath, globals.fs.path.dirname(packageFile.path));
       dependencies[plugin.name] = 'file:$relativePath';
     }
   }
@@ -88,7 +94,7 @@ Future<void> addPluginsModules(FlutterProject flutterProject) async {
       'name': plugin.name,
       'srcPath': _relative(
         globals.fs.path.join(plugin.path, OhosPlugin.kConfigKey),
-        from: flutterProject.ohos.ohosRoot.path,
+        flutterProject.ohos.ohosRoot.path,
       ),
       'targets': <Map<String, dynamic>>[
         <String, dynamic>{
@@ -122,10 +128,10 @@ Future<void> addFlutterModuleAndPluginsSrcOverrides(FlutterProject flutterProjec
   for (final Plugin plugin in plugins) {
     overrides[plugin.name] = _relative(
       globals.fs.path.join(plugin.path, OhosPlugin.kConfigKey),
-      from: flutterProject.ohos.ohosRoot.path,
+      flutterProject.ohos.ohosRoot.path,
     );
   }
-  final String relativePath = _relative(flutterProject.ohos.flutterModuleDirectory.path, from: flutterProject.ohos.ohosRoot.path);
+  final String relativePath = _relative(flutterProject.ohos.flutterModuleDirectory.path, flutterProject.ohos.ohosRoot.path);
   overrides['@ohos/flutter_module'] = 'file:./$relativePath';
   overrides['@ohos/flutter_ohos'] = 'file:./har/flutter.har';
   final String configNew = const JsonEncoder.withIndent('  ').convert(config);
@@ -181,10 +187,12 @@ Future<void> addFlutterModuleAndPluginsOverrides(FlutterProject flutterProject) 
   final String packageConfig = packageFile.readAsStringSync();
   final Map<String, dynamic> config = JSON5.parse(packageConfig) as Map<String, dynamic>;
   final Map<String, dynamic> overrides = config['overrides'] as Map<String, dynamic>? ?? <String, dynamic>{};
+  final SettingsFile settings = flutterProject.ohos.settings;
+  final bool useAbsolutePathOfHar = settings.values[kUseAbsolutePathOfHar] == 'true';
 
   for (final Plugin plugin in plugins) {
     final String absolutePath = globals.fs.path.join(flutterProject.ohos.ohosRoot.path, 'har/${plugin.name}.har');
-    if (flutterProject.isModule) {
+    if (useAbsolutePathOfHar && flutterProject.isModule) {
       overrides[plugin.name] = 'file:$absolutePath';
     } else {
       overrides[plugin.name] = 'file:./har/${plugin.name}.har';
@@ -194,6 +202,11 @@ Future<void> addFlutterModuleAndPluginsOverrides(FlutterProject flutterProject) 
   packageFile.writeAsStringSync(configNew, flush: true);
 }
 
-String _relative(String path, {String? from}) {
-  return globals.fs.path.relative(path, from: from).replaceAll(r'\', '/');
+String _relative(String path, String from) {
+  final String realPath = path.endsWith('.har')
+      ? path
+      : globals.fs.file(path).resolveSymbolicLinksSync();
+  final String realFrom = globals.fs.file(from).resolveSymbolicLinksSync();
+  final String result = globals.fs.path.relative(realPath, from: realFrom).replaceAll(r'\', '/');
+  return result;
 }
