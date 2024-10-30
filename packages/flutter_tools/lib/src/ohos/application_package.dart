@@ -274,6 +274,7 @@ class OhosModule {
     required String modulePath,
     String? flavor,
   }) {
+    modulePath = globals.fs.path.normalize(globals.fs.file(modulePath).resolveSymbolicLinksSync());
     final String moduleJsonPath = globals.fs.path.join(modulePath, 'src', 'main', 'module.json5');
     final File moduleJsonFile = globals.fs.file(moduleJsonPath);
     if (!moduleJsonFile.existsSync()) {
