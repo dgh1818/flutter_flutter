@@ -3284,7 +3284,7 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
         _finalizeEditing(action, shouldUnfocus: false);
       case TextInputAction.removeFocus:
         if (defaultTargetPlatform == TargetPlatform.ohos) {
-          _finalizeEditing(action, shouldUnfocus: true);
+          widget.focusNode.unfocus();
         }
     }
   }
@@ -3440,12 +3440,12 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
           case TextInputAction.route:
           case TextInputAction.emergencyCall:
           case TextInputAction.newline:
-          case TextInputAction.removeFocus:
             widget.focusNode.unfocus();
           case TextInputAction.next:
             widget.focusNode.nextFocus();
           case TextInputAction.previous:
             widget.focusNode.previousFocus();
+          default:
         }
       }
     }
