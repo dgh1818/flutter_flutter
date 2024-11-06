@@ -1128,7 +1128,8 @@ class OhosProject extends FlutterProjectPlatform {
 
       final String srcPath = module['srcPath'] as String;
       return globals.fs
-          .directory(globals.fs.path.join(ephemeralDirectory.path, srcPath));
+          .directory(globals.fs.path.join(ephemeralDirectory.path,
+                     globals.platform.isWindows ? srcPath.replaceAll(r'./', r'') : srcPath));
     }
     return editableHostAppDirectory.childDirectory(mainModuleName);
   }
