@@ -4,7 +4,22 @@ Flutter SDK 仓库
 原始仓来源：https://github.com/flutter/flutter
 
 ## 仓库说明
-本仓库是基于Flutter SDK对于OpenHarmony平台的兼容拓展，可支持IDE或者终端使用Flutter Tools指令编译和构建OpenHarmony应用程序。
+1. 本仓库是基于Flutter SDK对于OpenHarmony平台的兼容拓展，可支持IDE或者终端使用Flutter Tools指令编译和构建OpenHarmony应用程序。
+2. 本仓库基于Flutter官方社区3.22.0版本构建
+   * [sdk基础版本链接](https://github.com/flutter/flutter/commit/5dcb86f68f239346676ceb1ed1ea385bd215fba1)
+   * [engine基础版本链接](https://github.com/flutter/engine/commit/f6344b75dcf861d8bf1f1322780b8811f982e31a)
+
+## 升级指导
+1. 如果您的项目希望从鸿蒙3.7.12版本升级到3.22.0版本
+   * 环境依赖：两者环境配置一致，无需额外修改
+   * 从3.7.12->3.22.0的官方特性新增与变更请参考[Release Notes](https://docs.flutter.dev/release/release-notes)
+   * 官方兼容性变更请参考[升级指导](https://docs.flutter.dev/release/breaking-changes)
+   * 渲染引擎：新增impeller-vulkan模式（默认，可切换为skia-gl）
+   * 三方库
+      - 纯dart库请升级到指定版本以支持3.22.0
+      - [OpenHarmony-SIG/flutter_packages](https://gitee.com/openharmony-sig/flutter_packages/blob/master/README.md)中的package在3.22.0版本已经过一轮简单的可用性测试，如果在您使用中有任何问题，烦请创建issue跟踪解决。
+
+2. 如果您的项目希望从安卓或ios等版本迁移到鸿蒙适配3.22.0版本，请参考剩余指导文档。
 
 ## 开发文档
 [参考文档](https://gitee.com/openharmony-sig/flutter_samples/tree/master/ohos/docs)
@@ -20,7 +35,7 @@ Flutter SDK 仓库
    *下列环境变量配置，类Unix系统（Linux、Mac），下可直接参照配置，Windows下环境变量配置请在‘编辑系统环境变量’中设置*
 
   1. 配置HarmonyOS SDK和环境变量
-   * API12, deveco-studio-5.0 或 command-line-tools-5.0
+   * API12, deveco-studio-5.0 或 command-line-tools-5.0 (推荐使用5.0.0 Release或更新版本)
    * 配置 Java17
    * 配置环境变量 (SDK, node, ohpm, hvigor)
 
@@ -63,7 +78,6 @@ Flutter SDK 仓库
        export PATH=$TOOL_HOME/tools/hvigor/bin:$PATH # command-line-tools/hvigor/bin
        export PATH=$TOOL_HOME/tools/node/bin:$PATH # command-line-tools/tool/node/bin
       ```
-   4. Flutter 默认使用自己sdk中的har包，不会使用flutter engine中的har包，如果需要使用flutter engine的har包，需要手工将flutter engine中的 `src/out/ohos_<build_type>_arm64/har/flutter.har` 复制到flutter sdk路径下的 `packages/flutter_tools/templates/app_shared/ohos.tmpl/har/har_product.tmpl/` 并加上构建类型与HarmonyOS SDK版本的后缀，如 `flutter.har.release.12`。
 
 ## 构建步骤
 
@@ -75,10 +89,6 @@ Flutter SDK 仓库
     # 创建工程
     flutter create --platforms ohos <projectName>
 
-    # 进入工程根目录编译
-    # 示例：flutter build hap [--target-platform ohos-arm64] [--local-engine=<DIR>/src/out/ohos_release_arm64] --release
-    flutter build hap --release
-   ```
    # 进入工程根目录编译
    # 示例：flutter build hap [--target-platform ohos-arm64] [--local-engine=<DIR>/src/out/ohos_release_arm64] --release
    flutter build hap --target-platform ohos-arm64 --<debug|release|profile> [--local-engine=src/out/<engine产物目录> --local-engine-host=src/out/<engine host目录>/]
@@ -87,6 +97,8 @@ Flutter SDK 仓库
    当前Flutter ohos平台中支持impeller-vulkan渲染模式，可通过开关控制是否打开。
    开关位于`buildinfo.json5`文件中，如果选择关闭impeller渲染，可将json文件中的value改为false。下一次运行时即可关闭。
    文件路径：`ohos/entry/src/main/resources/rawfile/buildinfo.json5`
+   （初次flutter create之后，配置文件位于profile目录，首次run或build之后会搬移到rawfile目录）
+
    文件内容：
    ```json
    {
@@ -99,19 +111,18 @@ Flutter SDK 仓库
    }
    ```
    新建工程默认打开impeller选项。
-   对于旧工程，可将以上buildinfo.json5文件复制到工程目录的对应路径下，并修改value值即可实现开关功能。如果不添加开关，则默认打开enable-impeller。
+   对于旧工程，可将以上buildinfo.json5文件复制到工程目录的对应路径下(rawfile目录)，并修改value值即可实现开关功能。如果不添加开关，则默认打开enable-impeller。
 
 3. 通过`flutter devices`指令发现ohos设备之后，使用 `hdc -t <deviceId> install <hap file path>`进行安装。
 
 4. 也可直接使用下列指令运行：
 ```
-   # 示例：flutter run --local-engine=<DIR>/src/out/ohos_debug_unopt_arm64 -d <device-id>
-   flutter run --debug [--local-engine=/home/user/engine_make/src/out/ohos_debug_unopt_arm64 -d <device-id> --local-engine-host=src/out/<engine host目录>/]
+   flutter run --debug [--local-engine=<DIR>/src/out/ohos_debug_unopt_arm64] [--local-engine-host=<DIR>/src/out/host_debug_unopt] -d <device-id>
 ```
 
 5. 构建app包命令：
    ```
-    # 示例：flutter build app --release [--local-engine=<DIR>/src/out/ohos_release_arm64]  local-engine为可选项
+    # 示例：flutter build app --release [--local-engine=<DIR>/src/out/ohos_release_arm64] [--local-engine-host=<DIR>/src/out/host_release]
     flutter build app --release
    ```
 
@@ -133,6 +144,9 @@ Flutter SDK 仓库
 | run    | 应用运行 | flutter run [--local-engine=\<兼容ohos的engine产物路径\>]                |
 | attach | 调试模式 | flutter attach                                                    |
 | screenshot | 截屏 | flutter screenshot                                                 |
+| pub | 获取依赖 | flutter pub get                                                 |
+| clean | 清除项目依赖 | flutter clean                                                 |
+| cache | 清除全局缓存数据 | flutter pub cache clean                                                  |
 
 附：[Flutter三方库适配计划](https://docs.qq.com/sheet/DVVJDWWt1V09zUFN2)
 
@@ -286,10 +300,21 @@ Flutter SDK 仓库
 
 18. 在.ohos的项目执行`flutter clean` 报错，然后再执行`flutter pub get`也报错。
     1. 解决方案：删除.ohos文件夹，重新flutter pub get 即可
-    2.报错信息：
+    2. 报错信息：
       ```
        Oops; flutter has exited unexpectedly: "PathNotFoundException: Cannot open file, path = 'D:\code\.ohos\build-profile.json5' (OS Error: 系统找不到指定的文件。，error = 2)".
        A crash report has been written to D:\code\flutter_01.log.
+      ```
+
+19. 模拟器执行时发生白屏、崩溃等现象。
+    1. 模拟器只支持Mac(arm64), 还不支持Mac(x86)和Windows
+    2. 模拟器暂不支持vulkan，请尝试构建步骤2.1，关闭impeller后重试
+
+20. flutter profile模式下编译或运行失败
+    1. 请在ohos项目build_profile.json5中添加buildModeSet字段，可参考[complex_layout](https://gitee.com/harmonycommando_flutter/flutter/blob/oh-3.22.0/dev/benchmarks/complex_layout/ohos/build-profile.json5)
+    2. 报错信息:
+      ```
+      hvigor ERROR: Build mode 'profile' used in command line is not declared in buildModeSet in /xxx/example/ohos/build-profile.json5.
       ```
 
 [更多FAQ](https://gitee.com/openharmony-sig/flutter_samples/blob/master/ohos/docs/08_FAQ/README.md)

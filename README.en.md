@@ -4,7 +4,21 @@ Flutter SDK repository
 Original warehouse source: https://github.com/flutter/flutter
 
 ## Warehouse description
-This repository is a compatible extension of Flutter SDK for the OpenHarmony platform, and can support IDE or terminal use of Flutter Tools instructions to compile and build OpenHarmony applications.
+1. This repository is a compatible extension of Flutter SDK for the OpenHarmony platform, and can support IDE or terminal use of Flutter Tools instructions to compile and build OpenHarmony applications.
+2. This repository is built based on the Flutter official community version 3.22.0
+   * [sdk base version](https://github.com/flutter/flutter/commit/5dcb86f68f239346676ceb1ed1ea385bd215fba1)
+   * [engine base version](https://github.com/flutter/engine/commit/f6344b75dcf861d8bf1f1322780b8811f982e31a)
+
+## Upgrade Guide
+1. If your project is upgrading from HarmonyOS version 3.7.12 to version 3.22.0:
+   * Environment dependencies: Configuration remains consistent between the two versions, no additional modifications required.
+   * For new features and changes from 3.7.12 to 3.22.0, please refer to the [Release Notes](https://docs.flutter.dev/release/release-notes).
+   * For official compatibility changes, please refer to the [Upgrade Guide](https://docs.flutter.dev/release/breaking-changes).
+   * Rendering Engine: Added impeller-vulkan mode (default, can be switched to skia-gl).
+   * Third-party libraries:
+      - Pure Dart libraries should be upgraded to the specified version to support 3.22.0.
+      - The packages in [OpenHarmony-SIG/flutter_packages](https://gitee.com/openharmony-sig/flutter_packages/blob/master/README.md) have undergone a basic usability test for version 3.22.0. If you encounter any issues during use, please create an issue for tracking.
+2. If your project is migrating from Android or iOS to the HarmonyOS adaptation for version 3.22.0, please refer to the remaining guide documents.
 
 ## Development document
 [Docs](https://gitee.com/openharmony-sig/flutter_samples/tree/master/ohos/docs)
@@ -21,7 +35,7 @@ This repository is a compatible extension of Flutter SDK for the OpenHarmony pla
     *The following environment variable configuration is for Unix-like systems (Linux, Mac). You can directly refer to the configuration below. For environment variable configuration under Windows, please set it in ‘Edit System Environment Variables’*
 
    1. Configure the HarmonyOS SDK and environment variables
-    * API12, deveco-studio-5.0 or command-line-tools-5.0
+    * API12, deveco-studio-5.0 or command-line-tools-5.0 (Recommended to use version 5.0.0 Release or later)
     * Configure Java17
     * Configure environment variables (SDK, node, ohpm, hvigor)
 
@@ -68,7 +82,6 @@ This repository is a compatible extension of Flutter SDK for the OpenHarmony pla
         export PATH=$TOOL_HOME/tools/hvigor/bin:$PATH # command-line-tools/hvigor/bin
         export PATH=$TOOL_HOME/tools/node/bin:$PATH # command-line-tools/tool/node/bin
        ```
-    4. Flutter uses `flutter.har` in its own sdk and will not use the one under flutter engine build. If the `flutter.har` in the engine build directory is needed, one needs to copy `src/out/ohos_<build_type>_arm64/har/flutter.har` to flutter sdk path `packages/flutter_tools/templates/app_shared/ohos.tmpl/har/har_product.tmpl/` and add build type with HarmonyOS sdk version suffix such as `flutter.har.release.12`.
 
 ## Build steps
 
@@ -80,17 +93,15 @@ This repository is a compatible extension of Flutter SDK for the OpenHarmony pla
      # Create project
      flutter create --platforms ohos <projectName>
 
-     # Go to the project root directory for compilation
-     # Example: flutter build hap [--target-platform ohos-arm64] [--local-engine=<DIR>/src/out/ohos_release_arm64] --release
-     flutter build hap --release
-    ```
-    # Enter the project root directory to compile
+    # Go to the project root directory for compilation
     # Example: flutter build hap [--target-platform ohos-arm64] --local-engine=<DIR>/src/out/ohos_release_arm64 --release
     flutter build hap --target-platform ohos-arm64 --<debug|release|profile> --local-engine=<DIR>/src/out/<engine> --local-engine-host=src/out/<engine_host>/
     ```
     2.1 Create a Project and Enable the Impeller
     Currently, the Flutter OHOS platform supports the impeller-vulkan rendering mode, which can be controlled via a switch. The switch is located in the 'buildinfo.json5' file. If you choose to disable the Impeller rendering, you can change the value in the JSON file to false. The next time you run the project, the Impeller will be disabled.
     File path: `ohos/entry/src/main/resources/rawfile/buildinfo.json5`
+    (After the initial `flutter create`, the configuration file is located in the `profile` directory. After the first `run` or `build`, it will be moved to the `rawfile` directory.)
+
     File content:
     ```json
     {
@@ -103,21 +114,17 @@ This repository is a compatible extension of Flutter SDK for the OpenHarmony pla
     }
     ```
     By default, the Impeller option is enabled in new projects.
-    For existing projects, you can copy the above buildinfo.json5 file to the corresponding directory in your project and modify the value to enable or disable the switch. If the switch does not exist, then will set enable-impeller by default.
+    For existing projects, you can copy the above buildinfo.json5 file to the corresponding directory(rawfile) in your project and modify the value to enable or disable the switch. If the switch does not exist, then will set enable-impeller by default.
 
 3. After discovering the ohos device through the `flutter devices` command, use `hdc -t <deviceId> install <hap file path>` to install it.
 
 4. You can also directly use the following command to run:
     ```
-     # Example: flutter run [--local-engine=<DIR>/src/out/ohos_debug_unopt_arm64] -d <device-id>
+     # Example: flutter run [--local-engine=<DIR>/src/out/ohos_debug_unopt_arm64] [--local-engine-host=<DIR>/src/out/host_debug_unopt] -d <device-id>
      flutter run --debug -d <device-id>
     ```
 
 5. Build app package command:
-    ```
-     # Example: flutter build app --release [--local-engine=<DIR>/src/out/ohos_release_arm64]  local-engine(is optional)
-     flutter build app --release
-    ```
     ```
     # Example: flutter run --local-engine=<DIR>/src/out/ohos_debug_unopt_arm64 -d <device-id>
     flutter run  --debug --local-engine=/home/user/engine_make/src/out/ohos_debug_unopt_arm64 -d <device-id> --local-engine-host=src/out/<engine_host>/
@@ -142,6 +149,9 @@ This repository is a compatible extension of Flutter SDK for the OpenHarmony pla
 | run | application run | flutter run [--local-engine=\<engine product path compatible with ohos\>]                  |
 | attach | debug mode | flutter attach                                                    |
 | screenshot | screenshot | flutter screenshot                                                 |
+| pub | Obtains the dependencies.| flutter pub get                                                 |
+| clean | Clears the project dependencies.| flutter clean                                                 |
+| cache | Clears global cache data.| flutter pub cache clean                                                  |
 
 Attachment: [Flutter third-party library adaptation plan](https://docs.qq.com/sheet/DVVJDWWt1V09zUFN2)
 
@@ -298,6 +308,17 @@ Attachment: [Flutter third-party library adaptation plan](https://docs.qq.com/sh
       ```
        Oops; flutter has exited unexpectedly: "PathNotFoundException: Cannot open file, path = 'D:\code\.ohos\build-profile.json5' (OS Error:  The system cannot find the specified file。，error = 2)".
        A crash report has been written to D:\code\flutter_01.log.
+      ```
+
+19. White screen, crashes, or similar issues occur when running the emulator.
+    1. The emulator only supports Mac (arm64) and does not yet support Mac (x86) or Windows.
+    2. Since the emulator does not currently support Vulkan, please try following the steps in section 2.1. Disable Impeller and try again.
+
+20. Compilation or runtime failure in Flutter profile mode
+    1. Please add the `buildModeSet` field in the OHOS project `build_profile.json5`. You can refer to [complex_layout](https://gitee.com/harmonycommando_flutter/flutter/blob/oh-3.22.0/dev/benchmarks/complex_layout/ohos/build-profile.json5).
+    2. Error message:
+      ```
+      hvigor ERROR: Build mode 'profile' used in command line is not declared in buildModeSet in /xxx/example/ohos/build-profile.json5.
       ```
 
 [More FAQ](https://gitee.com/openharmony-sig/flutter_samples/blob/master/ohos/docs/08_FAQ/README.md)
