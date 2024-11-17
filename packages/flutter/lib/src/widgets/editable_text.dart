@@ -3282,10 +3282,6 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
         // Finalize editing, but don't give up focus because this keyboard
         // action does not imply the user is done inputting information.
         _finalizeEditing(action, shouldUnfocus: false);
-      case TextInputAction.removeFocus:
-        if (defaultTargetPlatform == TargetPlatform.ohos) {
-          widget.focusNode.unfocus();
-        }
     }
   }
 
@@ -3445,7 +3441,6 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
             widget.focusNode.nextFocus();
           case TextInputAction.previous:
             widget.focusNode.previousFocus();
-          default:
         }
       }
     }
