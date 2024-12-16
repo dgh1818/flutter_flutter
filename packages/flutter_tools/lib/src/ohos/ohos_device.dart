@@ -123,6 +123,9 @@ class OhosDevice extends Device {
     await runHdcCheckedAsync(<String>['shell', 'rm', remotePath]);
   }
 
+  @override
+  bool get supportsFlavors => true;
+
   Future<bool> _installApp(covariant ApplicationPackage app,
       {String? userIdentifier}) async {
     if (app is! OhosHap) {
