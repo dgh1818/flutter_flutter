@@ -1040,6 +1040,8 @@ class _OhosViewState extends State<OhosView> {
   @override
   void dispose() {
     _controller.dispose();
+    _focusNode?.dispose();
+    _focusNode = null;
     super.dispose();
   }
 
