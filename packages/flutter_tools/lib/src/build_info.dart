@@ -364,6 +364,7 @@ class OhosBuildInfo {
       OhosArch.arm64_v8a,
       OhosArch.x86_64,
     ],
+    this.enableImpellerFlag = null,
   });
 
   // The build info containing the mode and flavor.
@@ -372,6 +373,8 @@ class OhosBuildInfo {
   /// The target platforms for the build.
   final Iterable<OhosArch> targetArchs;
 
+  // enable impeller option, default is true
+  final bool? enableImpellerFlag;
 }
 
 

@@ -51,6 +51,7 @@ const String APP_SO = 'libapp.so';
 const String HAR_FILE_NAME = 'flutter.har';
 
 const String BUILD_INFO_JSON_PATH = 'src/main/resources/base/profile/buildinfo.json5';
+const String BUILD_INFO_JSON_DES_PATH = 'src/main/resources/rawfile/buildinfo.json5';
 
 final bool isWindows = globals.platform.isWindows;
 
@@ -99,6 +100,36 @@ Future<void> copyFlutterBuildInfoFile(OhosProject ohosProject) async {
   }
   // delete sourceFile
   await sourceFile.delete();
+}
+
+Future<void> setImpellerEnableFlag(OhosProject ohosProject, OhosBuildInfo ohosBuildInfo) async {
+  final String buildinfoFilePath = globals.fs.path.join(ohosProject.flutterModuleDirectory.path, BUILD_INFO_JSON_DES_PATH);
+
+  final File file = globals.localFileSystem.file(buildinfoFilePath);
+
+  if (!await file.exists()) {
+    throw Exception('Failed to find buildinfo.json5 file: $buildinfoFilePath');
+  }
+
+  final String content = await file.readAsString();
+
+  final Map<String, dynamic> json = jsonDecode(content) as Map<String, dynamic>;
+
+  // find "enable_impeller" in json file
+  final List<dynamic> stringList = json['string'] as List<dynamic>;
+  final Map<String, dynamic>? enableImpellerItem = stringList.firstWhere(
+    (dynamic item) => (item as Map<String, dynamic>)['name'] == 'enable_impeller',
+    orElse: () => null,
+  ) as Map<String, dynamic>?;
+
+  if (enableImpellerItem != null) {
+    enableImpellerItem['value'] = ohosBuildInfo.enableImpellerFlag?.toString();
+  }
+
+  final String updatedContent = const JsonEncoder.withIndent('  ').convert(json);
+
+  // save setting
+  await file.writeAsString(updatedContent);
 }
 
 /// eg:entry/src/main/resources/rawfile
@@ -349,12 +380,12 @@ Future<String> flutterAssemble(FlutterProject flutterProject,
 }
 
 /// 清理和拷贝flutter产物和资源
-void cleanAndCopyFlutterAsset(
+Future<void> cleanAndCopyFlutterAsset(
     OhosProject ohosProject,
     OhosBuildInfo ohosBuildInfo,
     Logger? logger,
     String ohosRootPath,
-    String output) {
+    String output) async {
   logger?.printTrace('copy flutter assets to project start');
   // clean flutter assets
   final String desFlutterAssetsPath =
@@ -367,7 +398,11 @@ void cleanAndCopyFlutterAsset(
   /// copy flutter assets
   copyFlutterAssets(globals.fs.path.join(output, FLUTTER_ASSETS_PATH),
       desFlutterAssetsPath, logger);
-  copyFlutterBuildInfoFile(ohosProject);
+  await copyFlutterBuildInfoFile(ohosProject);
+
+  if (ohosBuildInfo.enableImpellerFlag != null) {
+    await setImpellerEnableFlag(ohosProject, ohosBuildInfo);
+  }
 
   final String desAppSoPath =
       getAppSoPath(ohosRootPath, ohosBuildInfo.targetArchs.first, ohosProject);
@@ -542,7 +577,7 @@ class OhosHvigorBuilder implements OhosBuilder {
 
     final String output = await flutterAssemble(flutterProject, ohosBuildInfo, target);
 
-    cleanAndCopyFlutterAsset(ohosProject, ohosBuildInfo, _logger, ohosRootPath, output);
+    await cleanAndCopyFlutterAsset(ohosProject, ohosBuildInfo, _logger, ohosRootPath, output);
 
     cleanAndCopyFlutterRuntime(ohosProject, ohosBuildInfo, _logger, ohosRootPath, ohosBuildData);
 
