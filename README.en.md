@@ -130,6 +130,8 @@ Original warehouse source: https://github.com/flutter/flutter
     flutter run  --debug --local-engine=/home/user/engine_make/src/out/ohos_debug_unopt_arm64 -d <device-id> --local-engine-host=src/out/<engine_host>/
     ```
 
+## Release Notes
+ - [3.22.0-ohos-0.1.0 Beta](/release-notes/Flutter%203.22.0-ohos%200.1.0%20ReleaseNote.en.md)
 
 ## Compatible command list developed by OpenHarmony
 
