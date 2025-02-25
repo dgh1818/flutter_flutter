@@ -1521,15 +1521,13 @@ class FocusManager with DiagnosticableTreeMixin, ChangeNotifier {
     if (kFlutterMemoryAllocationsEnabled) {
       ChangeNotifier.maybeDispatchObjectCreation(this);
     }
-    if (kIsWeb || (defaultTargetPlatform != TargetPlatform.android && defaultTargetPlatform != TargetPlatform.ohos)) {
+    if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) {
       // It appears that some Android keyboard implementations can cause
       // app lifecycle state changes: adding this listener would cause the
       // text field to unfocus as the user is trying to type.
       //
       // Until this is resolved, we won't be adding the listener to Android apps.
       // https://github.com/flutter/flutter/pull/142930#issuecomment-1981750069
-      // On the OHOS platform, any operations on the keyboard are ineffective when the app loses focus,
-      // making it unsuitable to listen to the application lifecycle.
       _appLifecycleListener = _AppLifecycleListener(_appLifecycleChange);
       WidgetsBinding.instance.addObserver(_appLifecycleListener!);
     }
