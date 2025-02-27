@@ -209,6 +209,7 @@ class AdaptiveTextSelectionToolbar extends StatelessWidget {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
+      case TargetPlatform.ohos:
       case TargetPlatform.windows:
         assert(debugCheckHasMaterialLocalizations(context));
         final MaterialLocalizations localizations = MaterialLocalizations.of(context);
@@ -256,6 +257,7 @@ class AdaptiveTextSelectionToolbar extends StatelessWidget {
           });
       case TargetPlatform.fuchsia:
       case TargetPlatform.android:
+      case TargetPlatform.ohos:
         final List<Widget> buttons = <Widget>[];
         for (int i = 0; i < buttonItems.length; i++) {
           final ContextMenuButtonItem buttonItem = buttonItems[i];
@@ -305,6 +307,7 @@ class AdaptiveTextSelectionToolbar extends StatelessWidget {
           anchorBelow: anchors.secondaryAnchor == null ? anchors.primaryAnchor : anchors.secondaryAnchor!,
           children: resultChildren,
         );
+      case TargetPlatform.ohos:
       case TargetPlatform.android:
         return TextSelectionToolbar(
           anchorAbove: anchors.primaryAnchor,

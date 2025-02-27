@@ -17,6 +17,8 @@ import 'material_localizations.dart';
 import 'theme.dart';
 
 const double _kToolbarHeight = 44.0;
+
+// Padding between the toolbar and the anchor.
 const double _kToolbarContentDistance = 8.0;
 
 /// A fully-functional Material-style text selection toolbar.

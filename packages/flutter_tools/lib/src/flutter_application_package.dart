@@ -17,6 +17,8 @@ import 'globals.dart' as globals;
 import 'ios/application_package.dart';
 import 'linux/application_package.dart';
 import 'macos/application_package.dart';
+import 'ohos/application_package.dart';
+import 'ohos/ohos_sdk.dart';
 import 'project.dart';
 import 'tester/flutter_tester.dart';
 import 'web/web_device.dart';
@@ -26,19 +28,22 @@ import 'windows/application_package.dart';
 class FlutterApplicationPackageFactory extends ApplicationPackageFactory {
   FlutterApplicationPackageFactory({
     required AndroidSdk? androidSdk,
+    required HarmonySdk? ohosSdk,
     required ProcessManager processManager,
     required Logger logger,
     required UserMessages userMessages,
     required FileSystem fileSystem,
-  }) : _androidSdk = androidSdk,
-       _processManager = processManager,
-       _logger = logger,
-       _userMessages = userMessages,
-       _fileSystem = fileSystem,
-       _processUtils = ProcessUtils(logger: logger, processManager: processManager);
-
+  })  : _androidSdk = androidSdk,
+        _ohosSdk = ohosSdk,
+        _processManager = processManager,
+        _logger = logger,
+        _userMessages = userMessages,
+        _fileSystem = fileSystem,
+        _processUtils =
+            ProcessUtils(logger: logger, processManager: processManager);
 
   final AndroidSdk? _androidSdk;
+  final HarmonySdk? _ohosSdk;
   final ProcessManager _processManager;
   final Logger _logger;
   final ProcessUtils _processUtils;
@@ -79,7 +84,8 @@ class FlutterApplicationPackageFactory extends ApplicationPackageFactory {
         );
       case TargetPlatform.ios:
         return applicationBinary == null
-            ? await IOSApp.fromIosProject(FlutterProject.current().ios, buildInfo)
+            ? await IOSApp.fromIosProject(
+                FlutterProject.current().ios, buildInfo)
             : IOSApp.fromPrebuiltApp(applicationBinary);
       case TargetPlatform.tester:
         return FlutterTesterApp.fromCurrentDirectory(globals.fs);
@@ -107,6 +113,30 @@ class FlutterApplicationPackageFactory extends ApplicationPackageFactory {
         return applicationBinary == null
             ? FuchsiaApp.fromFuchsiaProject(FlutterProject.current().fuchsia)
             : FuchsiaApp.fromPrebuiltApp(applicationBinary);
+      case TargetPlatform.ohos:
+      case TargetPlatform.ohos_arm64:
+      case TargetPlatform.ohos_arm:
+      case TargetPlatform.ohos_x64:
+        if (applicationBinary == null) {
+          return OhosHap.fromOhosProject(
+            FlutterProject.current().ohos,
+            processManager: _processManager,
+            processUtils: _processUtils,
+            logger: _logger,
+            ohosSdk: _ohosSdk,
+            userMessages: _userMessages,
+            fileSystem: _fileSystem,
+            buildInfo: buildInfo,
+          );
+        }
+        return OhosHap.fromHap(
+          applicationBinary,
+          ohosSdk: _ohosSdk!,
+          processManager: _processManager,
+          logger: _logger,
+          userMessages: _userMessages,
+          processUtils: _processUtils,
+        );
     }
   }
 }

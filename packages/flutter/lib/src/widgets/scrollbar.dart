@@ -1610,6 +1610,7 @@ class RawScrollbarState<T extends RawScrollbar> extends State<T> with TickerProv
           newPosition = clampDouble(newPosition, position.minScrollExtent, position.maxScrollExtent);
         case TargetPlatform.iOS:
         case TargetPlatform.android:
+        case TargetPlatform.ohos:
           // We can only drag the scrollbar into overscroll on mobile
           // platforms, and only then if the physics allow it.
           break;

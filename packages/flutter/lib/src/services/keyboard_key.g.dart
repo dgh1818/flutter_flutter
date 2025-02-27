@@ -341,6 +341,12 @@ class LogicalKeyboardKey extends KeyboardKey {
   /// This is used by platform-specific code to generate Flutter key codes.
   static const int glfwPlane = 0x01800000000;
 
+  /// The plane value for the private keys defined by the ohos embedding.
+  ///
+  /// This is used by platform-specific code to generate Flutter key codes.
+  static const int ohosPlane = 0x01900000000;
+
+
   /// Represents the logical "Space" key on the keyboard.
   ///
   /// See the function [RawKeyEvent.logicalKey] for more information.

@@ -120,6 +120,7 @@ class _ContextMenuRegionState extends State<_ContextMenuRegion> {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
       case TargetPlatform.iOS:
+      case TargetPlatform.ohos:
         return true;
       case TargetPlatform.macOS:
       case TargetPlatform.fuchsia:

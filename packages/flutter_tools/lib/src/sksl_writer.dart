@@ -55,6 +55,10 @@ Future<String?> sharedSkSlWriter(Device device, Map<String, Object?>? data, {
     case TargetPlatform.web_javascript:
     case TargetPlatform.windows_x64:
     case TargetPlatform.windows_arm64:
+    case TargetPlatform.ohos:
+    case TargetPlatform.ohos_arm:
+    case TargetPlatform.ohos_arm64:
+    case TargetPlatform.ohos_x64:
       break;
   }
   final Map<String, Object> manifest = <String, Object>{

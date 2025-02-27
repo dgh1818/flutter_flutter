@@ -428,6 +428,10 @@ Future<Uri?> dryRunNativeAssets({
         fileSystem: fileSystem,
         buildRunner: buildRunner,
       );
+    case build_info.TargetPlatform.ohos:
+    case build_info.TargetPlatform.ohos_arm:
+    case build_info.TargetPlatform.ohos_arm64:
+    case build_info.TargetPlatform.ohos_x64://TODO: adapt ohos
     case build_info.TargetPlatform.fuchsia_arm64:
     case build_info.TargetPlatform.fuchsia_x64:
     case build_info.TargetPlatform.web_javascript:
@@ -502,6 +506,7 @@ Future<Uri?> dryRunNativeAssetsMultipleOSes({
         projectUri,
         buildRunner,
       ),
+    // TODO: adapt Ohos
   ];
   final Uri nativeAssetsUri = await writeNativeAssetsYaml(
     KernelAssets(nativeAssetPaths),
@@ -724,6 +729,10 @@ Target _getNativeTarget(build_info.TargetPlatform targetPlatform) {
     case build_info.TargetPlatform.android_arm64:
     case build_info.TargetPlatform.android_x64:
     case build_info.TargetPlatform.android_x86:
+    case build_info.TargetPlatform.ohos:
+    case build_info.TargetPlatform.ohos_arm:
+    case build_info.TargetPlatform.ohos_arm64:
+    case build_info.TargetPlatform.ohos_x64:
       throw Exception('Unknown targetPlatform: $targetPlatform.');
   }
 }

@@ -253,6 +253,8 @@ class DefaultTextEditingShortcuts extends StatelessWidget {
 
   static final Map<ShortcutActivator, Intent> _fuchsiaShortcuts = _androidShortcuts;
 
+  static final Map<ShortcutActivator, Intent> _ohosShortcuts = _androidShortcuts;
+
   static final Map<ShortcutActivator, Intent> _linuxNumpadShortcuts = <ShortcutActivator, Intent>{
     // When numLock is on, numpad keys shortcuts require shift to be pressed too.
     const SingleActivator(LogicalKeyboardKey.numpad6, shift: true, numLock: LockState.locked): const ExtendSelectionByCharacterIntent(forward: true, collapseSelection: false),
@@ -524,6 +526,7 @@ class DefaultTextEditingShortcuts extends StatelessWidget {
       TargetPlatform.linux   => _linuxShortcuts,
       TargetPlatform.macOS   => _macShortcuts,
       TargetPlatform.windows => _windowsShortcuts,
+      TargetPlatform.ohos    => _ohosShortcuts,
     };
   }
 
@@ -536,6 +539,7 @@ class DefaultTextEditingShortcuts extends StatelessWidget {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         return null;
       case TargetPlatform.iOS:
         return _iOSDisablingTextShortcuts;

@@ -36,6 +36,7 @@ import 'linux/linux_doctor.dart';
 import 'linux/linux_workflow.dart';
 import 'macos/macos_workflow.dart';
 import 'macos/xcode_validator.dart';
+import 'ohos/ohos_doctor.dart';
 import 'proxy_validator.dart';
 import 'reporting/reporting.dart';
 import 'tester/flutter_tester.dart';
@@ -139,6 +140,7 @@ class _DefaultDoctorValidatorsProvider implements DoctorValidatorsProvider {
         flutterRoot: () => Cache.flutterRoot!,
         operatingSystemUtils: globals.os,
       ),
+      ohosValidator!,   //OhosValidator
       if (platform.isWindows)
         WindowsVersionValidator(
           operatingSystemUtils: globals.os,

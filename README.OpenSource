@@ -1,0 +1,11 @@
+[
+    {
+        "Name": "flutter",
+        "License": "BSD 3-Clause License",
+        "License File": "LICENSE",
+        "Version Number": "3.7.12",
+        "Owner": "aibin@openvalley.net",
+        "Upstream URL": "https://github.com/flutter/flutter/",
+        "Description": "Flutter makes it easy and fast to build beautiful mobile apps. Flutter is Google''s mobile app SDK for crafting high-quality native interfaces on iOS and Android in record time. Flutter works with existing code, is used by developers and organization"
+    }
+]

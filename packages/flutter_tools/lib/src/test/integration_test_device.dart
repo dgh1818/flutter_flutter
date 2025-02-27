@@ -86,7 +86,6 @@ class IntegrationTestTestDevice implements TestDevice {
     final vm_service.IsolateRef isolateRef = await vmService.findExtensionIsolate(
       kIntegrationTestMethod,
     );
-
     await vmService.service.streamListen(vm_service.EventStreams.kExtension);
     final Stream<String> remoteMessages = vmService.service.onExtensionEvent
         .where((vm_service.Event e) => e.extensionKind == kIntegrationTestExtension)

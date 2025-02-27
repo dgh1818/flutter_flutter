@@ -19,6 +19,7 @@ final class PlatformAdaptiveIcons implements Icons {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         return false;
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:

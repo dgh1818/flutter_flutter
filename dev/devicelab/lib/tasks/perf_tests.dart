@@ -1382,6 +1382,8 @@ class PerfTest {
             '--use-existing-app',
             existingApp
           ],
+          if (writeSkslFileName != null) ...<String>['--write-sksl-on-exit', writeSkslFileName],
+          if (cacheSkSL) '--cache-sksl',
           if (dartDefine.isNotEmpty) ...<String>['--dart-define', dartDefine],
           if (enableImpeller != null && enableImpeller!) '--enable-impeller',
           if (enableImpeller != null && !enableImpeller!)
@@ -1399,7 +1401,8 @@ class PerfTest {
         await resetPlist();
       }
 
-      final Map<String, dynamic> data = json.decode(
+      final Map<String, dynamic> data = json.decode
+
         file('${_testOutputDirectory(testDirectory)}/$resultFilename.json').readAsStringSync(),
       ) as Map<String, dynamic>;
 

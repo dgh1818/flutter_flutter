@@ -378,6 +378,8 @@ class RenderView extends RenderObject with RenderObjectWithChildMixin<RenderBox>
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         lowerOverlayStyle = layer!.find<SystemUiOverlayStyle>(bottom);
+        break;
+      case TargetPlatform.ohos:
       case TargetPlatform.fuchsia:
       case TargetPlatform.iOS:
       case TargetPlatform.linux:

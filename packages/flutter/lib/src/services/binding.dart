@@ -159,6 +159,9 @@ mixin ServicesBinding on BindingBase, SchedulerBinding {
   @mustCallSuper
   Future<void> handleSystemMessage(Object systemMessage) async {
     final Map<String, dynamic> message = systemMessage as Map<String, dynamic>;
+    if (message['type'] is! String) {
+      return;
+    }
     final String type = message['type'] as String;
     switch (type) {
       case 'memoryPressure':

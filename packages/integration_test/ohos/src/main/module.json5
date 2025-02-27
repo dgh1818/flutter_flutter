@@ -1,0 +1,11 @@
+{
+  "module": {
+    "name": "integration_test",
+    "type": "har",
+    "deviceTypes": [
+      "default",
+      "tablet",
+      "2in1"
+    ]
+  }
+}

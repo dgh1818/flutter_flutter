@@ -777,6 +777,7 @@ class _CircularProgressIndicatorState extends State<CircularProgressIndicator> w
           case TargetPlatform.macOS:
             return _buildCupertinoIndicator(context);
           case TargetPlatform.android:
+          case TargetPlatform.ohos:
           case TargetPlatform.fuchsia:
           case TargetPlatform.linux:
           case TargetPlatform.windows:

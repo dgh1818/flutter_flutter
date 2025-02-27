@@ -486,6 +486,21 @@ class DaemonDomain extends Domain {
                 'fixCode': _ReasonCode.create.name,
               });
             }
+          case PlatformType.ohos:
+            if (!featureFlags.isOhosEnabled) {
+              reasons.add(<String, Object>{
+                'reasonText': 'the Ohos feature is not enabled',
+                'fixText': 'Run "flutter config --enable-ohos"',
+                'fixCode': _ReasonCode.config.name,
+              });
+            }
+            if (!supportedPlatforms.contains(SupportedPlatform.ohos)) {
+              reasons.add(<String, Object>{
+                'reasonText': 'the Ohos platform is not enabled for this project',
+                'fixText': 'Run "flutter create --platforms=ohos ." in your application directory',
+                'fixCode': _ReasonCode.create.name,
+              });
+            }
           case PlatformType.ios:
             if (!featureFlags.isIOSEnabled) {
               reasons.add(<String, Object>{

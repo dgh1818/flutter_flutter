@@ -17,7 +17,7 @@ import 'plugins.dart';
 const bool kIs3dSceneSupported = true;
 
 const Set<String> _kValidPluginPlatforms = <String>{
-  'android', 'ios', 'web', 'windows', 'linux', 'macos',
+  'android', 'ios', 'web', 'windows', 'linux', 'macos','ohos',
 };
 
 /// A wrapper around the `flutter` section in the `pubspec.yaml` file.
@@ -209,6 +209,34 @@ class FlutterManifest {
       final Object? android = platforms['android'];
       if (android is YamlMap) {
         return android['package'] as String?;
+      }
+    }
+    return null;
+  }
+
+  /// Returns the OpenHarmony package declared by this manifest in its
+  /// module or plugin descriptor. Returns null, if there is no
+  /// such declaration.
+  String? get ohosPackage {
+     if (isModule) {
+      final Object? module = _flutterDescriptor['module'];
+      if (module is YamlMap) {
+        return module['ohosPackage'] as String?;
+      }
+    }
+    final Map<String, Object?>? platforms = supportedPlatforms;
+    if (platforms == null) {
+      // Pre-multi-platform plugin format
+      if (isPlugin) {
+        final YamlMap? plugin = _flutterDescriptor['plugin'] as YamlMap?;
+        return plugin?['ohosPackage'] as String?;
+      }
+      return null;
+    }
+    if (platforms.containsKey('ohos')) {
+      final Object? ohos = platforms['ohos'];
+      if (ohos is YamlMap) {
+        return ohos['package'] as String?;
       }
     }
     return null;

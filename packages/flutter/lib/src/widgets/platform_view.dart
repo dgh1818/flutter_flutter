@@ -197,6 +197,143 @@ class AndroidView extends StatefulWidget {
   State<AndroidView> createState() => _AndroidViewState();
 }
 
+class OhosView extends StatefulWidget {
+  /// Creates a widget that embeds an Ohos view.
+  ///
+  /// {@template flutter.widgets.OhosView.constructorArgs}
+  /// The `viewType` and `hitTestBehavior` parameters must not be null.
+  /// If `creationParams` is not null then `creationParamsCodec` must not be null.
+  /// {@endtemplate}
+  const OhosView({
+    super.key,
+    required this.viewType,
+    this.onPlatformViewCreated,
+    this.hitTestBehavior = PlatformViewHitTestBehavior.opaque,
+    this.layoutDirection,
+    this.gestureRecognizers,
+    this.creationParams,
+    this.creationParamsCodec,
+    this.clipBehavior = Clip.hardEdge,
+  }) : assert(viewType != null),
+        assert(hitTestBehavior != null),
+        assert(creationParams == null || creationParamsCodec != null),
+        assert(clipBehavior != null);
+
+  /// The unique identifier for Ohos view type to be embedded by this widget.
+  ///
+  /// A [PlatformViewFactory](/javadoc/io/flutter/plugin/platform/PlatformViewFactory.html)
+  /// for this type must have been registered.
+  ///
+  /// See also:
+  ///
+  ///  * [OhosView] for an example of registering a platform view factory.
+  final String viewType;
+
+  /// {@template flutter.widgets.OhosView.onPlatformViewCreated}
+  /// Callback to invoke after the platform view has been created.
+  ///
+  /// May be null.
+  /// {@endtemplate}
+  final PlatformViewCreatedCallback? onPlatformViewCreated;
+
+  /// {@template flutter.widgets.OhosView.hitTestBehavior}
+  /// How this widget should behave during hit testing.
+  ///
+  /// This defaults to [PlatformViewHitTestBehavior.opaque].
+  /// {@endtemplate}
+  final PlatformViewHitTestBehavior hitTestBehavior;
+
+  /// {@template flutter.widgets.OhosView.layoutDirection}
+  /// The text direction to use for the embedded view.
+  ///
+  /// If this is null, the ambient [Directionality] is used instead.
+  /// {@endtemplate}
+  final TextDirection? layoutDirection;
+
+  /// Which gestures should be forwarded to the Ohos view.
+  ///
+  /// {@template flutter.widgets.OhosView.gestureRecognizers.descHead}
+  /// The gesture recognizers built by factories in this set participate in the gesture arena for
+  /// each pointer that was put down on the widget. If any of these recognizers win the
+  /// gesture arena, the entire pointer event sequence starting from the pointer down event
+  /// will be dispatched to the platform view.
+  ///
+  /// When null, an empty set of gesture recognizer factories is used, in which case a pointer event sequence
+  /// will only be dispatched to the platform view if no other member of the arena claimed it.
+  /// {@endtemplate}
+  ///
+  /// For example, with the following setup vertical drags will not be dispatched to the Ohos
+  /// view as the vertical drag gesture is claimed by the parent [GestureDetector].
+  ///
+  /// ```dart
+  /// GestureDetector(
+  ///   onVerticalDragStart: (DragStartDetails d) {},
+  ///   child: const OhosView(
+  ///     viewType: 'webview',
+  ///   ),
+  /// )
+  /// ```
+  ///
+  /// To get the [OhosView] to claim the vertical drag gestures we can pass a vertical drag
+  /// gesture recognizer factory in [gestureRecognizers] e.g:
+  ///
+  /// ```dart
+  /// GestureDetector(
+  ///   onVerticalDragStart: (DragStartDetails details) {},
+  ///   child: SizedBox(
+  ///     width: 200.0,
+  ///     height: 100.0,
+  ///     child: OhosView(
+  ///       viewType: 'webview',
+  ///       gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+  ///         Factory<OneSequenceGestureRecognizer>(
+  ///           () => EagerGestureRecognizer(),
+  ///         ),
+  ///       },
+  ///     ),
+  ///   ),
+  /// )
+  /// ```
+  ///
+  /// {@template flutter.widgets.OhosView.gestureRecognizers.descFoot}
+  /// A platform view can be configured to consume all pointers that were put
+  /// down in its bounds by passing a factory for an [EagerGestureRecognizer] in
+  /// [gestureRecognizers]. [EagerGestureRecognizer] is a special gesture
+  /// recognizer that immediately claims the gesture after a pointer down event.
+  ///
+  /// The [gestureRecognizers] property must not contain more than one factory
+  /// with the same [Factory.type].
+  ///
+  /// Changing [gestureRecognizers] results in rejection of any active gesture
+  /// arenas (if the platform view is actively participating in an arena).
+  /// {@endtemplate}
+  // We use OneSequenceGestureRecognizers as they support gesture arena teams.
+  // TODO(amirh): get a list of GestureRecognizers here.
+  // https://github.com/flutter/flutter/issues/20953
+  final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
+
+  /// Passed as the args argument of [PlatformViewFactory#create](/javadoc/io/flutter/plugin/platform/PlatformViewFactory.html#create-ohos.content.Context-int-java.lang.Object-)
+  ///
+  /// This can be used by plugins to pass constructor parameters to the embedded Ohos view.
+  final dynamic creationParams;
+
+  /// The codec used to encode `creationParams` before sending it to the
+  /// platform side. It should match the codec passed to the constructor of [PlatformViewFactory](/javadoc/io/flutter/plugin/platform/PlatformViewFactory.html#PlatformViewFactory-io.flutter.plugin.common.MessageCodec-).
+  ///
+  /// This is typically one of: [StandardMessageCodec], [JSONMessageCodec], [StringCodec], or [BinaryCodec].
+  ///
+  /// This must not be null if [creationParams] is not null.
+  final MessageCodec<dynamic>? creationParamsCodec;
+
+  /// {@macro flutter.material.Material.clipBehavior}
+  ///
+  /// Defaults to [Clip.hardEdge], and must not be null.
+  final Clip clipBehavior;
+
+  @override
+  State<OhosView> createState() => _OhosViewState();
+}
+
 /// Common superclass for iOS and macOS platform views.
 ///
 /// Platform views are used to embed native views in the widget hierarchy, with
@@ -828,6 +965,138 @@ class _AndroidViewState extends State<AndroidView> {
   }
 }
 
+class _OhosViewState extends State<OhosView> {
+  int? _id;
+  late OhosViewController _controller;
+  TextDirection? _layoutDirection;
+  bool _initialized = false;
+  FocusNode? _focusNode;
+
+  static final Set<Factory<OneSequenceGestureRecognizer>> _emptyRecognizersSet =
+  <Factory<OneSequenceGestureRecognizer>>{};
+
+  @override
+  Widget build(BuildContext context) {
+    return Focus(
+      focusNode: _focusNode,
+      onFocusChange: _onFocusChange,
+      child: _OhosPlatformView(
+        controller: _controller,
+        hitTestBehavior: widget.hitTestBehavior,
+        gestureRecognizers: widget.gestureRecognizers ?? _emptyRecognizersSet,
+        clipBehavior: widget.clipBehavior,
+      ),
+    );
+  }
+
+  void _initializeOnce() {
+    if (_initialized) {
+      return;
+    }
+    _initialized = true;
+    _createNewOhosView();
+    _focusNode = FocusNode(debugLabel: 'OhosView(id: $_id)');
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final TextDirection newLayoutDirection = _findLayoutDirection();
+    final bool didChangeLayoutDirection = _layoutDirection != newLayoutDirection;
+    _layoutDirection = newLayoutDirection;
+
+    _initializeOnce();
+    if (didChangeLayoutDirection) {
+      // The native view will update asynchronously, in the meantime we don't want
+      // to block the framework. (so this is intentionally not awaiting).
+      _controller.setLayoutDirection(_layoutDirection!);
+    }
+  }
+
+  @override
+  void didUpdateWidget(OhosView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    final TextDirection newLayoutDirection = _findLayoutDirection();
+    final bool didChangeLayoutDirection = _layoutDirection != newLayoutDirection;
+    _layoutDirection = newLayoutDirection;
+
+    if (widget.viewType != oldWidget.viewType) {
+      _controller.dispose();
+      _createNewOhosView();
+      return;
+    }
+
+    if (didChangeLayoutDirection) {
+      _controller.setLayoutDirection(_layoutDirection!);
+    }
+  }
+
+  TextDirection _findLayoutDirection() {
+    assert(widget.layoutDirection != null || debugCheckHasDirectionality(context));
+    return widget.layoutDirection ?? Directionality.of(context);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _focusNode?.dispose();
+    _focusNode = null;
+    super.dispose();
+  }
+
+  void _createNewOhosView() {
+    _id = platformViewsRegistry.getNextPlatformViewId();
+    _controller = PlatformViewsService.initOhosView(
+      id: _id!,
+      viewType: widget.viewType,
+      layoutDirection: _layoutDirection!,
+      creationParams: widget.creationParams,
+      creationParamsCodec: widget.creationParamsCodec,
+      onFocus: () {
+        _focusNode!.requestFocus();
+      },
+    );
+    if (widget.onPlatformViewCreated != null) {
+      _controller.addOnPlatformViewCreatedListener(widget.onPlatformViewCreated!);
+    }
+  }
+
+  void _onFocusChange(bool isFocused) {
+    if (!_controller.isCreated) {
+      return;
+    }
+    if (!isFocused) {
+      _controller.clearFocus().catchError((dynamic e) {
+        if (e is MissingPluginException) {
+          // We land the framework part of Ohos platform views keyboard
+          // support before the engine part. There will be a commit range where
+          // clearFocus isn't implemented in the engine. When that happens we
+          // just swallow the error here. Once the engine part is rolled to the
+          // framework I'll remove this.
+          // TODO(amirh): remove this once the engine's clearFocus is rolled.
+          return;
+        }
+      });
+      return;
+    }
+    SystemChannels.textInput.invokeMethod<void>(
+      'TextInput.setPlatformViewClient',
+      <String, dynamic>{'platformViewId': _id},
+    ).catchError((dynamic e) {
+      if (e is MissingPluginException) {
+        // We land the framework part of Ohos platform views keyboard
+        // support before the engine part. There will be a commit range where
+        // setPlatformViewClient isn't implemented in the engine. When that
+        // happens we just swallow the error here. Once the engine part is
+        // rolled to the framework I'll remove this.
+        // TODO(amirh): remove this once the engine's clearFocus is rolled.
+        return;
+      }
+    });
+  }
+}
+
 abstract class _DarwinViewState<PlatformViewT extends _DarwinView, ControllerT extends DarwinPlatformViewController, RenderT extends RenderDarwinPlatformView<ControllerT>, ViewT extends _DarwinPlatformView<ControllerT, RenderT>> extends State<PlatformViewT> {
   ControllerT? _controller;
   TextDirection? _layoutDirection;
@@ -1019,6 +1288,40 @@ class _AndroidPlatformView extends LeafRenderObjectWidget {
 
   @override
   void updateRenderObject(BuildContext context, RenderAndroidView renderObject) {
+    renderObject.controller = controller;
+    renderObject.hitTestBehavior = hitTestBehavior;
+    renderObject.updateGestureRecognizers(gestureRecognizers);
+    renderObject.clipBehavior = clipBehavior;
+  }
+}
+
+class _OhosPlatformView extends LeafRenderObjectWidget {
+  const _OhosPlatformView({
+    required this.controller,
+    required this.hitTestBehavior,
+    required this.gestureRecognizers,
+    this.clipBehavior = Clip.hardEdge,
+  }) : assert(controller != null),
+        assert(hitTestBehavior != null),
+        assert(gestureRecognizers != null),
+        assert(clipBehavior != null);
+
+  final OhosViewController controller;
+  final PlatformViewHitTestBehavior hitTestBehavior;
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
+  final Clip clipBehavior;
+
+  @override
+  RenderObject createRenderObject(BuildContext context) =>
+      RenderOhosView(
+        viewController: controller,
+        hitTestBehavior: hitTestBehavior,
+        gestureRecognizers: gestureRecognizers,
+        clipBehavior: clipBehavior,
+      );
+
+  @override
+  void updateRenderObject(BuildContext context, RenderOhosView renderObject) {
     renderObject.controller = controller;
     renderObject.hitTestBehavior = hitTestBehavior;
     renderObject.updateGestureRecognizers(gestureRecognizers);
@@ -1421,6 +1724,36 @@ class AndroidViewSurface extends StatefulWidget {
   }
 }
 
+class OhosViewSurface extends StatefulWidget {
+  /// Construct an `OhosPlatformViewSurface`.
+  const OhosViewSurface({
+    super.key,
+    required this.controller,
+    required this.hitTestBehavior,
+    required this.gestureRecognizers,
+  }) : assert(controller != null),
+        assert(hitTestBehavior != null),
+        assert(gestureRecognizers != null);
+
+  /// The controller for the platform view integrated by this [OhosViewSurface].
+  ///
+  /// See [PlatformViewSurface.controller] for details.
+  final OhosViewController controller;
+
+  /// Which gestures should be forwarded to the PlatformView.
+  ///
+  /// See [PlatformViewSurface.gestureRecognizers] for details.
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
+
+  /// {@macro flutter.widgets.AndroidView.hitTestBehavior}
+  final PlatformViewHitTestBehavior hitTestBehavior;
+
+  @override
+  State<StatefulWidget> createState() {
+    return _OhosViewSurfaceState();
+  }
+}
+
 class _AndroidViewSurfaceState extends State<AndroidViewSurface> {
   @override
   void initState() {
@@ -1461,6 +1794,46 @@ class _AndroidViewSurfaceState extends State<AndroidViewSurface> {
   }
 }
 
+class _OhosViewSurfaceState extends State<OhosViewSurface> {
+  @override
+  void initState() {
+    super.initState();
+    if (!widget.controller.isCreated) {
+      // Schedule a rebuild once creation is complete and the final dislay
+      // type is known.
+      widget.controller.addOnPlatformViewCreatedListener(_onPlatformViewCreated);
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeOnPlatformViewCreatedListener(_onPlatformViewCreated);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.controller.requiresViewComposition) {
+      return _PlatformLayerBasedOhosViewSurface(
+        controller: widget.controller,
+        hitTestBehavior: widget.hitTestBehavior,
+        gestureRecognizers: widget.gestureRecognizers,
+      );
+    } else {
+      return _TextureBasedOhosViewSurface(
+        controller: widget.controller,
+        hitTestBehavior: widget.hitTestBehavior,
+        gestureRecognizers: widget.gestureRecognizers,
+      );
+    }
+  }
+
+  void _onPlatformViewCreated(int _) {
+    // Trigger a re-build based on the current controller state.
+    setState(() {});
+  }
+}
+
 // Displays an Android platform view via GL texture.
 class _TextureBasedAndroidViewSurface extends PlatformViewSurface {
   const _TextureBasedAndroidViewSurface({
@@ -1485,6 +1858,31 @@ class _TextureBasedAndroidViewSurface extends PlatformViewSurface {
   }
 }
 
+class _TextureBasedOhosViewSurface extends PlatformViewSurface {
+  const _TextureBasedOhosViewSurface({
+    required OhosViewController super.controller,
+    required super.hitTestBehavior,
+    required super.gestureRecognizers,
+  }) : assert(controller != null),
+        assert(hitTestBehavior != null),
+        assert(gestureRecognizers != null);
+
+  @override
+  RenderObject createRenderObject(BuildContext context) {
+    final OhosViewController viewController = controller as OhosViewController;
+    // Use GL texture based composition.
+    // App should use GL texture unless they require to embed a SurfaceView.
+    final RenderOhosView renderBox = RenderOhosView(
+      viewController: viewController,
+      gestureRecognizers: gestureRecognizers,
+      hitTestBehavior: hitTestBehavior,
+    );
+    viewController.pointTransformer =
+        (Offset position) => renderBox.globalToLocal(position);
+    return renderBox;
+  }
+}
+
 class _PlatformLayerBasedAndroidViewSurface extends PlatformViewSurface {
   const _PlatformLayerBasedAndroidViewSurface({
     required AndroidViewController super.controller,
@@ -1495,6 +1893,26 @@ class _PlatformLayerBasedAndroidViewSurface extends PlatformViewSurface {
   @override
   RenderObject createRenderObject(BuildContext context) {
     final AndroidViewController viewController = controller as AndroidViewController;
+    final PlatformViewRenderBox renderBox =
+        super.createRenderObject(context) as PlatformViewRenderBox;
+    viewController.pointTransformer =
+        (Offset position) => renderBox.globalToLocal(position);
+    return renderBox;
+  }
+}
+
+class _PlatformLayerBasedOhosViewSurface extends PlatformViewSurface {
+  const _PlatformLayerBasedOhosViewSurface({
+    required OhosViewController super.controller,
+    required super.hitTestBehavior,
+    required super.gestureRecognizers,
+  }) : assert(controller != null),
+        assert(hitTestBehavior != null),
+        assert(gestureRecognizers != null);
+
+  @override
+  RenderObject createRenderObject(BuildContext context) {
+    final OhosViewController viewController = controller as OhosViewController;
     final PlatformViewRenderBox renderBox =
         super.createRenderObject(context) as PlatformViewRenderBox;
     viewController.pointTransformer =

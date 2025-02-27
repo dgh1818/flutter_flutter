@@ -17,6 +17,7 @@ import 'convert.dart';
 import 'device.dart';
 import 'globals.dart' as globals;
 import 'project.dart';
+import 'ohos/hdc_server.dart';
 import 'version.dart';
 
 const String kResultType = 'type';
@@ -166,6 +167,12 @@ Future<io.WebSocket> _defaultOpenChannel(String url, {
   while (socket == null) {
     attempts += 1;
     try {
+      final String? hdcServerHost = getHdcServerHost();
+      // when on hdc server mode,the host is not local,change to hdc server
+      if(hdcServerHost!=null){
+        url = url.replaceAll('127.0.0.1', hdcServerHost);
+        logger.printStatus('io.WebSocket.connect change url to $url');
+      }
       socket = await constructor(url, compression: compression, logger: logger);
     } on io.WebSocketException catch (e) {
       await handleError(e);

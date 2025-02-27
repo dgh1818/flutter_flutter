@@ -174,6 +174,24 @@ const String rootGradleFileContent = r'''
 // To update all the build.gradle files in the Flutter repo,
 // See dev/tools/bin/generate_gradle_lockfiles.dart.
 
+buildscript {
+    ext.kotlin_version = '1.7.10'
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+
+    configurations.classpath {
+        resolutionStrategy.activateDependencyLocking()
+    }
+}
+
+>>>>>>> dev
 allprojects {
     repositories {
         google()

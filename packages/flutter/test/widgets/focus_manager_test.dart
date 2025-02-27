@@ -1386,6 +1386,7 @@ void main() {
     testWidgets('Initial highlight mode guesses correctly.', (WidgetTester tester) async {
       FocusManager.instance.highlightStrategy = FocusHighlightStrategy.automatic;
       switch (defaultTargetPlatform) {
+        case TargetPlatform.ohos:
         case TargetPlatform.fuchsia:
         case TargetPlatform.android:
         case TargetPlatform.iOS:

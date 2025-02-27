@@ -248,6 +248,7 @@ class _CupertinoRadioState<T> extends State<CupertinoRadio<T>> with TickerProvid
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         accessibilitySelected = null;
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:

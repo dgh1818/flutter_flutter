@@ -86,6 +86,7 @@ void main() {
   testWidgets('Defaults to MaterialTapTargetBehavior.padded on mobile platforms and MaterialTapTargetBehavior.shrinkWrap on desktop', (WidgetTester tester) async {
     final ThemeData themeData = ThemeData(platform: defaultTargetPlatform);
     switch (defaultTargetPlatform) {
+      case TargetPlatform.ohos:
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.iOS:
@@ -493,6 +494,7 @@ void main() {
         } else {
           expect(theme.splashFactory, equals(InkSparkle.splashFactory));
         }
+      case TargetPlatform.ohos:
       case TargetPlatform.iOS:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
@@ -506,6 +508,7 @@ void main() {
     final ThemeData theme = ThemeData(useMaterial3: false);
 
     switch (debugDefaultTargetPlatformOverride!) {
+      case TargetPlatform.ohos:
       case TargetPlatform.android:
       case TargetPlatform.iOS:
       case TargetPlatform.fuchsia:
@@ -518,6 +521,7 @@ void main() {
 
   testWidgets('VisualDensity.adaptivePlatformDensity returns adaptive values', (WidgetTester tester) async {
     switch (debugDefaultTargetPlatformOverride!) {
+      case TargetPlatform.ohos:
       case TargetPlatform.android:
       case TargetPlatform.iOS:
       case TargetPlatform.fuchsia:
@@ -545,6 +549,7 @@ void main() {
   testWidgets('VisualDensity in ThemeData defaults to "compact" on desktop and "standard" on mobile', (WidgetTester tester) async {
     final ThemeData themeData = ThemeData();
     switch (debugDefaultTargetPlatformOverride!) {
+      case TargetPlatform.ohos:
       case TargetPlatform.android:
       case TargetPlatform.iOS:
       case TargetPlatform.fuchsia:

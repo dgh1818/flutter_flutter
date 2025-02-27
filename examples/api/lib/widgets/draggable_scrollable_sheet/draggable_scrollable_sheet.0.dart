@@ -97,6 +97,7 @@ class _DraggableScrollableSheetExampleState extends State<DraggableScrollableShe
       case TargetPlatform.android:
       case TargetPlatform.iOS:
       case TargetPlatform.fuchsia:
+      case TargetPlatform.ohos:
         return false;
     }
   }

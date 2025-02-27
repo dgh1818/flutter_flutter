@@ -52,6 +52,9 @@ final platform.TargetPlatform _browserPlatform = () {
   if (navigatorPlatform.contains('android')) {
     return platform.TargetPlatform.android;
   }
+  if (navigatorPlatform.contains('ohos')) {
+    return platform.TargetPlatform.ohos;
+  }
   // Since some phones can report a window.navigator.platform as Linux, fall
   // back to use CSS to disambiguate Android vs Linux desktop. If the CSS
   // indicates that a device has a "fine pointer" (mouse) as the primary

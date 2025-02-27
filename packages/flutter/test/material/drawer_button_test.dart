@@ -173,6 +173,7 @@ void main() {
       case TargetPlatform.linux:
       case TargetPlatform.macOS:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         expectedLabel = null;
     }
     expect(tester.getSemantics(find.byType(DrawerButton)), matchesSemantics(
@@ -230,6 +231,7 @@ void main() {
       case TargetPlatform.linux:
       case TargetPlatform.macOS:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         expectedLabel = null;
     }
     expect(tester.getSemantics(find.byType(EndDrawerButton)), matchesSemantics(

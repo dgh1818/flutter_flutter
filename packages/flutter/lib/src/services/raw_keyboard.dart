@@ -13,6 +13,7 @@ import 'raw_keyboard_fuchsia.dart';
 import 'raw_keyboard_ios.dart';
 import 'raw_keyboard_linux.dart';
 import 'raw_keyboard_macos.dart';
+import 'raw_keyboard_ohos.dart';
 import 'raw_keyboard_web.dart';
 import 'raw_keyboard_windows.dart';
 import 'system_channels.dart';
@@ -404,6 +405,17 @@ abstract class RawKeyEvent with Diagnosticable {
     } else {
       final String keymap = message['keymap']! as String;
       switch (keymap) {
+        case 'ohos':
+          data = RawKeyEventDataOhos(
+            message['type'] as String? ?? KeyType.keydown.toString(),
+            message['keyCode'] as int? ?? 0,
+            message['deviceId'] as int? ?? 0,
+            message['character'] as String? ?? '',
+          );
+          if (message.containsKey('character')) {
+            character = message['character'] as String?;
+          }
+          break;
         case 'android':
           data = RawKeyEventDataAndroid(
             flags: message['flags'] as int? ?? 0,

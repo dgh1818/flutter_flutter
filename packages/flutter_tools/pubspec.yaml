@@ -52,6 +52,8 @@ dependencies:
   http_multi_server: 3.2.1
   convert: 3.1.1
   async: 2.11.0
+  # this dependence use to parse json5 config file
+  json5: ^0.8.0
   unified_analytics: 5.8.8+1
 
   cli_config: 0.2.0
@@ -120,4 +122,5 @@ dartdoc:
   # Exclude this package from the hosted API docs.
   nodoc: true
 
+# TODO: fix checksum
 # PUBSPEC CHECKSUM: 067f
