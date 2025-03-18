@@ -1649,7 +1649,6 @@ enum PixelFormat {
   /// component, followed by: green, blue and alpha. Premultiplied alpha isn't
   /// used, matching [ImageByteFormat.rawExtendedRgba128].
   rgbaFloat32,
-  //rgba1010102,
 }
 
 /// Signature for [Image] lifecycle events.
@@ -1766,7 +1765,7 @@ class Image {
   // considering the binary size of the engine after LTO optimization. You can
   // use the third-party pure dart image library to encode other formats.
   // See: https://github.com/flutter/flutter/issues/16635 for more details.
-  Future<ByteData?> toByteData({ImageByteFormat format = ImageByteFormat.rawUnmodified}) {
+  Future<ByteData?> toByteData({ImageByteFormat format = ImageByteFormat.rawRgba}) {
     assert(!_disposed && !_image._disposed);
     return _image.toByteData(format: format);
   }
@@ -3708,10 +3707,6 @@ abstract class ImageFilter {
     return _GaussianBlurImageFilter(sigmaX: sigmaX, sigmaY: sigmaY, tileMode: tileMode);
   }
 
-  factory ImageFilter.setHdr({ int hdr = 0, bool is_image = true }) {
-    return _SetHdr(hdr: hdr, is_image:is_image);
-  }
-
   /// Creates an image filter that dilates each input pixel's channel values
   /// to the max value within the given radii along the x and y axes.
   factory ImageFilter.dilate({ double radiusX = 0.0, double radiusY = 0.0 }) {
@@ -3827,38 +3822,6 @@ class _GaussianBlurImageFilter implements ImageFilter {
   int get hashCode => Object.hash(sigmaX, sigmaY);
 }
 
-class _SetHdr implements ImageFilter {
-    _SetHdr({ required this.hdr, required this.is_image }) {
-      nativeFilter.sethdr_(this);
-    }
-
-    final int hdr;
-    final bool is_image;
-
-    late final _ImageFilter nativeFilter = _ImageFilter.setHdr(this);
-    @override
-    _ImageFilter _toNativeImageFilter() => nativeFilter;
-
-    @override
-    String get _shortDescription => 'setHdr($hdr, $is_image)';
-
-    @override
-    String toString() => 'ImageFilter.setHdr($hdr, $is_image)';
-
-    @override
-    bool operator ==(Object other) {
-      if (other.runtimeType != runtimeType) {
-        return false;
-      }
-      return other is _SetHdr
-          && other.hdr == hdr
-          && other.is_image == is_image;
-    }
-
-    @override
-    int get hashCode => Object.hash(hdr, is_image);
-}
-
 class _DilateImageFilter implements ImageFilter {
   _DilateImageFilter({ required this.radiusX, required this.radiusY });
 
@@ -3963,11 +3926,6 @@ base class _ImageFilter extends NativeFieldWrapperClass1 {
     _initBlur(filter.sigmaX, filter.sigmaY, filter.tileMode.index);
   }
 
-  _ImageFilter.setHdr(_SetHdr filter)
-    : creator = filter {
-    _constructor();
-  }
-
   /// Creates an image filter that dilates each input pixel's channel values
   /// to the max value within the given radii along the x and y axes.
   _ImageFilter.dilate(_DilateImageFilter filter)
@@ -4014,18 +3972,11 @@ base class _ImageFilter extends NativeFieldWrapperClass1 {
     _initComposed(nativeFilterOuter, nativeFilterInner);
   }
 
-  void sethdr_(_SetHdr filter) {
-    _initSetHdr(filter.hdr, filter.is_image);
-  }
-
   @Native<Void Function(Handle)>(symbol: 'ImageFilter::Create')
   external void _constructor();
 
   @Native<Void Function(Pointer<Void>, Double, Double, Int32)>(symbol: 'ImageFilter::initBlur', isLeaf: true)
   external void _initBlur(double sigmaX, double sigmaY, int tileMode);
-
-  @Native<Void Function(Pointer<Void>, Int32, Bool)>(symbol: 'ImageFilter::initSetHdr', isLeaf: true)
-  external void _initSetHdr(int hdr, bool is_image);
 
   @Native<Void Function(Pointer<Void>, Double, Double)>(symbol: 'ImageFilter::initDilate', isLeaf: true)
   external void _initDilate(double radiusX, double radiusY);
