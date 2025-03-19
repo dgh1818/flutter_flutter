@@ -3125,9 +3125,27 @@ class _SemanticsSortGroup implements Comparable<_SemanticsSortGroup> {
       horizontalGroups = horizontalGroups.reversed.toList();
     }
 
-    return horizontalGroups
-      .expand((_SemanticsSortGroup group) => group.sortedWithinKnot())
-      .toList();
+    switch (defaultTargetPlatform) {
+      // At present, OHOS does not support selecting the target component for hover
+      // events based on the childrenInHitTestOrder. The default component selection
+      // of the OHOS accessibility service is in the reverse order of
+      // childenInTraversalOrder.
+      // So, in order to avoid unexpected component selection in some situation,
+      // sortedWithinKnot shoult be avoid.
+      // For example:
+      // stack: children[A, B, C]
+      // sortedWithinKnot may order childenInTraversalOrder as [A, C, B] unexpectedly.
+      // FIXME: Remove it when OHOS support childrenInHitTestOrder
+      case TargetPlatform.ohos:
+        return
+          horizontalGroups
+          .expand((_SemanticsSortGroup group) => group.nodes)
+          .toList();
+      default:
+        return horizontalGroups
+        .expand((_SemanticsSortGroup group) => group.sortedWithinKnot())
+        .toList();
+    }
   }
 
   /// Sorts [nodes] where nodes intersect both vertically and horizontally.
