@@ -334,6 +334,7 @@ Future<String> flutterAssemble(FlutterProject flutterProject,
   // If path is relative, make it absolute from flutter project.
   output = getAbsolutePath(flutterProject, output);
   try {
+    final String? flavor = ohosBuildInfo.buildInfo.flavor;
     final BuildResult result = await globals.buildSystem.build(
         target,
         Environment(
@@ -344,6 +345,7 @@ Future<String> flutterAssemble(FlutterProject flutterProject,
               .childDirectory('flutter_build'),
           defines: <String, String>{
             ...ohosBuildInfo.buildInfo.toBuildSystemEnvironment(),
+            if (flavor != null) kFlavor: flavor,
             kTargetFile: targetFile,
             kTargetPlatform: getNameForTargetPlatform(TargetPlatform.ohos),
           },
