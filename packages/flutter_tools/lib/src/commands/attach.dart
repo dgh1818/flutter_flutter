@@ -7,6 +7,7 @@ import 'dart:async';
 import 'package:unified_analytics/unified_analytics.dart';
 import 'package:vm_service/vm_service.dart';
 
+import '../ohos/ohos_device.dart';
 import '../android/android_device.dart';
 import '../base/common.dart';
 import '../base/file_system.dart';
@@ -386,7 +387,7 @@ known, it can be explicitly provided to attach via the command-line, e.g.
           ProtocolDiscovery.vmService(
             // If it's an Android device, attaching relies on past log searching
             // to find the service protocol.
-            await device.getLogReader(includePastLogs: device is AndroidDevice),
+            await device.getLogReader(includePastLogs: device is AndroidDevice || device is OhosDevice),
             portForwarder: device.portForwarder,
             ipv6: ipv6!,
             devicePort: deviceVmservicePort,
