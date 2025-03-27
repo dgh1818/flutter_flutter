@@ -204,7 +204,7 @@ Future<int> assembleHap(
     required String ohosRootPath,
     required String hvigorwPath,
     required String flavor,
-    required String buildMode,
+    required BuildInfo buildInfo,
     Logger? logger}) async {
   final List<String> command = <String>[
     hvigorwPath,
@@ -213,9 +213,10 @@ Future<int> assembleHap(
     '-p',
     'product=$flavor',
     '-p',
-    'buildMode=$buildMode',
+    'buildMode=${buildInfo.modeName}',
     '--no-daemon',
   ];
+  _appendCommands(command, buildInfo);
   return hvigorwTask(command,
       processUtils: processUtils,
       workPath: ohosRootPath,
@@ -228,7 +229,7 @@ Future<int> assembleApp(
     required String ohosRootPath,
     required String hvigorwPath,
     required String flavor,
-    required String buildMode,
+    required BuildInfo buildInfo,
     Logger? logger}) async {
   final List<String> command = <String>[
     hvigorwPath,
@@ -237,9 +238,10 @@ Future<int> assembleApp(
     '-p',
     'product=$flavor',
     '-p',
-    'buildMode=$buildMode',
+    'buildMode=${buildInfo.modeName}',
     '--no-daemon',
   ];
+  _appendCommands(command, buildInfo);
   return hvigorwTask(command,
       processUtils: processUtils,
       workPath: ohosRootPath,
@@ -253,7 +255,7 @@ Future<int> assembleHar(
     required String workPath,
     required String hvigorwPath,
     required String moduleName,
-    required String buildMode,
+    required BuildInfo buildInfo,
     String product = 'default',
     Logger? logger}) async {
   final List<String> command = <String>[
@@ -268,6 +270,7 @@ Future<int> assembleHar(
     'assembleHar',
     '--no-daemon',
   ];
+  _appendCommands(command, buildInfo);
   return hvigorwTask(command,
       processUtils: processUtils,
       workPath: workPath,
@@ -281,7 +284,7 @@ Future<int> assembleHsp(
     required String hvigorwPath,
     required String moduleName,
     required String flavor,
-    required String buildMode,
+    required BuildInfo buildInfo,
     Logger? logger}) async {
   final List<String> command = <String>[
     hvigorwPath,
@@ -293,10 +296,11 @@ Future<int> assembleHsp(
     '-p',
     'product=$flavor',
     '-p',
-    'buildMode=$buildMode',
+    'buildMode=${buildInfo.modeName}',
     'assembleHsp',
     '--no-daemon',
   ];
+  _appendCommands(command, buildInfo);
   return hvigorwTask(command,
       processUtils: processUtils,
       workPath: workPath,
@@ -537,7 +541,7 @@ class OhosHvigorBuilder implements OhosBuilder {
         hvigorwPath: hvigorwPath,
         flavor: getFlavor(
             ohosProject.getBuildProfileFile(), ohosBuildInfo.buildInfo.flavor),
-        buildMode: ohosBuildInfo.buildInfo.modeName,
+        buildInfo: ohosBuildInfo.buildInfo,
         logger: _logger);
     status.stop();
     if (errorCode != 0) {
@@ -681,7 +685,7 @@ class OhosHvigorBuilder implements OhosBuilder {
         flavor: getFlavor(
             ohosProject.getBuildProfileFile(), ohosBuildInfo.buildInfo.flavor),
         hvigorwPath: hvigorwPath,
-        buildMode: ohosBuildInfo.buildInfo.modeName,
+        buildInfo: ohosBuildInfo.buildInfo,
         logger: _logger);
     status.stop();
     if (errorCode1 != 0) {
@@ -766,7 +770,7 @@ class OhosHvigorBuilder implements OhosBuilder {
         workPath: ohosProjectPath,
         moduleName: moduleName,
         hvigorwPath: hvigorwPath,
-        buildMode: ohosBuildInfo.buildInfo.modeName,
+        buildInfo: ohosBuildInfo.buildInfo,
         logger: logger);
     if (errorCode != 0) {
       throwToolExit('Oops! assembleHars failed! please check log.');
@@ -814,10 +818,22 @@ class OhosHvigorBuilder implements OhosBuilder {
         hvigorwPath: hvigorwPath,
         flavor: getFlavor(
             project.ohos.getBuildProfileFile(), ohosBuildInfo.buildInfo.flavor),
-        buildMode: ohosBuildInfo.buildInfo.modeName,
+        buildInfo: ohosBuildInfo.buildInfo,
         logger: logger);
     if (errorCode != 0) {
       throwToolExit('Oops! assembleHsps failed! please check log.');
     }
+  }
+}
+
+void _appendCommands(List<String> command, BuildInfo buildInfo) {
+  final Map<String, String> envConfig = buildInfo.toEnvironmentConfig();
+  if (envConfig.isEmpty) {
+    return;
+  }
+  command.add('-s');
+  for (final MapEntry<String, String> config in envConfig.entries) {
+    command.add('-p');
+    command.add('${config.key}=${config.value}');
   }
 }
