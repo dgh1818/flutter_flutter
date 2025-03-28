@@ -657,10 +657,10 @@ class HdcLogReader extends DeviceLogReader {
 
     // If past logs are included then filter for 'flutter' logs only.
     if (includePastLogs) {
-      args.addAll(<String>['-T', 'flutter']);
+      args.addAll(<String>['-e', 'flutter']);
     } else {
-      // if not includePastLogs, execute clear log.
-      device.clearLogs();
+       // execute show local time log
+      args.addAll(<String>['-v', 'time']);
     }
     final Process process =
         await processManager.start(device.hdcCommandForDevice(args));
