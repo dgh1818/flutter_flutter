@@ -1,5 +1,6 @@
 /node_modules
 /oh_modules
+/local.properties
 /.preview
 /build
 /.cxx
@@ -7,6 +8,7 @@
 *.har
 **/BuildProfile.ets
 **/oh-package-lock.json5
+GeneratedPluginRegistrant.ets
 
 **/src/main/resources/rawfile/flutter_assets/
 **/libs/arm64-v8a/libapp.so
