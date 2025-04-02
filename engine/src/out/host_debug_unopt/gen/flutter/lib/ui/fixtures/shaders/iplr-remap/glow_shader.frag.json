@@ -1,0 +1,93 @@
+{
+  "bind_prototypes": [
+    {
+      "args": [
+        {
+          "argument_name": "command",
+          "type_name": "ResourceBinder&"
+        },
+        {
+          "argument_name": "texture",
+          "type_name": "std::shared_ptr<const Texture>"
+        },
+        {
+          "argument_name": "sampler",
+          "type_name": "const std::unique_ptr<const Sampler>&"
+        }
+      ],
+      "descriptor_type": "DescriptorType::kSampledImage",
+      "docstring": "Bind combined image sampler for resource named tNoise.",
+      "name": "TNoise",
+      "return_type": "bool"
+    },
+    {
+      "args": [
+        {
+          "argument_name": "command",
+          "type_name": "ResourceBinder&"
+        },
+        {
+          "argument_name": "texture",
+          "type_name": "std::shared_ptr<const Texture>"
+        },
+        {
+          "argument_name": "sampler",
+          "type_name": "const std::unique_ptr<const Sampler>&"
+        }
+      ],
+      "descriptor_type": "DescriptorType::kSampledImage",
+      "docstring": "Bind combined image sampler for resource named tInput.",
+      "name": "TInput",
+      "return_type": "bool"
+    }
+  ],
+  "buffers": [],
+  "entrypoint": "glow_shader_fragment_main",
+  "header_file_name": "glow_shader.frag.h",
+  "sampled_images": [
+    {
+      "binding": 72,
+      "descriptor_set": 0,
+      "descriptor_type": "DescriptorType::kSampledImage",
+      "ext_res_0": 72,
+      "ext_res_1": 72,
+      "index": 0,
+      "location": 8,
+      "name": "tNoise",
+      "offset": 0,
+      "set": 0,
+      "type": {
+        "bit_width": 0,
+        "columns": 1,
+        "members": [],
+        "type_name": "ShaderType::kSampledImage",
+        "vec_size": 1
+      }
+    },
+    {
+      "binding": 71,
+      "descriptor_set": 0,
+      "descriptor_type": "DescriptorType::kSampledImage",
+      "ext_res_0": 71,
+      "ext_res_1": 71,
+      "index": 0,
+      "location": 7,
+      "name": "tInput",
+      "offset": 0,
+      "set": 0,
+      "type": {
+        "bit_width": 0,
+        "columns": 1,
+        "members": [],
+        "type_name": "ShaderType::kSampledImage",
+        "vec_size": 1
+      }
+    }
+  ],
+  "shader_name": "glow_shader",
+  "shader_stage": "fragment",
+  "stage_inputs": [],
+  "stage_outputs": [],
+  "struct_definitions": [],
+  "subpass_inputs": []
+}

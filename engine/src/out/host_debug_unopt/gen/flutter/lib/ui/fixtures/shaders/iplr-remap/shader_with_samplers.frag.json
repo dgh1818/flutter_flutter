@@ -1,0 +1,93 @@
+{
+  "bind_prototypes": [
+    {
+      "args": [
+        {
+          "argument_name": "command",
+          "type_name": "ResourceBinder&"
+        },
+        {
+          "argument_name": "texture",
+          "type_name": "std::shared_ptr<const Texture>"
+        },
+        {
+          "argument_name": "sampler",
+          "type_name": "const std::unique_ptr<const Sampler>&"
+        }
+      ],
+      "descriptor_type": "DescriptorType::kSampledImage",
+      "docstring": "Bind combined image sampler for resource named textureB.",
+      "name": "TextureB",
+      "return_type": "bool"
+    },
+    {
+      "args": [
+        {
+          "argument_name": "command",
+          "type_name": "ResourceBinder&"
+        },
+        {
+          "argument_name": "texture",
+          "type_name": "std::shared_ptr<const Texture>"
+        },
+        {
+          "argument_name": "sampler",
+          "type_name": "const std::unique_ptr<const Sampler>&"
+        }
+      ],
+      "descriptor_type": "DescriptorType::kSampledImage",
+      "docstring": "Bind combined image sampler for resource named textureA.",
+      "name": "TextureA",
+      "return_type": "bool"
+    }
+  ],
+  "buffers": [],
+  "entrypoint": "shader_with_samplers_fragment_main",
+  "header_file_name": "shader_with_samplers.frag.h",
+  "sampled_images": [
+    {
+      "binding": 65,
+      "descriptor_set": 0,
+      "descriptor_type": "DescriptorType::kSampledImage",
+      "ext_res_0": 65,
+      "ext_res_1": 65,
+      "index": 0,
+      "location": 1,
+      "name": "textureB",
+      "offset": 0,
+      "set": 0,
+      "type": {
+        "bit_width": 0,
+        "columns": 1,
+        "members": [],
+        "type_name": "ShaderType::kSampledImage",
+        "vec_size": 1
+      }
+    },
+    {
+      "binding": 64,
+      "descriptor_set": 0,
+      "descriptor_type": "DescriptorType::kSampledImage",
+      "ext_res_0": 64,
+      "ext_res_1": 64,
+      "index": 0,
+      "location": 0,
+      "name": "textureA",
+      "offset": 0,
+      "set": 0,
+      "type": {
+        "bit_width": 0,
+        "columns": 1,
+        "members": [],
+        "type_name": "ShaderType::kSampledImage",
+        "vec_size": 1
+      }
+    }
+  ],
+  "shader_name": "shader_with_samplers",
+  "shader_stage": "fragment",
+  "stage_inputs": [],
+  "stage_outputs": [],
+  "struct_definitions": [],
+  "subpass_inputs": []
+}
