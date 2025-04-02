@@ -48,3 +48,4 @@ part 'semantics.dart';
 part 'setup_hooks.dart';
 part 'text.dart';
 part 'window.dart';
+part 'set_hdr.dart';

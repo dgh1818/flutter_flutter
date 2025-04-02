@@ -1649,6 +1649,7 @@ enum PixelFormat {
   /// component, followed by: green, blue and alpha. Premultiplied alpha isn't
   /// used, matching [ImageByteFormat.rawExtendedRgba128].
   rgbaFloat32,
+  //rgba1010102,
 }
 
 /// Signature for [Image] lifecycle events.
@@ -1765,7 +1766,7 @@ class Image {
   // considering the binary size of the engine after LTO optimization. You can
   // use the third-party pure dart image library to encode other formats.
   // See: https://github.com/flutter/flutter/issues/16635 for more details.
-  Future<ByteData?> toByteData({ImageByteFormat format = ImageByteFormat.rawRgba}) {
+  Future<ByteData?> toByteData({ImageByteFormat format = ImageByteFormat.rawUnmodified}) {
     assert(!_disposed && !_image._disposed);
     return _image.toByteData(format: format);
   }
