@@ -8,7 +8,10 @@ flutter build hap --release
 
 # 新增api：
 ui.SetHdr.enableHdr(enable_hdr:true);     使能Hdr模式
-ui.SetHdr.setHdrMode(hdr: 1 ,is_image:true);    //hdr=1 Hlg  hdr=2 PQ  HDR=0 SDR   is_image=true 手动控制hdr    is_image=false PlatformView输出格式控制hdr（适用于flutter video player）
+
+ui.SetHdr.setHdrMode(hdr: 1 ,is_image:true);
+hdr=1 Hlg  hdr=2 PQ  HDR=0 SDR   
+is_image=true 手动控制hdr    is_image=false PlatformView输出格式控制hdr（适用于flutter video player）
 
 
 原始仓来源：https://github.com/flutter/flutter
