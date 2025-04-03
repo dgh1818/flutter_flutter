@@ -3620,6 +3620,7 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
       }
       _lastKnownRemoteTextEditingValue = localValue;
     } else {
+      _textInputConnection!.updateConfig(_effectiveAutofillClient.textInputConfiguration);
       _textInputConnection!.show();
     }
   }
