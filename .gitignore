@@ -26,7 +26,6 @@
 .vscode/*
 
 # Flutter repo-specific
-/bin/cache/
 /bin/internal/bootstrap.bat
 /bin/internal/bootstrap.sh
 /bin/mingit/
@@ -42,7 +41,6 @@
 /dev/integration_tests/**/xcuserdata
 /dev/integration_tests/**/Pods
 /packages/flutter/coverage/
-version
 analysis_benchmark.json
 
 # packages file containing multi-root paths
