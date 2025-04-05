@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "experimentSets": {
+    "sdkExperiments": []
+  },
+  "sdk": {
+    "default": {
+      "experimentSet": "sdkExperiments"
+    },
+    "_example_libraries": {
+      "ui": {
+        "experimentSet": "nullSafety"
+      }
+    }
+  },
+  "packages": {}
+}

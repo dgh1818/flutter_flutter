@@ -1,0 +1,1 @@
+gen/flutter/lib/ui/fixtures/shaders/iplr-json/ink_sparkle.frag.iplr: F:/flutter_engine_ohos/src/flutter/impeller/compiler/shader_lib\flutter/runtime_effect.glsl ../../flutter/impeller/fixtures/ink_sparkle.frag
