@@ -1,0 +1,11 @@
+{
+  "frameworkVersion": "3.22.1-0.0.pre.30866",
+  "channel": "[user-branch]",
+  "repositoryUrl": "ssh://git@ssh.github.com:443/dgh1818/flutter_flutter.git",
+  "frameworkRevision": "ac469eab8ec94efb0670e2316cb4706c59eb8e60",
+  "frameworkCommitDate": "2025-03-31 01:34:33 +0800",
+  "engineRevision": "f6344b75dcf861d8bf1f1322780b8811f982e31a",
+  "dartSdkVersion": "3.4.0",
+  "devToolsVersion": "2.34.1",
+  "flutterVersion": "3.22.1-0.0.pre.30866"
+}
