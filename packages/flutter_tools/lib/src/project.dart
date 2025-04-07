@@ -1225,13 +1225,11 @@ class OhosProject extends FlutterProjectPlatform {
           .childFile('$moduleName-$flavor-signed.${type.name}'),
     ];
     if (type == OhosFileType.app) {
-      findFiles.add(moduleDir
+      findFiles.add(moduleDir.parent
           .childDirectory('build')
-          .childDirectory(flavor)
           .childDirectory('outputs')
           .childDirectory(flavor)
-          .childDirectory('app')
-          .childFile('$moduleName-$flavor.hap'));
+          .childFile('ohos-$flavor-signed.app'));
     }
     for (final File file in findFiles) {
       if (file.existsSync()) {
