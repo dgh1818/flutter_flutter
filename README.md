@@ -17,12 +17,12 @@ Flutter SDK 仓库
    * 渲染引擎：新增impeller-vulkan模式（默认，可切换为skia-gl）
    * 三方库
       - 纯dart库请升级到指定版本以支持3.22.0
-      - [OpenHarmony-SIG/flutter_packages](https://gitee.com/openharmony-sig/flutter_packages/blob/master/README.md)中的package在3.22.0版本已经过一轮简单的可用性测试，如果在您使用中有任何问题，烦请创建issue跟踪解决。
+      - [OpenHarmony-SIG/flutter_packages](https://gitcode.com/openharmony-sig/flutter_packages/blob/master/README.md)中的package在3.22.0版本已经过一轮简单的可用性测试，如果在您使用中有任何问题，烦请创建issue跟踪解决。
 
 2. 如果您的项目希望从安卓或ios等版本迁移到鸿蒙适配3.22.0版本，请参考剩余指导文档。
 
 ## 开发文档
-[参考文档](https://gitee.com/openharmony-sig/flutter_samples/tree/master/ohos/docs)
+[参考文档](https://gitcode.com/openharmony-sig/flutter_samples/tree/master/ohos/docs)
 
 ## 环境依赖
 
@@ -47,7 +47,7 @@ Flutter SDK 仓库
        export PATH=$TOOL_HOME/tools/node/bin:$PATH # command-line-tools/tool/node/bin
       ```
 
-  2. 通过代码工具下载当前仓库代码`git clone https://gitee.com/openharmony-sig/flutter_flutter.git`，指定dev或master分支，并配置环境
+  2. 通过代码工具下载当前仓库代码`git clone https://gitcode.com/openharmony-sig/flutter_flutter.git`，指定3.22.0-ohos分支，并配置环境
 
      ```sh
       export PUB_CACHE=D:/PUB
@@ -63,14 +63,14 @@ Flutter SDK 仓库
       ```sh
        #依赖缓存
        export PUB_CACHE=D:/PUB(自定义路径)
-
+      
        # 国内镜像
        export PUB_HOSTED_URL=https://pub.flutter-io.cn
        export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
-
+      
        # 拉取下来的flutter_flutter/bin目录
        export PATH=/home/<user>/ohos/flutter_flutter/bin:$PATH
-
+      
        # HamonyOS SDK
        export TOOL_HOME=/Applications/DevEco-Studio.app/Contents # mac环境
        export DEVECO_SDK_HOME=$TOOL_HOME/sdk # command-line-tools/sdk
@@ -131,25 +131,25 @@ Flutter SDK 仓库
  - [3.22.0-ohos-0.1.0 Beta](/release-notes/Flutter%203.22.0-ohos%200.1.0%20ReleaseNote.md)
 
 ## 已兼容OpenHarmony开发的指令列表
-| 指令名称 | 指令描述 | 使用说明                                                              |
-| ------- | ------- |-------------------------------------------------------------------|
-| doctor | 环境检测 | flutter doctor                                                    |
-| config | 环境配置 | flutter config --\<key\> \<value\>                                |
-| create | 创建新项目 | flutter create --platforms ohos,android,ios --org \<org\> \<appName\> |
-| create | 创建module模板 | flutter create -t module \<module_name\> |
-| create | 创建plugin模板 | flutter create -t plugin --platforms ohos,android,ios \<plugin_name\> |
-| create | 创建plugin_ffi模板 | flutter create -t plugin_ffi --platforms ohos,android,ios \<plugin_name\> |
-| devices | 已连接设备查找 | flutter devices                                                   |
-| install | 应用安装 | flutter install -t \<deviceId\> \<hap文件路径\>                                                   |
-| assemble | 资源打包 | flutter assemble                                                  |
-| build  | 测试应用构建 | flutter build hap --debug [--target-platform ohos-arm64] [--local-engine=\<兼容ohos的debug engine产物路径\>]       |
-| build  | 正式应用构建 | flutter build hap --release [--target-platform ohos-arm64] [--local-engine=\<兼容ohos的release engine产物路径\>]   |
-| run    | 应用运行 | flutter run [--local-engine=\<兼容ohos的engine产物路径\>]                |
-| attach | 调试模式 | flutter attach                                                    |
-| screenshot | 截屏 | flutter screenshot                                                 |
-| pub | 获取依赖 | flutter pub get                                                 |
-| clean | 清除项目依赖 | flutter clean                                                 |
-| cache | 清除全局缓存数据 | flutter pub cache clean                                                  |
+| 指令名称   | 指令描述           | 使用说明                                                     |
+| ---------- | ------------------ | ------------------------------------------------------------ |
+| doctor     | 环境检测           | flutter doctor                                               |
+| config     | 环境配置           | flutter config --\<key\> \<value\>                           |
+| create     | 创建新项目         | flutter create --platforms ohos,android,ios --org \<org\> \<appName\> |
+| create     | 创建module模板     | flutter create -t module \<module_name\>                     |
+| create     | 创建plugin模板     | flutter create -t plugin --platforms ohos,android,ios \<plugin_name\> |
+| create     | 创建plugin_ffi模板 | flutter create -t plugin_ffi --platforms ohos,android,ios \<plugin_name\> |
+| devices    | 已连接设备查找     | flutter devices                                              |
+| install    | 应用安装           | flutter install -t \<deviceId\> \<hap文件路径\>              |
+| assemble   | 资源打包           | flutter assemble                                             |
+| build      | 测试应用构建       | flutter build hap --debug [--target-platform ohos-arm64] [--local-engine=\<兼容ohos的debug engine产物路径\>] |
+| build      | 正式应用构建       | flutter build hap --release [--target-platform ohos-arm64] [--local-engine=\<兼容ohos的release engine产物路径\>] |
+| run        | 应用运行           | flutter run [--local-engine=\<兼容ohos的engine产物路径\>]    |
+| attach     | 调试模式           | flutter attach                                               |
+| screenshot | 截屏               | flutter screenshot                                           |
+| pub        | 获取依赖           | flutter pub get                                              |
+| clean      | 清除项目依赖       | flutter clean                                                |
+| cache      | 清除全局缓存数据   | flutter pub cache clean                                      |
 
 附：[Flutter三方库适配计划](https://docs.qq.com/sheet/DVVJDWWt1V09zUFN2)
 
@@ -184,7 +184,7 @@ Flutter SDK 仓库
     HDC_SERVER_PORT=8710
    ```
 
-   配置完成后flutter sdk可以通过hdc server完成设备连接，也可参考[官方指导](https://docs.openharmony.cn/pages/v4.0/zh-cn/device-dev/subsystems/subsys-toolchain-hdc-guide.md/#hdc-client%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AEhdc-server)。
+   配置完成后flutter sdk可以通过hdc server完成设备连接，也可参考[官方指导](https://docs.openharmony.cn/pages/v5.0/zh-cn/device-dev/subsystems/subsys-toolchain-hdc-guide.md/#hdc-client%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AEhdc-server)。
 
 6. 构建Hap任务时报错：Error: The hvigor depends on the npmrc file. Configure the npmrc file first.
 
@@ -253,8 +253,8 @@ Flutter SDK 仓库
 
 15. 执行`flutter build hap` 时遇到路径校验报错。
     1. 解决方案：
-      ·打开 deveco 安装路径 D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\res\schemas 下的 ohos-project-build-profile-schema.json文件。
-      ·在该文件中找到包含："pattern": "^(\\./|\\.\\./)[\\s\\S]+$"的行,并删除此行。
+        ·打开 deveco 安装路径 D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\res\schemas 下的 ohos-project-build-profile-schema.json文件。
+        ·在该文件中找到包含："pattern": "^(\\./|\\.\\./)[\\s\\S]+$"的行,并删除此行。
     2. 报错信息:
     ```
      #hvigor  ERROR: Schema validate failed.
@@ -320,4 +320,4 @@ Flutter SDK 仓库
       hvigor ERROR: Build mode 'profile' used in command line is not declared in buildModeSet in /xxx/example/ohos/build-profile.json5.
       ```
 
-[更多FAQ](https://gitee.com/openharmony-sig/flutter_samples/blob/master/ohos/docs/08_FAQ/README.md)
+[更多FAQ](https://gitcode.com/openharmony-sig/flutter_samples/blob/master/ohos/docs/08_FAQ/README.md)

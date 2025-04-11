@@ -17,7 +17,7 @@ Original warehouse source: https://github.com/flutter/flutter
    * Rendering Engine: Added impeller-vulkan mode (default, can be switched to skia-gl).
    * Third-party libraries:
       - Pure Dart libraries should be upgraded to the specified version to support 3.22.0.
-      - The packages in [OpenHarmony-SIG/flutter_packages](https://gitee.com/openharmony-sig/flutter_packages/blob/master/README.md) have undergone a basic usability test for version 3.22.0. If you encounter any issues during use, please create an issue for tracking.
+      - The packages in [OpenHarmony-SIG/flutter_packages](https://gitcode.com/openharmony-sig/flutter_packages/blob/master/README.md) have undergone a basic usability test for version 3.22.0. If you encounter any issues during use, please create an issue for tracking.
 2. If your project is migrating from Android or iOS to the HarmonyOS adaptation for version 3.22.0, please refer to the remaining guide documents.
 
 ## Development document
@@ -47,7 +47,7 @@ Original warehouse source: https://github.com/flutter/flutter
         export PATH=$TOOL_HOME/tools/node/bin:$PATH # command-line-tools/tool/node/bin
        ```
 
-   2. Download the current warehouse code `git clone https://gitee.com/openharmony-sig/flutter_flutter.git` Specify the dev or master branch and configure the environment
+   2. Download the current warehouse code `git clone https://gitcode.com/openharmony-sig/flutter_flutter.git` Specify the oh-3.22.0 branch and configure the environment
 
       ```sh
        export PATH=<flutter_flutter path>/bin:$PATH
@@ -67,14 +67,14 @@ Original warehouse source: https://github.com/flutter/flutter
        ```sh
         # Dependent cache
         export PUB_CACHE=D:/PUB(Custom path)
-
+       
         # Domestic mirror
         export PUB_HOSTED_URL=https://pub.flutter-io.cn
         export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
-
+       
         # The flutter_flutter directory pulled from Gitee
         export PATH=/home/<user>/ohos/flutter_flutter/bin:$PATH
-
+       
         # HarmonyOS SDK
         export TOOL_HOME=/Applications/DevEco-Studio.app/Contents # For mac
         export DEVECO_SDK_HOME=$TOOL_HOME/sdk # command-line-tools/sdk
@@ -188,13 +188,13 @@ Attachment: [Flutter third-party library adaptation plan](https://docs.qq.com/sh
      HDC_SERVER_PORT=8710
     ```
 
-    After the configuration is completed, the flutter sdk can complete the device connection through the hdc server. You can also refer to [official guidance](https://docs.openharmony.cn/pages/v4.0/zh-cn/device-dev/subsystems/subsys-toolchain -hdc-guide.md/#hdc-client%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AEhdc-server) .
+    After the configuration is completed, the flutter sdk can complete the device connection through the hdc server. You can also refer to [official guidance](https://docs.openharmony.cn/pages/v5.0/zh-cn/device-dev/subsystems/subsys-toolchain -hdc-guide.md/#hdc-client%E5%A6%82%E4%BD%95%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AEhdc-server) .
 
 6. An error occurred when building the Hap task: Error: The hvigor depends on the npmrc file. Configure the npmrc file first.
 
 
     Please create the file `.npmrc` in the user directory `~`. For this configuration, please refer to [DevEco Studio official documentation](https://developer.harmonyos.com/cn/docs/documentation/doc-guides-V3/environment_config -0000001052902427-V3), the edited content is as follows:
-
+    
     ```
      registry=https://repo.huaweicloud.com/repository/npm/
      @ohos:registry=https://repo.harmonyos.com/npm/
@@ -256,8 +256,8 @@ Attachment: [Flutter third-party library adaptation plan](https://docs.qq.com/sh
 
 15. An error message indicating path verification occurs when `flutter build hap` is executed。
     1. Solution：
-      · Open the ohos-project-build-profile-schema.json file in deveco installation path D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\res\schemas。
-      · Find the line containing: "pattern": "^(\\./|\\.\\./)[\\s\\S]+$" in the file and delete it。
+        · Open the ohos-project-build-profile-schema.json file in deveco installation path D:\DevEco Studio\tools\hvigor\hvigor-ohos-plugin\res\schemas。
+        · Find the line containing: "pattern": "^(\\./|\\.\\./)[\\s\\S]+$" in the file and delete it。
     2. Error message:
     ```
      #hvigor  ERROR: Schema validate failed.
