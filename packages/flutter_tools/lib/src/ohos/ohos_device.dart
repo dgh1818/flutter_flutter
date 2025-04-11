@@ -418,6 +418,8 @@ class OhosDevice extends Device {
       return TargetPlatform.ohos_arm64;
     } else if (abilist.contains('x64')) {
       return TargetPlatform.ohos_x64;
+    } else if (abilist.contains('x86_64')) {
+      return TargetPlatform.ohos_x64;
     } else {
       return TargetPlatform.ohos_arm64;
     }

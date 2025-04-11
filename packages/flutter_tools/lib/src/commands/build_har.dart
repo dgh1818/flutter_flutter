@@ -36,7 +36,7 @@ class BuildHarCommand extends BuildSubCommand {
     argParser.addMultiOption(
       'target-platform',
       defaultsTo: const <String>['ohos-arm64'],
-      allowed: <String>['ohos-arm64', 'ohos-arm', 'ohos-x86'],
+      allowed: <String>['ohos-arm64', 'ohos-arm', 'ohos-x64'],
       help: 'The target platform for which the app is compiled.',
     );
   }
