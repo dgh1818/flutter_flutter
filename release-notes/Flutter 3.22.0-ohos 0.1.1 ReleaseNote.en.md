@@ -16,4 +16,4 @@ April 1, 2025
 - Flutter SDK: 3.22.0-ohos-0.1.1
 
 ## Enablement Documents
-- [Document Link](https://gitee.com/openharmony-sig/flutter_samples/tree/master/ohos/docs)
+- [Document Link](https://gitcode.com/openharmony-sig/flutter_samples/tree/master/ohos/docs)

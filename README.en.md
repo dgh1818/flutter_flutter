@@ -21,7 +21,7 @@ Original warehouse source: https://github.com/flutter/flutter
 2. If your project is migrating from Android or iOS to the HarmonyOS adaptation for version 3.22.0, please refer to the remaining guide documents.
 
 ## Development document
-[Docs](https://gitee.com/openharmony-sig/flutter_samples/tree/master/ohos/docs)
+[Docs](https://gitcode.com/openharmony-sig/flutter_samples/tree/master/ohos/docs)
 
 ## Environment dependencies
 

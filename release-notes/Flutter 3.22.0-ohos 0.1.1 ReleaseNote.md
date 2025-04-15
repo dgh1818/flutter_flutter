@@ -16,4 +16,4 @@ OpenHarmony API15
 - Flutter SDK: 3.22.0-ohos-0.1.1
 
 ## 赋能文档
-- [文档链接](https://gitee.com/openharmony-sig/flutter_samples/tree/master/ohos/docs)
+- [文档链接](https://gitcode.com/openharmony-sig/flutter_samples/tree/master/ohos/docs)
