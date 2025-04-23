@@ -117,6 +117,7 @@ class _CupertinoTextFieldSelectionGestureDetectorBuilder extends TextSelectionGe
       }
     }
     super.onSingleTapUp(details);
+    _state._requestKeyboard(kind: details.kind);
     _state.widget.onTap?.call();
   }
 
@@ -1016,7 +1017,10 @@ class _CupertinoTextFieldState extends State<CupertinoTextField> with Restoratio
 
   EditableTextState get _editableText => editableTextKey.currentState!;
 
-  void _requestKeyboard() {
+  PointerDeviceKind _deviceKind = PointerDeviceKind.unknown;
+
+  void _requestKeyboard({PointerDeviceKind kind = PointerDeviceKind.unknown}) {
+    _deviceKind = kind;
     _editableText.requestKeyboard();
   }
 
@@ -1253,7 +1257,8 @@ class _CupertinoTextFieldState extends State<CupertinoTextField> with Restoratio
         )
       : AutofillConfiguration.disabled;
 
-    return _editableText.textInputConfiguration.copyWith(autofillConfiguration: autofillConfiguration);
+    return _editableText.textInputConfiguration.copyWith(
+        autofillConfiguration: autofillConfiguration, deviceKind: _deviceKind);
   }
   // AutofillClient implementation end.
 

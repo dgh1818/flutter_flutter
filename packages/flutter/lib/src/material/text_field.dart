@@ -74,6 +74,12 @@ class _TextFieldSelectionGestureDetectorBuilder extends TextSelectionGestureDete
   }
 
   @override
+  void onSingleTapUp(TapDragUpDetails details) {
+    _state._deviceKind = details.kind;
+    super.onSingleTapUp(details);
+  }
+
+  @override
   void onSingleLongTapStart(LongPressStartDetails details) {
     super.onSingleLongTapStart(details);
     if (delegate.selectionEnabled) {
@@ -1182,7 +1188,10 @@ class _TextFieldState extends State<TextField> with RestorationMixin implements 
 
   EditableTextState? get _editableText => editableTextKey.currentState;
 
-  void _requestKeyboard() {
+  PointerDeviceKind _deviceKind = PointerDeviceKind.unknown;
+
+  void _requestKeyboard({PointerDeviceKind kind = PointerDeviceKind.unknown}) {
+    _deviceKind = kind;
     _editableText?.requestKeyboard();
   }
 
@@ -1317,7 +1326,8 @@ class _TextFieldState extends State<TextField> with RestorationMixin implements 
         )
       : AutofillConfiguration.disabled;
 
-    return _editableText!.textInputConfiguration.copyWith(autofillConfiguration: autofillConfiguration);
+    return _editableText!.textInputConfiguration.copyWith(
+        autofillConfiguration: autofillConfiguration, deviceKind: _deviceKind);
   }
   // AutofillClient implementation end.
 
