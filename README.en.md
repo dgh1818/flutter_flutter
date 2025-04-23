@@ -67,14 +67,14 @@ Original warehouse source: https://github.com/flutter/flutter
        ```sh
         # Dependent cache
         export PUB_CACHE=D:/PUB(Custom path)
-       
+
         # Domestic mirror
         export PUB_HOSTED_URL=https://pub.flutter-io.cn
         export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
-       
+
         # The flutter_flutter directory pulled from Gitee
         export PATH=/home/<user>/ohos/flutter_flutter/bin:$PATH
-       
+
         # HarmonyOS SDK
         export TOOL_HOME=/Applications/DevEco-Studio.app/Contents # For mac
         export DEVECO_SDK_HOME=$TOOL_HOME/sdk # command-line-tools/sdk
@@ -131,6 +131,7 @@ Original warehouse source: https://github.com/flutter/flutter
     ```
 
 ## Release Notes
+ - [3.22.0-ohos-0.1.2 Beta](/release-notes/Flutter%203.22.0-ohos%200.1.2%20ReleaseNote.en.md)
  - [3.22.0-ohos-0.1.1 Beta](/release-notes/Flutter%203.22.0-ohos%200.1.1%20ReleaseNote.en.md)
  - [3.22.0-ohos-0.1.0 Beta](/release-notes/Flutter%203.22.0-ohos%200.1.0%20ReleaseNote.en.md)
 
@@ -194,7 +195,7 @@ Attachment: [Flutter third-party library adaptation plan](https://docs.qq.com/sh
 
 
     Please create the file `.npmrc` in the user directory `~`. For this configuration, please refer to [DevEco Studio official documentation](https://developer.harmonyos.com/cn/docs/documentation/doc-guides-V3/environment_config -0000001052902427-V3), the edited content is as follows:
-    
+
     ```
      registry=https://repo.huaweicloud.com/repository/npm/
      @ohos:registry=https://repo.harmonyos.com/npm/
