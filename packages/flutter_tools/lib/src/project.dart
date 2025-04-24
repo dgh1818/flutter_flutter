@@ -1210,39 +1210,38 @@ class OhosProject extends FlutterProjectPlatform {
     bool throwOnMissing = false,
   }) {
     final Directory moduleDir = globals.fs.directory(modulePath);
-    final List<File> findFiles = <File>[
-      moduleDir
+    File targetFile;
+    if (type != OhosFileType.app) {
+      // 从模块级 build-profile.json5 中读取输出文件名
+      final String? fileName = _readFromModule(
+          moduleDir.childFile(kBuildProfileName), flavor);
+      targetFile = moduleDir
           .childDirectory('build')
           .childDirectory(flavor)
           .childDirectory('outputs')
           .childDirectory(flavor)
-          .childFile('$moduleName-$flavor-signed.${type.name}'),
-      moduleDir
-          .childDirectory('build')
-          .childDirectory('default')
-          .childDirectory('outputs')
-          .childDirectory(flavor)
-          .childFile('$moduleName-$flavor-signed.${type.name}'),
-    ];
-    if (type == OhosFileType.app) {
-      findFiles.add(moduleDir.parent
+          .childFile(fileName != null
+              ? '$fileName.${type.name}'
+              : '$moduleName-$flavor-signed.${type.name}');
+    } else {
+      // 从工程级 build-profile.json5 中读取输出文件名
+      final String? fileName = _readFromProject(
+          moduleDir.parent.childFile(kBuildProfileName), flavor);
+      targetFile = moduleDir.parent
           .childDirectory('build')
           .childDirectory('outputs')
           .childDirectory(flavor)
-          .childFile('ohos-$flavor-signed.app'));
-    }
-    for (final File file in findFiles) {
-      if (file.existsSync()) {
-        return file;
-      }
+          .childFile(fileName != null
+              ? '$fileName.${type.name}'
+              : 'ohos-$flavor-signed.${type.name}');
     }
 
-    if (throwOnMissing) {
+    if (throwOnMissing && !targetFile.existsSync()) {
       throwToolExit('Hvigor build failed to produce an ${type.name} file. '
         "It's likely that this file was generated under $modulePath, "
-        "but the tool couldn't find it.");
+        "but the tool couldn't find it: $targetFile");
     }
-    return findFiles[0];
+    return targetFile;
   }
 
   File get flutterModulePackageFile =>
@@ -1326,6 +1325,42 @@ class OhosProject extends FlutterProjectPlatform {
       },
       printStatusWhenWriting: false,
     );
+  }
+
+  static String? _readFromProject(File buildProfileFile, String flavor) {
+    // app.products[].output.artifactName
+    if (!buildProfileFile.existsSync()) {
+      return null;
+    }
+    final Map<String, dynamic> buildProfile = JSON5
+        .parse(buildProfileFile.readAsStringSync()) as Map<String, dynamic>;
+    final Map<String, dynamic> app =
+        buildProfile['app'] as Map<String, dynamic>;
+    final List<dynamic>? products = app['products'] as List<dynamic>?;
+    final Map<String, dynamic>? target = products?.firstWhere((dynamic item) {
+      final Map<String, dynamic> module = item as Map<String, dynamic>;
+      return module['name'] as String == flavor;
+    }, orElse: () => null) as Map<String, dynamic>?;
+    final Map<String, dynamic>? output =
+        target?['output'] as Map<String, dynamic>?;
+    return output?['artifactName'] as String?;
+  }
+
+  static String? _readFromModule(File buildProfileFile, String flavor) {
+    // targets[].output.artifactName
+    if (!buildProfileFile.existsSync()) {
+      return null;
+    }
+    final Map<String, dynamic> buildProfile = JSON5
+        .parse(buildProfileFile.readAsStringSync()) as Map<String, dynamic>;
+    final List<dynamic>? products = buildProfile['targets'] as List<dynamic>?;
+    final Map<String, dynamic>? target = products?.firstWhere((dynamic item) {
+      final Map<String, dynamic> module = item as Map<String, dynamic>;
+      return module['name'] as String == flavor;
+    }, orElse: () => null) as Map<String, dynamic>?;
+    final Map<String, dynamic>? output =
+        target?['output'] as Map<String, dynamic>?;
+    return output?['artifactName'] as String?;
   }
 }
 
