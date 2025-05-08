@@ -14,6 +14,7 @@ Original warehouse source: https://github.com/flutter/flutter
    * Environment dependencies: Configuration remains consistent between the two versions, no additional modifications required.
    * For new features and changes from 3.7.12 to 3.22.0, please refer to the [Release Notes](https://docs.flutter.dev/release/release-notes).
    * For official compatibility changes, please refer to the [Upgrade Guide](https://docs.flutter.dev/release/breaking-changes).
+   * For the changelog from 3.7 to 3.22, please refer to the [Changelog](/release-notes/changelog/Flutter3.7_to_3.22_CHANGElOG.md)
    * Rendering Engine: Added impeller-vulkan mode (default, can be switched to skia-gl).
    * Third-party libraries:
       - Pure Dart libraries should be upgraded to the specified version to support 3.22.0.

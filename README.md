@@ -14,6 +14,7 @@ Flutter SDK 仓库
    * 环境依赖：两者环境配置一致，无需额外修改
    * 从3.7.12->3.22.0的官方特性新增与变更请参考[Release Notes](https://docs.flutter.dev/release/release-notes)
    * 官方兼容性变更请参考[升级指导](https://docs.flutter.dev/release/breaking-changes)
+   * 兼容性变更说明请参考[变更说明](/release-notes/changelog/flutter3.7升级flutter3.22%20兼容性变更说明.md)
    * 渲染引擎：新增impeller-vulkan模式（默认，可切换为skia-gl）
    * 三方库
       - 纯dart库请升级到指定版本以支持3.22.0
