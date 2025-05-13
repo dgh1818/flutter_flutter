@@ -1,4 +1,18 @@
 # Changelog
+## 5.1.0.403SP1
+- Window内存泄露修复 (3.7:[4942fe4f](https://gitcode.com/openharmony-sig/flutter_engine/commit/4942fe4f8214c1139c4c839c4e78d9e52c613759?ref=xcomponent&prId=817), 3.22:[15e9ff7f](https://gitcode.com/openharmony-sig/flutter_engine/commit/15e9ff7faaac99db25014d9a7b3d15a0050ef1ac?ref=fix_window_leak&prId=796))
+- 修改外接纹理的内容时重新调度一帧 (3.22:[1d86f339](https://gitcode.com/openharmony-sig/flutter_engine/commit/1d86f33900d8690d5f2802d09b9a161ad2459e4f?ref=oh-3.22.0))
+- 避免主线程外接纹理生产端死锁 (3.7:[acc7426f](https://gitcode.com/openharmony-sig/flutter_engine/commit/acc7426f028ed3523a943d67aded6fcfcffa71ea?ref=cherry-pick3.22&prId=807), 3.22:[979e1815](https://gitcode.com/openharmony-sig/flutter_engine/commit/979e1815f515e83ebe4816e8addc6f50723b3a45?ref=external_teture_avoid_dead_lock&prId=804))
+- 同步3.22外接纹理改动:1.取消外接纹理无用的状态变量;2.外接纹理使用全局textureID (3.7:[7a3a5375](https://gitcode.com/openharmony-sig/flutter_engine/commit/7a3a5375337f9fb8349c2ee0fa16372837d466c4?ref=golbal_textureId&prId=812))
+- impeller简单遮挡剔除 & 修复部分场景组件不渲染 (3.22:[2ead7ffb](https://gitcode.com/openharmony-sig/flutter_engine/commit/2ead7ffbc429ae7660947f10f05c75d4c31984eb?ref=oh-3.22.0))
+- darwin-arm64中云端产物打包增加flutter_tester,禁用flutter_tester编译 (3.7:[fd051fa6](https://gitcode.com/openharmony-sig/flutter_engine/commit/fd051fa6c48be1f078f272ec045b2e1bbd8f61d4?ref=dev&prId=813))
+- 修正外接纹理第一帧背景色颜色格式为ABGR (3.7:[49d603ae](https://gitcode.com/openharmony-sig/flutter_engine/commit/49d603ae4dac2bb59d21574cf140dd97513fd067?ref=7-ABGR&prId=792), 3.22:[fd3717ce](https://gitcode.com/openharmony-sig/flutter_engine/commit/fd3717ce2234d5cea70e3ec19543ead96d885f8e?ref=22-ABGR&prId=793))
+- 取消设置请求本地窗口请求缓冲区的超时等待时间为0，解决某些场景下的闪烁问题(3.7:[7b637946](https://gitcode.com/openharmony-sig/flutter_engine/commit/7b63794671380e6507cb5122774d3399cdc82343?ref=flash&prId=808))
+- 修复外接键盘时，shift加方向键文字被删除的问题 (3.7:[2f33bb4b](https://gitcode.com/openharmony-sig/flutter_engine/commit/2f33bb4b3fb52a6b94727c686193f20e97a07eab?ref=dev&prId=785), 3.22:[b9772832](https://gitcode.com/openharmony-sig/flutter_engine/commit/b9772832d2ec3f96a394387e00b41dab3eadd687?ref=oh-3.22.0&prId=786))
+- 分支同步外接纹理LRU缓存策略优化 (3.7:[37b61a9a](https://gitcode.com/openharmony-sig/flutter_engine/commit/37b61a9a93dbfafc04e5706a991ecd632436e68b?ref=lru&prId=791), 3.22:[a1700852](https://gitcode.com/openharmony-sig/flutter_engine/commit/a1700852477189eb4ea5f803b14308432640c0a5?ref=code-better-lru&prId=683))
+- 路由跳转软键盘状态异常处理 (3.7:[ea4535da](https://gitcode.com/openharmony-sig/flutter_engine/commit/ea4535da5ec422c546e64785145be76a483213b3?ref=dev&prId=799), 3.22:[ed9aee2e](https://gitcode.com/openharmony-sig/flutter_engine/commit/ed9aee2ef22cc45117060acf6767782157ba02cc?ref=oh-3.22.0&prId=803))
+- 增加导出接口EventSink, StreamHandler (3.7:[4a976c5e](https://gitcode.com/openharmony-sig/flutter_engine/commit/4a976c5e68a422db60bda964d634751d3a72608f?ref=dev&prId=787), 3.22:[aa58c13b](https://gitcode.com/openharmony-sig/flutter_engine/commit/aa58c13b9e8177433b8a3e70cd0c34b66ec1fb90?ref=oh-3.22.0&prId=788))
+
 
 ## 5.1.0.403
 - 修复showModalBottomSheet动画失效 (3.7:[2c88beb6](https://gitcode.com/openharmony-sig/flutter_engine/commit/2c88beb69bf674f72c82cc7807e15acbe2fb5776?ref=fix-accessibility&prId=789))
