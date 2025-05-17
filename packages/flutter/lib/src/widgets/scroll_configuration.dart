@@ -129,6 +129,7 @@ class ScrollBehavior {
       case TargetPlatform.windows:
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
+      case TargetPlatform.ohos:
         return MultitouchDragStrategy.latestPointer;
     }
   }
@@ -168,6 +169,7 @@ class ScrollBehavior {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.iOS:
+      case TargetPlatform.ohos:
         return child;
     }
   }
@@ -182,6 +184,7 @@ class ScrollBehavior {
       case TargetPlatform.linux:
       case TargetPlatform.macOS:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         return child;
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
@@ -216,6 +219,7 @@ class ScrollBehavior {
       case TargetPlatform.macOS:
         return (PointerEvent event) => MacOSScrollViewFlingVelocityTracker(event.kind);
       case TargetPlatform.android:
+      case TargetPlatform.ohos:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
@@ -247,6 +251,7 @@ class ScrollBehavior {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         return _clampingPhysics;
     }
   }

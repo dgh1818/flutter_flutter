@@ -859,6 +859,10 @@ Target _getNativeTarget(build_info.TargetPlatform targetPlatform) {
     case build_info.TargetPlatform.android_arm64:
     case build_info.TargetPlatform.android_x64:
     case build_info.TargetPlatform.android_x86:
+    case build_info.TargetPlatform.ohos:
+    case build_info.TargetPlatform.ohos_arm:
+    case build_info.TargetPlatform.ohos_arm64:
+    case build_info.TargetPlatform.ohos_x64:
       throw Exception('Unknown targetPlatform: $targetPlatform.');
   }
 }

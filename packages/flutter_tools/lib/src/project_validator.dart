@@ -93,6 +93,7 @@ class VariableDumpMachineProjectValidator extends MachineProjectValidator {
       'Platform.isMacOS':                 platform.isMacOS,
       'Platform.isFuchsia':               platform.isFuchsia,
       'Platform.pathSeparator':           platform.pathSeparator,
+      'Platform.isOhos':                  platform.isOhos,
 
       // Cache
       'Cache.flutterRoot':                Cache.flutterRoot,

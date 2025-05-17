@@ -609,6 +609,7 @@ class Switch extends StatelessWidget {
           case TargetPlatform.fuchsia:
           case TargetPlatform.linux:
           case TargetPlatform.windows:
+          case TargetPlatform.ohos:
             effectiveActiveThumbColor = activeColor;
           case TargetPlatform.iOS:
           case TargetPlatform.macOS:
@@ -738,6 +739,7 @@ class _MaterialSwitchState extends State<_MaterialSwitch> with TickerProviderSta
               case TargetPlatform.fuchsia:
               case TargetPlatform.linux:
               case TargetPlatform.windows:
+              case TargetPlatform.ohos:
                 updateCurve();
               case TargetPlatform.iOS:
               case TargetPlatform.macOS:
@@ -813,6 +815,7 @@ class _MaterialSwitchState extends State<_MaterialSwitch> with TickerProviderSta
           case TargetPlatform.fuchsia:
           case TargetPlatform.linux:
           case TargetPlatform.windows:
+          case TargetPlatform.ohos:
             final _SwitchConfig config = Theme.of(context).useMaterial3 ? _SwitchConfigM3(context) : _SwitchConfigM2();
             final double trackInnerStart = config.trackHeight / 2.0;
             final double trackInnerEnd = config.trackWidth - trackInnerStart;
@@ -909,6 +912,7 @@ class _MaterialSwitchState extends State<_MaterialSwitch> with TickerProviderSta
           case TargetPlatform.fuchsia:
           case TargetPlatform.linux:
           case TargetPlatform.windows:
+          case TargetPlatform.ohos:
             switchConfig = theme.useMaterial3 ? _SwitchConfigM3(context) : _SwitchConfigM2();
             defaults = theme.useMaterial3 ? _SwitchDefaultsM3(context) : _SwitchDefaultsM2(context);
           case TargetPlatform.iOS:
@@ -1791,6 +1795,7 @@ class _SwitchThemeAdaptation extends Adaptation<SwitchThemeData> {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         return defaultValue;
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:

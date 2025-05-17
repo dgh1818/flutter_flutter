@@ -40,6 +40,8 @@ import 'macos/cocoapods.dart';
 import 'macos/cocoapods_validator.dart';
 import 'macos/xcdevice.dart';
 import 'macos/xcode.dart';
+import 'ohos/hvigor_utils.dart';
+import 'ohos/ohos_sdk.dart';
 import 'native_assets.dart';
 import 'persistent_tool_state.dart';
 import 'pre_run_validator.dart';
@@ -69,6 +71,9 @@ OperatingSystemUtils get os => context.get<OperatingSystemUtils>()!;
 Signals get signals => context.get<Signals>() ?? LocalSignals.instance;
 AndroidStudio? get androidStudio => context.get<AndroidStudio>();
 AndroidSdk? get androidSdk => context.get<AndroidSdk>();
+OhosSdk? get ohosSdk => context.get<OhosSdk>();
+HmosSdk? get hmosSdk => context.get<HmosSdk>();
+HarmonySdk? get harmonySdk => context.get<HarmonySdk>();
 FlutterVersion get flutterVersion => context.get<FlutterVersion>()!;
 Usage get flutterUsage => context.get<Usage>()!;
 XcodeProjectInterpreter? get xcodeProjectInterpreter => context.get<XcodeProjectInterpreter>();
@@ -277,6 +282,8 @@ LocalFileSystem get localFileSystem => _instance ??= LocalFileSystem(
 
 /// Gradle utils in the current [AppContext].
 GradleUtils? get gradleUtils => context.get<GradleUtils>();
+
+HvigorUtils? get hvigorUtils => context.get<HvigorUtils>();
 
 CocoaPods? get cocoaPods => context.get<CocoaPods>();
 

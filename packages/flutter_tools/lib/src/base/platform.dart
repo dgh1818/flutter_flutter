@@ -46,6 +46,9 @@ abstract class Platform {
   /// True if the operating system is Fuchsia.
   bool get isFuchsia => operatingSystem == 'fuchsia';
 
+  /// True if the operating system is Ohos.
+  bool get isOhos => operatingSystem == 'ohos';
+
   /// The environment for this process.
   ///
   /// The returned environment is an unmodifiable map whose content is

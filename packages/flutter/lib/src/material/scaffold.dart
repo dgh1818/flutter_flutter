@@ -3063,6 +3063,7 @@ class ScaffoldState extends State<Scaffold> with TickerProviderStateMixin, Resto
           removeBottomPadding: true,
         );
       case TargetPlatform.android:
+      case TargetPlatform.ohos:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:

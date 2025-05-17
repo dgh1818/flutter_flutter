@@ -46,5 +46,7 @@ flutter:
         pluginClass: IntegrationTestPlugin
       ios:
         pluginClass: IntegrationTestPlugin
+      ohos:
+        pluginClass: IntegrationTestPlugin
 
 # PUBSPEC CHECKSUM: b1a2

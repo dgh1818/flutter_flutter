@@ -82,11 +82,11 @@ class PackagesTestCommand extends FlutterCommand {
   @override
   String get description {
     return 'Run the "test" package.\n'
-           'This is similar to "flutter test", but instead of hosting the tests in the '
-           'flutter environment it hosts the tests in a pure Dart environment. The main '
-           'differences are that the "dart:ui" library is not available and that tests '
-           'run faster. This is helpful for testing libraries that do not depend on any '
-           'packages from the Flutter SDK. It is equivalent to "pub run test".';
+        'This is similar to "flutter test", but instead of hosting the tests in the '
+        'flutter environment it hosts the tests in a pure Dart environment. The main '
+        'differences are that the "dart:ui" library is not available and that tests '
+        'run faster. This is helpful for testing libraries that do not depend on any '
+        'packages from the Flutter SDK. It is equivalent to "pub run test".';
   }
 
   @override
@@ -122,7 +122,7 @@ class PackagesForwardCommand extends FlutterCommand {
   @override
   String get description {
     return '$_description\n'
-           'This runs the "pub" tool in a Flutter context.';
+        'This runs the "pub" tool in a Flutter context.';
   }
 
   @override
@@ -153,7 +153,7 @@ class PackagesPassthroughCommand extends FlutterCommand {
   @override
   String get description {
     return 'Pass the remaining arguments to Dart\'s "pub" tool.\n'
-           'This runs the "pub" tool in a Flutter context.';
+        'This runs the "pub" tool in a Flutter context.';
   }
 
   @override
@@ -193,7 +193,7 @@ class PackagesGetCommand extends FlutterCommand {
   @override
   String get description {
     return '$_description\n'
-           'This runs the "pub" tool in a Flutter context.';
+        'This runs the "pub" tool in a Flutter context.';
   }
 
   @override

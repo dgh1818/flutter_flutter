@@ -287,6 +287,7 @@ class SelectableRegion extends StatefulWidget {
       || TargetPlatform.fuchsia
       || TargetPlatform.linux
       || TargetPlatform.windows
+      || TargetPlatform.ohos
         => false,
       // TODO(bleroux): the share button should be shown on iOS but the share
       // functionality requires some changes on the engine side because, on iPad,
@@ -403,6 +404,7 @@ class SelectableRegionState extends State<SelectableRegion> with TextSelectionDe
       case TargetPlatform.android:
       case TargetPlatform.iOS:
         break;
+      case TargetPlatform.ohos:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.macOS:
@@ -527,6 +529,7 @@ class SelectableRegionState extends State<SelectableRegion> with TextSelectionDe
         // on the sixth click the paragraph at the position is selected.
         return rawCount <= maxConsecutiveTap ? rawCount : (rawCount % maxConsecutiveTap == 0 ? maxConsecutiveTap : rawCount % maxConsecutiveTap);
       case TargetPlatform.linux:
+      case TargetPlatform.ohos:
         // From observation, these platforms reset their tap count to 0 when
         // the number of consecutive taps exceeds the max consecutive tap supported.
         // For example on Debian Linux with GTK, when going past a triple click,
@@ -633,6 +636,7 @@ class SelectableRegionState extends State<SelectableRegion> with TextSelectionDe
           case TargetPlatform.android:
           case TargetPlatform.fuchsia:
           case TargetPlatform.iOS:
+          case TargetPlatform.ohos:
             // On mobile platforms the selection is set on tap up for the first
             // tap.
             break;
@@ -798,6 +802,7 @@ class SelectableRegionState extends State<SelectableRegion> with TextSelectionDe
           case TargetPlatform.android:
           case TargetPlatform.fuchsia:
           case TargetPlatform.iOS:
+          case TargetPlatform.ohos:
             hideToolbar();
             _collapseSelectionAt(offset: details.globalPosition);
           case TargetPlatform.macOS:
@@ -888,6 +893,7 @@ class SelectableRegionState extends State<SelectableRegion> with TextSelectionDe
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         // If _lastSecondaryTapDownPosition is within the current selection then
         // keep the current selection, if not then collapse it.
         final bool lastSecondaryTapDownPositionWasOnActiveSelection = _positionIsOnActiveSelection(globalPosition: details.globalPosition);
@@ -1497,6 +1503,7 @@ class SelectableRegionState extends State<SelectableRegion> with TextSelectionDe
         switch (defaultTargetPlatform) {
           case TargetPlatform.android:
           case TargetPlatform.fuchsia:
+          case TargetPlatform.ohos:
             clearSelection();
           case TargetPlatform.iOS:
             hideToolbar(false);
@@ -1511,6 +1518,7 @@ class SelectableRegionState extends State<SelectableRegion> with TextSelectionDe
           case TargetPlatform.android:
           case TargetPlatform.iOS:
           case TargetPlatform.fuchsia:
+          case TargetPlatform.ohos:
             selectAll(SelectionChangedCause.toolbar);
           case TargetPlatform.linux:
           case TargetPlatform.macOS:
@@ -1526,6 +1534,7 @@ class SelectableRegionState extends State<SelectableRegion> with TextSelectionDe
         switch (defaultTargetPlatform) {
           case TargetPlatform.android:
           case TargetPlatform.fuchsia:
+          case TargetPlatform.ohos:
             clearSelection();
           case TargetPlatform.iOS:
             hideToolbar(false);

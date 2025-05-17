@@ -1,0 +1,11 @@
+/node_modules
+/oh_modules
+/local.properties
+/.preview
+/.idea
+/build
+/.cxx
+/.test
+*.har
+**/BuildProfile.ets
+**/oh-package-lock.json5

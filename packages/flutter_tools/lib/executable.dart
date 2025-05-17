@@ -235,7 +235,7 @@ List<FlutterCommand> generateCommands({
   ),
   MakeHostAppEditableCommand(),
   PackagesCommand(),
-  PrecacheCommand(
+    PrecacheCommand(
     verboseHelp: verboseHelp,
     cache: globals.cache,
     logger: globals.logger,

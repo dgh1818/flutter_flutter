@@ -54,6 +54,7 @@ enum PlatformType {
   macos,
   windows,
   fuchsia,
+  ohos,
   custom,
   windowsPreview;
 

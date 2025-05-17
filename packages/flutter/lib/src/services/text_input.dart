@@ -16,6 +16,7 @@ import 'dart:ui' show
   FlutterView,
   FontWeight,
   Offset,
+  PointerDeviceKind,
   Rect,
   Size,
   TextAlign,
@@ -491,6 +492,7 @@ class TextInputConfiguration {
     this.enableIMEPersonalizedLearning = true,
     this.allowedMimeTypes = const <String>[],
     this.enableDeltaModel = false,
+    this.deviceKind = PointerDeviceKind.unknown,
   }) : smartDashesType = smartDashesType ?? (obscureText ? SmartDashesType.disabled : SmartDashesType.enabled),
        smartQuotesType = smartQuotesType ?? (obscureText ? SmartQuotesType.disabled : SmartQuotesType.enabled);
 
@@ -662,6 +664,7 @@ class TextInputConfiguration {
     List<String>? allowedMimeTypes,
     AutofillConfiguration? autofillConfiguration,
     bool? enableDeltaModel,
+    PointerDeviceKind? deviceKind,
   }) {
     return TextInputConfiguration(
       viewId: viewId ?? this.viewId,
@@ -680,6 +683,7 @@ class TextInputConfiguration {
       allowedMimeTypes: allowedMimeTypes ?? this.allowedMimeTypes,
       autofillConfiguration: autofillConfiguration ?? this.autofillConfiguration,
       enableDeltaModel: enableDeltaModel ?? this.enableDeltaModel,
+      deviceKind: deviceKind ?? this.deviceKind,
     );
   }
 
@@ -708,6 +712,9 @@ class TextInputConfiguration {
   /// Defaults to false.
   final bool enableDeltaModel;
 
+  /// Defaults to PointerDeviceKind.unknown. Cannot be null.
+  final PointerDeviceKind deviceKind;
+
   /// Returns a representation of this object as a JSON object.
   Map<String, dynamic> toJson() {
     final Map<String, dynamic>? autofill = autofillConfiguration.toJson();
@@ -729,6 +736,7 @@ class TextInputConfiguration {
       'contentCommitMimeTypes': allowedMimeTypes,
       if (autofill != null) 'autofill': autofill,
       'enableDeltaModel' : enableDeltaModel,
+      'deviceKind' : deviceKind.index,
     };
   }
 }

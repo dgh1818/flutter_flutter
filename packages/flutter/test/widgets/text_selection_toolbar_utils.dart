@@ -40,6 +40,7 @@ void expectCupertinoToolbarForPartialSelection() {
 
   switch (defaultTargetPlatform) {
     case TargetPlatform.android:
+    case TargetPlatform.ohos:
       expect(find.byType(CupertinoButton), findsNWidgets(5));
       expect(find.text('Cut'), findsOneWidget);
       expect(find.text('Copy'), findsOneWidget);
@@ -80,6 +81,7 @@ void expectCupertinoToolbarForFullSelection() {
 
   switch (defaultTargetPlatform) {
     case TargetPlatform.android:
+    case TargetPlatform.ohos:
       expect(find.byType(CupertinoButton), findsNWidgets(4));
       expect(find.text('Cut'), findsOneWidget);
       expect(find.text('Copy'), findsOneWidget);
@@ -113,6 +115,7 @@ void expectCupertinoToolbarForCollapsedSelection() {
 
   switch (defaultTargetPlatform) {
     case TargetPlatform.android:
+    case TargetPlatform.ohos:
       expect(find.byType(CupertinoButton), findsNWidgets(4));
       expect(find.text('Cut'), findsOneWidget);
       expect(find.text('Copy'), findsOneWidget);
@@ -145,6 +148,7 @@ void expectMaterialToolbarForPartialSelection() {
 
   switch (defaultTargetPlatform) {
     case TargetPlatform.android:
+    case TargetPlatform.ohos:
       expect(find.byType(TextButton), findsNWidgets(5));
       expect(find.text('Cut'), findsOneWidget);
       expect(find.text('Copy'), findsOneWidget);
@@ -174,6 +178,7 @@ void expectMaterialToolbarForFullSelection() {
 
   switch (defaultTargetPlatform) {
     case TargetPlatform.android:
+    case TargetPlatform.ohos:
       expect(find.byType(TextButton), findsNWidgets(4));
       expect(find.text('Cut'), findsOneWidget);
       expect(find.text('Copy'), findsOneWidget);

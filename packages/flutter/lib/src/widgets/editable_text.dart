@@ -2111,6 +2111,7 @@ class EditableText extends StatefulWidget {
         case TargetPlatform.fuchsia:
         case TargetPlatform.linux:
         case TargetPlatform.windows:
+        case TargetPlatform.ohos:
           break;
       }
     }
@@ -2399,6 +2400,7 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         return textEditingValue.text.isNotEmpty
            && !(textEditingValue.selection.start == 0
                && textEditingValue.selection.end == textEditingValue.text.length);
@@ -2438,6 +2440,7 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         return false;
     }
   }
@@ -2489,6 +2492,7 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
         case TargetPlatform.linux:
         case TargetPlatform.windows:
           break;
+        case TargetPlatform.ohos:
         case TargetPlatform.android:
         case TargetPlatform.fuchsia:
           // Collapse the selection and hide the toolbar and handles.
@@ -2596,6 +2600,7 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
         case TargetPlatform.android:
         case TargetPlatform.iOS:
         case TargetPlatform.fuchsia:
+        case TargetPlatform.ohos:
           break;
         case TargetPlatform.macOS:
         case TargetPlatform.linux:
@@ -2607,6 +2612,7 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
         case TargetPlatform.fuchsia:
         case TargetPlatform.linux:
         case TargetPlatform.windows:
+        case TargetPlatform.ohos:
           bringIntoView(textEditingValue.selection.extent);
         case TargetPlatform.macOS:
         case TargetPlatform.iOS:
@@ -3021,7 +3027,7 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
       }
     }
 
-    if (defaultTargetPlatform != TargetPlatform.iOS && defaultTargetPlatform != TargetPlatform.android) {
+    if (defaultTargetPlatform != TargetPlatform.iOS && defaultTargetPlatform != TargetPlatform.android ) {
       return;
     }
 
@@ -3645,6 +3651,7 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
       }
       _lastKnownRemoteTextEditingValue = localValue;
     } else {
+      _textInputConnection!.updateConfig(_effectiveAutofillClient.textInputConfiguration);
       _textInputConnection!.show();
     }
   }
@@ -3777,7 +3784,8 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
     TargetPlatform.fuchsia ||
     TargetPlatform.linux ||
     TargetPlatform.macOS ||
-    TargetPlatform.windows => false,
+    TargetPlatform.windows ||
+    TargetPlatform.ohos => false,
   };
 
   bool _isInternalScrollableNotification(BuildContext? notificationContext) {
@@ -4231,6 +4239,7 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
       case TargetPlatform.windows:
       case TargetPlatform.fuchsia:
       case TargetPlatform.android:
+      case TargetPlatform.ohos:
         if (cause == SelectionChangedCause.drag) {
           if (oldSelection.baseOffset != newSelection.baseOffset) {
             bringIntoView(newSelection.base);
@@ -5111,6 +5120,7 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
       case TargetPlatform.android:
       case TargetPlatform.iOS:
       case TargetPlatform.fuchsia:
+      case TargetPlatform.ohos:
       // On mobile platforms, we don't unfocus on touch events unless they're
       // in the web browser, but we do unfocus for all other kinds of events.
         switch (event.kind) {
@@ -5118,6 +5128,7 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
             if (kIsWeb) {
               widget.focusNode.unfocus();
             }
+            break;
           case ui.PointerDeviceKind.mouse:
           case ui.PointerDeviceKind.stylus:
           case ui.PointerDeviceKind.invertedStylus:
@@ -5219,6 +5230,7 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
                       return false;
                     }
                   case TargetPlatform.android:
+                  case TargetPlatform.ohos:
                     // Gboard on Android puts non-CJK words in composing regions. Coalesce
                     // composing text in order to allow the saving of partial words in that
                     // case.
@@ -5348,7 +5360,7 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
       // Newer versions of iOS (iOS 15+) no longer reveal the most recently
       // entered character.
       const Set<TargetPlatform> mobilePlatforms = <TargetPlatform> {
-        TargetPlatform.android, TargetPlatform.fuchsia,
+        TargetPlatform.android, TargetPlatform.fuchsia, TargetPlatform.ohos
       };
       final bool brieflyShowPassword = WidgetsBinding.instance.platformDispatcher.brieflyShowPassword
                                     && mobilePlatforms.contains(defaultTargetPlatform);

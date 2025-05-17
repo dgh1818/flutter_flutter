@@ -114,6 +114,7 @@ class _PageViewExampleState extends State<PageViewExample> with TickerProviderSt
       case TargetPlatform.android:
       case TargetPlatform.iOS:
       case TargetPlatform.fuchsia:
+      case TargetPlatform.ohos:
         return false;
     }
   }
