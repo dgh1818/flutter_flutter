@@ -1,3 +1,13 @@
+
+## 说明
+当前hdr仅支持release模式
+如flutter enigne文件被华为云端文件替代，请手动替换以下文件
+替换以下目录文件：
+bin\cache\artifacts\engine\common
+bin\cache\artifacts\engine\ohos-arm64-release
+bin\cache\pkg
+
+
 Flutter SDK 仓库
 ==============
 
