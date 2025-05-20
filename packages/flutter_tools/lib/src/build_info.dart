@@ -848,10 +848,10 @@ String getNameForTargetPlatform(TargetPlatform platform, {DarwinArch? darwinArch
     TargetPlatform.tester         => 'flutter-tester',
     TargetPlatform.web_javascript => 'web-javascript',
     TargetPlatform.android        => 'android',
-    TargetPlatform.ohos        => 'ohos',
-    TargetPlatform.ohos_arm        => 'ohos-arm',
-    TargetPlatform.ohos_arm64        => 'ohos-arm64',
-    TargetPlatform.ohos_x64        => 'ohos-x64',
+    TargetPlatform.ohos           => 'ohos',
+    TargetPlatform.ohos_arm       => 'ohos-arm',
+    TargetPlatform.ohos_arm64     => 'ohos-arm64',
+    TargetPlatform.ohos_x64       => 'ohos-x64',
   };
 }
 
@@ -910,6 +910,17 @@ HostPlatform getCurrentHostPlatform() {
       DarwinArch.armv7 => throw Exception('Unsupported macOS arch "amv7"'),
     };
   }
+  if (globals.platform.isLinux) {
+    // support x64 and arm64 architecture.
+    return globals.os.hostPlatform;
+  }
+  if (globals.platform.isWindows) {
+    return HostPlatform.windows_x64;
+  }
+
+  globals.printWarning('Unsupported host platform, defaulting to Linux');
+
+  return HostPlatform.linux_x64;
 }
 
 OhosArch getOhosArchForName(String platform) {
@@ -937,20 +948,6 @@ String getPlatformNameForOhosArch(OhosArch arch) {
     OhosArch.x86_64      =>'ohos-x64' ,
     _ => throw Exception('Unsupported Ohos arch name "$arch"'),
   };
-}
-
-HostPlatform getCurrentHostPlatform() {
-  if (globals.platform.isLinux || globals.platform.isMacOS) {
-    // support x64 and arm64 architecture.
-    return globals.os.hostPlatform;
-  }
-  if (globals.platform.isWindows) {
-    return HostPlatform.windows_x64;
-  }
-
-  globals.printWarning('Unsupported host platform, defaulting to Linux');
-
-  return HostPlatform.linux_x64;
 }
 
 /// Returns the top-level build output directory.

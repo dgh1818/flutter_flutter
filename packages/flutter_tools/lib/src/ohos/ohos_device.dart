@@ -51,6 +51,7 @@ class OhosDevice extends Device {
           category: Category.mobile,
           platformType: PlatformType.ohos,
           ephemeral: true,
+          logger: logger,
         );
 
   final Logger _logger;

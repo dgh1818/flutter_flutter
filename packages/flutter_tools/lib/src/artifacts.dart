@@ -656,6 +656,7 @@ class CachedArtifacts implements Artifacts {
       case Artifact.windowsDesktopPath:
       case Artifact.flutterToolsFileGenerators:
       case Artifact.flutterPreviewDevice:
+      case Artifact.flutterEngineHar:
         return _getHostArtifactPath(artifact, platform, mode);
     }
   }
@@ -1151,7 +1152,7 @@ class CachedLocalEngineArtifacts implements Artifacts {
   FileSystemEntity getHostArtifact(
     HostArtifact artifact,
   ) {
-    if(isOhosLocalEngine() && hostArtifactList.contains(artifact)){
+    if (isOhosLocalEngine() && hostArtifactList.contains(artifact)){
       return _backupCache.getHostArtifact(artifact);
     }
     switch (artifact) {
@@ -1427,20 +1428,14 @@ class CachedLocalEngineArtifacts implements Artifacts {
   }
 
   String _flutterTesterPath(TargetPlatform platform) {
-    late List<String> clangDirs;
-    clangDirs = <String>['clang_x64', 'clang_arm64', '.', 'clang_x86', 'clang_i386'];
-    final String testerName = _artifactToFileName(Artifact.flutterTester, _platform)!;
-    if (_platform.isLinux || _platform.isMacOS || _platform.isWindows) {
-      for (final String clangDir in clangDirs) {
-        final String testerPath = _fileSystem.path.join(localEngineInfo.targetOutPath, clangDir, testerName);
-        if (_processManager.canRun(testerPath)) {
-          return testerPath;
-        }
-      }
-    } else {
-      throw Exception('Unsupported platform $platform.');
+    if (_platform.isLinux) {
+      return _fileSystem.path.join(localEngineInfo.targetOutPath, _artifactToFileName(Artifact.flutterTester, _platform));
+    } else if (_platform.isMacOS) {
+      return _fileSystem.path.join(localEngineInfo.targetOutPath, 'flutter_tester');
+    } else if (_platform.isWindows) {
+      return _fileSystem.path.join(localEngineInfo.targetOutPath, 'flutter_tester.exe');
     }
-    throw Exception('Unable to find $testerName');
+    throw Exception('Unsupported platform $platform.');
   }
 
   @override

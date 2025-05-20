@@ -334,6 +334,7 @@ Future<String> flutterAssemble(FlutterProject flutterProject,
         target,
         Environment(
           projectDir: globals.fs.currentDirectory,
+          packageConfigPath: ohosBuildInfo.buildInfo.packageConfigPath,
           outputDir: globals.fs.directory(output),
           buildDir: flutterProject.directory
               .childDirectory('.dart_tool')
