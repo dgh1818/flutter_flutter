@@ -293,6 +293,7 @@ class TargetPlatformVariant extends TestVariant<TargetPlatform> {
     TargetPlatform.android,
     TargetPlatform.iOS,
     TargetPlatform.fuchsia,
+    TargetPlatform.ohos,
   };
 
   /// Creates a [TargetPlatformVariant] that tests only the given value of

@@ -859,6 +859,10 @@ Target _getNativeTarget(build_info.TargetPlatform targetPlatform) {
     case build_info.TargetPlatform.android_arm64:
     case build_info.TargetPlatform.android_x64:
     case build_info.TargetPlatform.android_x86:
+    case build_info.TargetPlatform.ohos:
+    case build_info.TargetPlatform.ohos_arm:
+    case build_info.TargetPlatform.ohos_arm64:
+    case build_info.TargetPlatform.ohos_x64:
       throw Exception('Unknown targetPlatform: $targetPlatform.');
   }
 }
@@ -928,6 +932,12 @@ OSImpl _getNativeOSFromTargetPlatfrorm(build_info.TargetPlatform platform) {
     case build_info.TargetPlatform.android_x64:
     case build_info.TargetPlatform.android_x86:
       return OSImpl.android;
+    case build_info.TargetPlatform.ohos:
+    case build_info.TargetPlatform.ohos_arm:
+    case build_info.TargetPlatform.ohos_arm64:
+    case build_info.TargetPlatform.ohos_x64:
+      // todo: 修改为 OSImpl.ohos
+      return OSImpl.android;
     case build_info.TargetPlatform.tester:
       if (const LocalPlatform().isMacOS) {
         return OSImpl.macOS;
@@ -964,6 +974,10 @@ List<build_info.AndroidArch> _androidArchs(
           .split(' ')
           .map(build_info.getAndroidArchForName)
           .toList();
+    case build_info.TargetPlatform.ohos:
+    case build_info.TargetPlatform.ohos_arm:
+    case build_info.TargetPlatform.ohos_arm64:
+    case build_info.TargetPlatform.ohos_x64:
     case build_info.TargetPlatform.darwin:
     case build_info.TargetPlatform.fuchsia_arm64:
     case build_info.TargetPlatform.fuchsia_x64:

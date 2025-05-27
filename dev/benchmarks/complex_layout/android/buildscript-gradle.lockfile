@@ -48,6 +48,7 @@ com.android:zipflinger:8.1.0=classpath
 com.github.gundy:semver4j:0.16.4=classpath
 com.google.android:annotations:4.1.1.4=classpath
 com.google.api.grpc:proto-google-common-protos:2.0.1=classpath
+com.google.api.grpc:proto-google-common-protos:2.0.1=classpath
 com.google.auto.value:auto-value-annotations:1.6.2=classpath
 com.google.code.findbugs:jsr305:3.0.2=classpath
 com.google.code.gson:gson:2.8.9=classpath

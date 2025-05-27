@@ -31,6 +31,22 @@ import '../runner/flutter_command_runner.dart';
 /// The Object arg may be null.
 typedef PrintFn = void Function(Object);
 
+class CustomDevicesNotSupportCommand extends FlutterCommand {
+  @override
+  String get description => 'It will be supported later.';
+
+  @override
+  String get name => 'custom-devices';
+
+  @override
+  Future<FlutterCommandResult> runCommand() async {
+    throwToolExit('It will be supported later.');
+  }
+
+  @override
+  String get usage => description;
+}
+
 class CustomDevicesCommand extends FlutterCommand {
   factory CustomDevicesCommand({
     required CustomDevicesConfig customDevicesConfig,

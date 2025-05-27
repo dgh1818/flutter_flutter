@@ -18,6 +18,9 @@ abstract class FeatureFlags {
   /// const constructor so that subclasses can be const.
   const FeatureFlags();
 
+  /// Whether flutter desktop for ohos is enabled.
+  bool get isOhosEnabled => true;
+
   /// Whether flutter desktop for linux is enabled.
   bool get isLinuxEnabled => false;
 
@@ -62,6 +65,7 @@ abstract class FeatureFlags {
 
 /// All current Flutter feature flags.
 const List<Feature> allFeatures = <Feature>[
+  flutterOhosFeature,
   flutterWebFeature,
   flutterLinuxDesktopFeature,
   flutterMacOSDesktopFeature,
@@ -107,6 +111,24 @@ const Feature flutterWindowsDesktopFeature = Feature.fullyEnabled(
   name: 'support for desktop on Windows',
   configSetting: 'enable-windows-desktop',
   environmentOverride: 'FLUTTER_WINDOWS',
+);
+
+/// The [Feature] for Ohos devices.
+const Feature flutterOhosFeature = Feature(
+  name: 'Flutter for Ohos',
+  configSetting: 'enable-ohos',
+  master: FeatureChannelSetting(
+    available: true,
+    enabledByDefault: true,
+  ),
+  beta: FeatureChannelSetting(
+    available: true,
+    enabledByDefault: true,
+  ),
+  stable: FeatureChannelSetting(
+    available: true,
+    enabledByDefault: true,
+  ),
 );
 
 /// The [Feature] for Android devices.
@@ -205,15 +227,14 @@ const Feature swiftPackageManager = Feature(
 /// settings.
 class Feature {
   /// Creates a [Feature].
-  const Feature({
-    required this.name,
-    this.environmentOverride,
-    this.configSetting,
-    this.extraHelpText,
-    this.master = const FeatureChannelSetting(),
-    this.beta = const FeatureChannelSetting(),
-    this.stable = const FeatureChannelSetting()
-  });
+  const Feature(
+      {required this.name,
+      this.environmentOverride,
+      this.configSetting,
+      this.extraHelpText,
+      this.master = const FeatureChannelSetting(),
+      this.beta = const FeatureChannelSetting(),
+      this.stable = const FeatureChannelSetting()});
 
   /// Creates a [Feature] that is fully enabled across channels.
   const Feature.fullyEnabled(

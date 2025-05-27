@@ -33,7 +33,14 @@ void main() {
     List<String>? assets,
     List<(String path, String flavor)>? flavoredAssets,
   }) {
+  void writePubspecFile(
+    String path,
+    String name, {
+    List<String>? assets,
+    List<(String path, String flavor)>? flavoredAssets,
+  }) {
     String assetsSection;
+    if (assets == null && flavoredAssets == null) {
     if (assets == null && flavoredAssets == null) {
       assetsSection = '';
     } else {
@@ -44,10 +51,20 @@ flutter:
 ''');
 
       for (final String asset in (assets ?? <String>[])) {
+      for (final String asset in (assets ?? <String>[])) {
         buffer.write('''
        - $asset
 ''');
       }
+
+      for (final (String path, String flavor) in flavoredAssets ?? <(String, String)>[]) {
+        buffer.write('''
+       - path: $path
+         flavors:
+           - $flavor
+''');
+      }
+
 
       for (final (String path, String flavor) in flavoredAssets ?? <(String, String)>[]) {
         buffer.write('''
@@ -106,8 +123,15 @@ $assetsSection
     Map<Object, Object> expectedAssetManifest, {
     String? flavor,
   }) async {
+    Map<Object, Object> expectedAssetManifest, {
+    String? flavor,
+  }) async {
 
     final AssetBundle bundle = AssetBundleFactory.instance.createBundle();
+    await bundle.build(
+      packageConfigPath: '.dart_tool/package_config.json',
+      flavor: flavor,
+    );
     await bundle.build(
       packageConfigPath: '.dart_tool/package_config.json',
       flavor: flavor,
@@ -550,6 +574,73 @@ $assetsSection
       FileSystem: () => testFileSystem,
       ProcessManager: () => FakeProcessManager.any(),
     });
+
+    testUsingContext('Flavored assets are bundled when the app depends on a package', () async {
+      writePubspecFile(
+        'pubspec.yaml',
+        'test',
+      );
+      writePackageConfigFile(
+        <String, String>{
+          'test_package': 'p/p/',
+        },
+      );
+      writePubspecFile(
+        'p/p/pubspec.yaml',
+        'test_package',
+        flavoredAssets: <(String, String)>[('assets/vanilla.txt', 'vanilla')],
+      );
+
+      final List<String> assets = <String>['assets/vanilla.txt'];
+      writeAssets('p/p', assets);
+
+      const Map<Object, Object> expectedAssetManifest = <Object, Object>{
+        'packages/test_package/assets/vanilla.txt': <Map<String, Object>>[
+          <String, Object>{'asset': 'packages/test_package/assets/vanilla.txt'},
+        ]
+      };
+
+      await buildAndVerifyAssets(
+        assets,
+        <String>['test_package'],
+        expectedAssetManifest,
+        flavor: 'vanilla',
+      );
+    }, overrides: <Type, Generator>{
+      FileSystem: () => testFileSystem,
+      ProcessManager: () => FakeProcessManager.any(),
+    });
+  });
+
+  testUsingContext('Asset paths can contain URL reserved characters', () async {
+    writePubspecFile('pubspec.yaml', 'test');
+    writePackageConfigFile(<String, String>{'test_package': 'p/p/'});
+
+    final List<String> assets = <String>['a/foo', 'a/foo [x]'];
+    writePubspecFile(
+      'p/p/pubspec.yaml',
+      'test_package',
+      assets: assets,
+    );
+
+    writeAssets('p/p/', assets);
+    const Map<Object, Object> expectedAssetManifest = <Object, Object>{
+      'packages/test_package/a/foo': <Map<String, Object>>[
+        <String, Object>{'asset': 'packages/test_package/a/foo'}
+      ],
+      'packages/test_package/a/foo [x]': <Map<String, Object>>[
+        <String, Object>{'asset': 'packages/test_package/a/foo [x]'}
+      ]
+    };
+
+    await buildAndVerifyAssets(
+      assets,
+      <String>['test_package'],
+      expectedAssetManifest,
+    );
+  }, overrides: <Type, Generator>{
+    FileSystem: () => testFileSystem,
+      ProcessManager: () => FakeProcessManager.any(),
 
     testUsingContext('Flavored assets are bundled when the app depends on a package', () async {
       writePubspecFile(

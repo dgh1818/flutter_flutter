@@ -21,6 +21,7 @@ import '../flutter_manifest.dart';
 import '../flutter_project_metadata.dart';
 import '../globals.dart' as globals;
 import '../ios/code_signing.dart';
+import '../ohos/hvigor_utils.dart' as hvigor;
 import '../macos/swift_package_manager.dart';
 import '../macos/swift_packages.dart';
 import '../project.dart';
@@ -287,14 +288,16 @@ class CreateCommand extends CreateBase {
     final bool includeLinux;
     final bool includeMacos;
     final bool includeWindows;
+    final bool includeOhos;
     if (template == FlutterProjectType.module) {
-      // The module template only supports iOS and Android.
+      // The module template only supports iOS 、Android And OpenHarmony
       includeIos = true;
       includeAndroid = true;
       includeWeb = false;
       includeLinux = false;
       includeMacos = false;
       includeWindows = false;
+      includeOhos = true;
     } else if (template == FlutterProjectType.package) {
       // The package template does not supports any platform.
       includeIos = false;
@@ -303,6 +306,7 @@ class CreateCommand extends CreateBase {
       includeLinux = false;
       includeMacos = false;
       includeWindows = false;
+      includeOhos = false;
     } else {
       includeIos = featureFlags.isIOSEnabled && platforms.contains('ios');
       includeAndroid = featureFlags.isAndroidEnabled && platforms.contains('android');
@@ -310,6 +314,7 @@ class CreateCommand extends CreateBase {
       includeLinux = featureFlags.isLinuxEnabled && platforms.contains('linux');
       includeMacos = featureFlags.isMacOSEnabled && platforms.contains('macos');
       includeWindows = featureFlags.isWindowsEnabled && platforms.contains('windows');
+      includeOhos = featureFlags.isOhosEnabled && platforms.contains('ohos');
     }
 
     String? developmentTeam;
@@ -346,6 +351,7 @@ class CreateCommand extends CreateBase {
       linux: includeLinux,
       macos: includeMacos,
       windows: includeWindows,
+      ohos: includeOhos,
       dartSdkVersionBounds: '^$dartSdk',
       implementationTests: boolArg('implementation-tests'),
       agpVersion: gradle.templateAndroidGradlePluginVersion,
@@ -458,6 +464,7 @@ class CreateCommand extends CreateBase {
           macOSPlatform: includeMacos,
           windowsPlatform: includeWindows,
           webPlatform: includeWeb,
+          ohosPlatform: includeOhos,
         );
       }
     }
@@ -641,11 +648,17 @@ Your $application code is in $relativeAppMain.
         project: project, requireAndroidSdk: false);
     }
 
+    final bool generateOhos = templateContext['ohos'] == true;
+    if (generateOhos) {
+      hvigor.updateLocalProperties(project: project);
+    }
+
     final String organization = templateContext['organization']! as String; // Required to make the context.
     final String? androidPluginIdentifier = templateContext['androidIdentifier'] as String?;
     final String exampleProjectName = '${projectName}_example';
     templateContext['projectName'] = exampleProjectName;
     templateContext['androidIdentifier'] = CreateBase.createAndroidIdentifier(organization, exampleProjectName);
+    templateContext['ohosIdentifier'] = CreateBase.createAndroidIdentifier(organization, exampleProjectName);
     templateContext['iosIdentifier'] = CreateBase.createUTIIdentifier(organization, exampleProjectName);
     templateContext['macosIdentifier'] = CreateBase.createUTIIdentifier(organization, exampleProjectName);
     templateContext['windowsIdentifier'] = CreateBase.createWindowsIdentifier(organization, exampleProjectName);

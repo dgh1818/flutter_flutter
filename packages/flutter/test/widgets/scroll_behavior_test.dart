@@ -57,6 +57,7 @@ void main() {
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.iOS:
+      case TargetPlatform.ohos:
         // Does not throw if we aren't using it.
         defaultBehavior.buildScrollbar(capturedContext, child, details);
       case TargetPlatform.linux:

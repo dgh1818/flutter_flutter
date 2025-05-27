@@ -90,7 +90,7 @@ void main() {
       expect(builtWidget, isA<CupertinoTextMagnifier>());
     }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
 
-    testWidgets('should return null on all platforms not Android, iOS',
+    testWidgets('should return null on all platforms not Android, iOS, OpenHarmony',
         (WidgetTester tester) async {
       await tester.pumpWidget(const MaterialApp(
         home: Placeholder(),
@@ -112,7 +112,8 @@ void main() {
       variant: TargetPlatformVariant.all(
         excluding: <TargetPlatform>{
           TargetPlatform.iOS,
-          TargetPlatform.android
+          TargetPlatform.android,
+          TargetPlatform.ohos,
         }),
       );
   });

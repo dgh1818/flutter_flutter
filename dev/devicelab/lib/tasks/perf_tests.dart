@@ -1402,6 +1402,8 @@ class PerfTest {
             '--use-existing-app',
             existingApp
           ],
+          if (writeSkslFileName != null) ...<String>['--write-sksl-on-exit', writeSkslFileName],
+          if (cacheSkSL) '--cache-sksl',
           if (dartDefine.isNotEmpty) ...<String>['--dart-define', dartDefine],
           if (enableImpeller != null && enableImpeller!) '--enable-impeller',
           if (enableImpeller != null && !enableImpeller!)

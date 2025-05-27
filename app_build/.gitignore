@@ -1,0 +1,6 @@
+
+debug_out
+release_out
+__pycache__
+resource/.dart_tool
+/flutter_assets

@@ -6864,6 +6864,7 @@ void main() {
           // On Apple platforms, dragging the base handle makes it the extent.
           expect(controller.selection.baseOffset, testValue.length);
           expect(controller.selection.extentOffset, toOffset);
+        case TargetPlatform.ohos:
         case TargetPlatform.android:
         case TargetPlatform.fuchsia:
         case TargetPlatform.linux:
@@ -8748,6 +8749,7 @@ void main() {
         expect(controller.selection.baseOffset, 0);
 
       // Other platforms start from the previous selection.
+      case TargetPlatform.ohos:
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
@@ -8870,7 +8872,7 @@ void main() {
     );
     addTearDown(controller.dispose);
     final bool isTargetPlatformMobile = defaultTargetPlatform == TargetPlatform.android
-        || defaultTargetPlatform == TargetPlatform.fuchsia;
+        || defaultTargetPlatform == TargetPlatform.fuchsia || defaultTargetPlatform == TargetPlatform.ohos;
     await tester.pumpWidget(
       CupertinoApp(
         home: Center(
@@ -9086,7 +9088,7 @@ void main() {
     );
     addTearDown(controller.dispose);
     final bool isTargetPlatformMobile = defaultTargetPlatform == TargetPlatform.android
-        || defaultTargetPlatform == TargetPlatform.fuchsia;
+        || defaultTargetPlatform == TargetPlatform.fuchsia || defaultTargetPlatform == TargetPlatform.ohos;
     await tester.pumpWidget(
       CupertinoApp(
         home: Center(
@@ -9228,7 +9230,7 @@ void main() {
         expect(find.text('Cut'), findsOneWidget);
         expect(find.text('Copy'), findsOneWidget);
         expect(find.text('Paste'), findsOneWidget);
-
+      case TargetPlatform.ohos:
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
@@ -9252,7 +9254,7 @@ void main() {
         expect(find.text('Cut'), findsOneWidget);
         expect(find.text('Copy'), findsOneWidget);
         expect(find.text('Paste'), findsOneWidget);
-
+      case TargetPlatform.ohos:
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
@@ -9552,7 +9554,7 @@ void main() {
                 <TargetPlatform>{TargetPlatform.iOS, TargetPlatform.android}));
       });
 
-      testWidgets('should build nothing on all platforms but iOS and Android', (WidgetTester tester) async {
+      testWidgets('should build nothing on all platforms but iOS and Android、OpenHarmony', (WidgetTester tester) async {
         await tester.pumpWidget(const CupertinoApp(
           home: CupertinoTextField(),
         ));
@@ -9571,7 +9573,7 @@ void main() {
             isNull);
       },
           variant: TargetPlatformVariant.all(
-              excluding: <TargetPlatform>{TargetPlatform.iOS, TargetPlatform.android}));
+              excluding: <TargetPlatform>{TargetPlatform.iOS, TargetPlatform.android, TargetPlatform.ohos }));
     });
 
     testWidgets('Can drag handles to show, unshow, and update magnifier',

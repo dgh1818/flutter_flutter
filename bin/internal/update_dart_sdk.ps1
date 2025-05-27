@@ -20,7 +20,9 @@ $cachePath = "$flutterRoot\bin\cache"
 $dartSdkPath = "$cachePath\dart-sdk"
 $dartSdkLicense = "$cachePath\LICENSE.dart_sdk_archive.md"
 $engineStamp = "$cachePath\engine-dart-sdk.stamp"
-$engineVersion = (Get-Content "$flutterRoot\bin\internal\engine.version")
+$engineVersionFile = "engine.ohos.version"
+
+$engineVersion = (Get-Content "$flutterRoot\bin\internal\$engineVersionFile")
 $engineRealm = (Get-Content "$flutterRoot\bin\internal\engine.realm")
 
 $oldDartSdkPrefix = "dart-sdk.old"
@@ -40,14 +42,16 @@ if ((Test-Path $engineStamp) -and ($engineVersion -eq (Get-Content $engineStamp)
     return
 }
 
-$dartSdkBaseUrl = $Env:FLUTTER_STORAGE_BASE_URL
+$dartSdkBaseUrl = $Env:FLUTTER_OHOS_STORAGE_BASE_URL
 if (-not $dartSdkBaseUrl) {
-    $dartSdkBaseUrl = "https://storage.googleapis.com"
+    $dartSdkBaseUrl = "https://flutter-ohos.obs.cn-south-1.myhuaweicloud.com"
 }
 if ($engineRealm) {
     $dartSdkBaseUrl = "$dartSdkBaseUrl/$engineRealm"
 }
-
+if($Env:FLUTTER_OHOS_STORAGE_BASE_URL) {
+    $dartSdkBaseUrl = $Env:FLUTTER_OHOS_STORAGE_BASE_URL
+}
 # It's important to use the native Dart SDK as the default target architecture
 # for Flutter Windows builds depend on the Dart executable's architecture.
 $dartZipNameX64 = "dart-sdk-windows-x64.zip"
@@ -64,7 +68,7 @@ if ($env:PROCESSOR_ARCHITECTURE -eq "ARM64") {
     }
 }
 $dartSdkUrl = "$dartSdkBaseUrl/flutter_infra_release/flutter/$engineVersion/$dartZipName"
-
+Write-Host "dart-sdk-url: $dartSdkUrl"
 if ((Test-Path $dartSdkPath) -or (Test-Path $dartSdkLicense)) {
     # Move old SDK to a new location instead of deleting it in case it is still in use (e.g. by IntelliJ).
     $oldDartSdkSuffix = 1

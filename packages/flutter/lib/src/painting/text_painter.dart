@@ -1495,6 +1495,7 @@ class TextPainter {
     final List<TextBox> boxes = cachedLayout.paragraph
       .getBoxesForRange(graphemeRange.start, graphemeRange.end, boxHeightStyle: ui.BoxHeightStyle.strut);
 
+
     if (boxes.isNotEmpty) {
       final bool anchorToLeft = switch (glyphInfo.writingDirection) {
         TextDirection.ltr => anchorToLeadingEdge,

@@ -348,6 +348,9 @@ class AOTSnapshotter {
       TargetPlatform.linux_arm64,
       TargetPlatform.windows_x64,
       TargetPlatform.windows_arm64,
+      TargetPlatform.ohos_arm64,
+      TargetPlatform.ohos_arm,
+      TargetPlatform.ohos_x64,
     ].contains(platform);
   }
 }

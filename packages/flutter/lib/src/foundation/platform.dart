@@ -81,6 +81,9 @@ enum TargetPlatform {
 
   /// Windows: <https://www.windows.com>
   windows,
+
+  /// Ohos
+  ohos,
 }
 
 /// Override the [defaultTargetPlatform] in debug builds.

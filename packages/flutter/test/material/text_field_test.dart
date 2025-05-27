@@ -3296,6 +3296,7 @@ void main() {
       case TargetPlatform.macOS:
         expect(controller.selection.baseOffset, 11);
         expect(controller.selection.extentOffset, 2);
+      case TargetPlatform.ohos:
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
@@ -3324,6 +3325,7 @@ void main() {
         // The left handle was already the extent, and it remains so.
         expect(controller.selection.baseOffset, 11);
         expect(controller.selection.extentOffset, 0);
+      case TargetPlatform.ohos:
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
@@ -3401,6 +3403,7 @@ void main() {
       case TargetPlatform.macOS:
         expect(controller.selection.baseOffset, 11);
         expect(controller.selection.extentOffset, 2);
+      case TargetPlatform.ohos:
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
@@ -3429,6 +3432,7 @@ void main() {
         // The left handle was already the extent, and it remains so.
         expect(controller.selection.baseOffset, 11);
         expect(controller.selection.extentOffset, 0);
+      case TargetPlatform.ohos:
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
@@ -3519,6 +3523,7 @@ void main() {
         case TargetPlatform.fuchsia:
         case TargetPlatform.linux:
         case TargetPlatform.windows:
+        case TargetPlatform.ohos:
           expect(controller.selection.baseOffset, toOffset);
           expect(controller.selection.extentOffset, testValue.length);
       }
@@ -16409,6 +16414,7 @@ void main() {
         expect(controller.selection.baseOffset, 0);
 
       // Other platforms start from the previous selection.
+      case TargetPlatform.ohos:
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
@@ -16882,7 +16888,7 @@ void main() {
         expect(find.text('Cut'), findsOneWidget);
         expect(find.text('Copy'), findsOneWidget);
         expect(find.text('Paste'), findsOneWidget);
-
+      case TargetPlatform.ohos:
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
@@ -16907,7 +16913,7 @@ void main() {
         expect(find.text('Cut'), findsOneWidget);
         expect(find.text('Copy'), findsOneWidget);
         expect(find.text('Paste'), findsOneWidget);
-
+      case TargetPlatform.ohos:
       case TargetPlatform.android:
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
@@ -17335,7 +17341,7 @@ void main() {
             isA<CupertinoTextMagnifier>());
       }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
 
-      testWidgets('should build nothing on Android and iOS',
+      testWidgets('should build nothing on Android and iOS,OpenHarmony',
           (WidgetTester tester) async {
         await tester.pumpWidget(const MaterialApp(
           home: Scaffold(body: TextField()))
@@ -17356,7 +17362,8 @@ void main() {
       },
       variant: TargetPlatformVariant.all(excluding: <TargetPlatform>{
         TargetPlatform.iOS,
-        TargetPlatform.android
+        TargetPlatform.android,
+        TargetPlatform.ohos,
       }));
     });
   });
@@ -17846,6 +17853,7 @@ void main() {
         switch (pointerDeviceKind) {
           case PointerDeviceKind.touch:
             switch (defaultTargetPlatform) {
+              case TargetPlatform.ohos:
               case TargetPlatform.iOS:
               case TargetPlatform.android:
               case TargetPlatform.fuchsia:
@@ -17914,6 +17922,7 @@ void main() {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         expect(spellCheckToolbar, isA<SpellCheckSuggestionsToolbar>());
     }
   }, variant: const TargetPlatformVariant(<TargetPlatform>{ TargetPlatform.android, TargetPlatform.iOS }));
@@ -17936,6 +17945,7 @@ void main() {
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
+      case TargetPlatform.ohos:
         expectedConfiguration = SpellCheckConfiguration(
           misspelledTextStyle: TextField.materialMisspelledTextStyle,
           spellCheckService: DefaultSpellCheckService(),

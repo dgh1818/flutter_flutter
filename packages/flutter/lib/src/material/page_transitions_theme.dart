@@ -194,6 +194,82 @@ class _OpenUpwardsPageTransitionState extends State<_OpenUpwardsPageTransition> 
   }
 }
 
+
+// This transition is intended to match the default for Openharmony.
+class _OpenRightwardsPageTransition extends StatelessWidget {
+  const _OpenRightwardsPageTransition({
+    required this.animation,
+    required this.secondaryAnimation,
+    required this.child,
+  });
+
+  // The new page slides upwards just a little as its clip
+  // rectangle exposes the page from right to left.
+  static final Tween<Offset> _primaryTranslationTween = Tween<Offset>(
+    begin: const Offset(1.0, 0),
+    end: Offset.zero,
+  );
+
+  // The old page slides upwards a little as the new page appears.
+  static final Tween<Offset> _secondaryTranslationTween = Tween<Offset>(
+    begin: Offset.zero,
+    end: const Offset(-0.2, 0),
+  );
+
+  // Used by all of the transition animations.
+  static const Curve _transitionCurve = Cubic(0.20, 0.00, 0.00, 1.00);
+
+  final Animation<double> animation;
+  final Animation<double> secondaryAnimation;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final Size size = constraints.biggest;
+
+        final CurvedAnimation primaryAnimation = CurvedAnimation(
+          parent: animation,
+          curve: _transitionCurve,
+          reverseCurve: _transitionCurve.flipped,
+        );
+
+
+        final Animation<Offset> primaryTranslationAnimation = _primaryTranslationTween.animate(primaryAnimation);
+
+        final Animation<Offset> secondaryTranslationAnimation = _secondaryTranslationTween.animate(
+          CurvedAnimation(
+            parent: secondaryAnimation,
+            curve: _transitionCurve,
+            reverseCurve: _transitionCurve.flipped,
+          ),
+        );
+
+        return AnimatedBuilder(
+          animation: animation,
+          builder: (BuildContext context, Widget? child) {
+            return child ?? Container();
+          },
+          child: AnimatedBuilder(
+            animation: secondaryAnimation,
+            child: FractionalTranslation(
+              translation: primaryTranslationAnimation.value,
+              child: child,
+            ),
+            builder: (BuildContext context, Widget? child) {
+              return FractionalTranslation(
+                translation: secondaryTranslationAnimation.value,
+                child: child,
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+
 // Zooms and fades a new page in, zooming out the previous page. This transition
 // is designed to match the Android Q activity transition.
 class _ZoomPageTransition extends StatelessWidget {
@@ -646,6 +722,27 @@ class OpenUpwardsPageTransitionsBuilder extends PageTransitionsBuilder {
   }
 }
 
+class OpenRightwardsPageTransitionsBuilder extends PageTransitionsBuilder {
+  /// Constructs a page transition animation that matches the transition used on
+  /// Openharmony.
+  const OpenRightwardsPageTransitionsBuilder();
+
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T>? route,
+    BuildContext? context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return _OpenRightwardsPageTransition(
+      animation: animation,
+      secondaryAnimation: secondaryAnimation,
+      child: child,
+    );
+  }
+}
+
 /// Used by [PageTransitionsTheme] to define a zooming [MaterialPageRoute] page
 /// transition animation that looks like the default page transition used on
 /// Android Q.
@@ -851,6 +948,7 @@ class PageTransitionsTheme with Diagnosticable {
 
   static const Map<TargetPlatform, PageTransitionsBuilder> _defaultBuilders = <TargetPlatform, PageTransitionsBuilder>{
     TargetPlatform.android: ZoomPageTransitionsBuilder(),
+    TargetPlatform.ohos: OpenRightwardsPageTransitionsBuilder(),
     TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
     TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
   };
@@ -964,7 +1062,7 @@ class _PageTransitionsThemeTransitionsState<T> extends State<_PageTransitionsThe
 
     final PageTransitionsBuilder matchingBuilder = widget.builders[platform] ?? switch (platform) {
       TargetPlatform.iOS => const CupertinoPageTransitionsBuilder(),
-      TargetPlatform.android || TargetPlatform.fuchsia || TargetPlatform.windows || TargetPlatform.macOS || TargetPlatform.linux => const ZoomPageTransitionsBuilder(),
+      TargetPlatform.android || TargetPlatform.fuchsia || TargetPlatform.windows || TargetPlatform.macOS || TargetPlatform.linux || TargetPlatform.ohos => const ZoomPageTransitionsBuilder(),
     };
     return matchingBuilder.buildTransitions<T>(
       widget.route,
