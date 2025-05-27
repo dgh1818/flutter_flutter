@@ -750,7 +750,23 @@ enum AndroidArch {
 enum OhosArch {
   armeabi_v7a,
   arm64_v8a,
-  x86_64,
+  x86_64;
+
+  String get archName {
+    return switch (this) {
+      OhosArch.armeabi_v7a => 'armeabi-v7a',
+      OhosArch.arm64_v8a => 'arm64-v8a',
+      OhosArch.x86_64 => 'x86_64'
+    };
+  }
+
+  String get platformName {
+    return switch (this) {
+      OhosArch.armeabi_v7a => 'ohos-arm',
+      OhosArch.arm64_v8a => 'ohos-arm64',
+      OhosArch.x86_64 => 'ohos-x64'
+    };
+  }
 }
 
 

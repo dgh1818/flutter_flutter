@@ -5,22 +5,22 @@ Flutter SDK 仓库
 
 ## 仓库说明
 1. 本仓库是基于Flutter SDK对于OpenHarmony平台的兼容拓展，可支持IDE或者终端使用Flutter Tools指令编译和构建OpenHarmony应用程序。
-2. 本仓库基于Flutter官方社区3.22.0版本构建
+2. 本仓库基于Flutter官方社区3.27.4版本构建
    * [sdk基础版本链接](https://github.com/flutter/flutter/commit/5dcb86f68f239346676ceb1ed1ea385bd215fba1)
    * [engine基础版本链接](https://github.com/flutter/engine/commit/f6344b75dcf861d8bf1f1322780b8811f982e31a)
 
 ## 升级指导
-1. 如果您的项目希望从鸿蒙3.7.12版本升级到3.22.0版本
+1. 如果您的项目希望从鸿蒙3.7.12版本升级到3.27.4版本
    * 环境依赖：两者环境配置一致，无需额外修改
-   * 从3.7.12->3.22.0的官方特性新增与变更请参考[Release Notes](https://docs.flutter.dev/release/release-notes)
+   * 从3.7.12->3.27.4的官方特性新增与变更请参考[Release Notes](https://docs.flutter.dev/release/release-notes)
    * 官方兼容性变更请参考[升级指导](https://docs.flutter.dev/release/breaking-changes)
    * 兼容性变更说明请参考[变更说明](/release-notes/changelog/flutter3.7升级flutter3.22%20兼容性变更说明.md)
    * 渲染引擎：新增impeller-vulkan模式（默认，可切换为skia-gl）
    * 三方库
-      - 纯dart库请升级到指定版本以支持3.22.0
-      - [OpenHarmony-SIG/flutter_packages](https://gitcode.com/openharmony-sig/flutter_packages/blob/master/README.md)中的package在3.22.0版本已经过一轮简单的可用性测试，如果在您使用中有任何问题，烦请创建issue跟踪解决。
+      - 纯dart库请升级到指定版本以支持3.27.4
+      - [OpenHarmony-SIG/flutter_packages](https://gitcode.com/openharmony-sig/flutter_packages/blob/master/README.md)中的package在3.27.4版本已经过一轮简单的可用性测试，如果在您使用中有任何问题，烦请创建issue跟踪解决。
 
-2. 如果您的项目希望从安卓或ios等版本迁移到鸿蒙适配3.22.0版本，请参考剩余指导文档。
+2. 如果您的项目希望从安卓或ios等版本迁移到鸿蒙适配3.27.4版本，请参考剩余指导文档。
 
 ## 开发文档
 [参考文档](https://gitcode.com/openharmony-sig/flutter_samples/tree/master/ohos/docs)
@@ -48,7 +48,7 @@ Flutter SDK 仓库
        export PATH=$TOOL_HOME/tools/node/bin:$PATH # command-line-tools/tool/node/bin
       ```
 
-  2. 通过代码工具下载当前仓库代码`git clone https://gitcode.com/openharmony-sig/flutter_flutter.git`，指定3.22.0-ohos分支，并配置环境
+  2. 通过代码工具下载当前仓库代码`git clone https://gitcode.com/openharmony-sig/flutter_flutter.git`，指定 oh-3.27.4-dev 分支，并配置环境
 
      ```sh
       export PUB_CACHE=D:/PUB
@@ -145,6 +145,7 @@ Flutter SDK 仓库
 ### TAG说明
  - 3.7.12-ohos-X.X.X: 基于上游社区3.7.12分支适配ohos的X.X.X版本。
  - 3.22.1-ohos-X.X.X: 基于上游社区3.22.0分支适配ohos的X.X.X版本。
+ - 3.27.5-ohos-X.X.X: 基于上游社区3.27.4分支适配ohos的X.X.X版本。
 
 ## 已兼容OpenHarmony开发的指令列表
 | 指令名称   | 指令描述           | 使用说明                                                     |
@@ -330,7 +331,7 @@ Flutter SDK 仓库
     2. 模拟器暂不支持vulkan，请尝试构建步骤2.1，关闭impeller后重试
 
 20. flutter profile模式下编译或运行失败
-    1. 请在ohos项目build_profile.json5中添加buildModeSet字段，可参考[complex_layout](https://gitee.com/harmonycommando_flutter/flutter/blob/oh-3.22.0/dev/benchmarks/complex_layout/ohos/build-profile.json5)
+    1. 请在ohos项目build_profile.json5中添加buildModeSet字段，可参考[complex_layout](./dev/benchmarks/complex_layout/ohos/build-profile.json5)
     2. 报错信息:
       ```
       hvigor ERROR: Build mode 'profile' used in command line is not declared in buildModeSet in /xxx/example/ohos/build-profile.json5.

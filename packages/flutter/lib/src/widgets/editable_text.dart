@@ -4382,8 +4382,15 @@ class EditableTextState extends State<EditableText> with AutomaticKeepAliveClien
   TextSelection? _adjustedSelectionWhenFocused() {
     TextSelection? selection;
     final bool isDesktop = switch (defaultTargetPlatform) {
-      TargetPlatform.android || TargetPlatform.iOS || TargetPlatform.fuchsia => false,
-      TargetPlatform.macOS || TargetPlatform.linux || TargetPlatform.windows => true,
+      TargetPlatform.android ||
+      TargetPlatform.iOS ||
+      TargetPlatform.fuchsia ||
+      TargetPlatform.ohos =>
+        false,
+      TargetPlatform.macOS ||
+      TargetPlatform.linux ||
+      TargetPlatform.windows =>
+        true,
     };
     final bool shouldSelectAll = widget.selectionEnabled
         && (kIsWeb || isDesktop)

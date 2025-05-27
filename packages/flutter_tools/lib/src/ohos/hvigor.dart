@@ -133,7 +133,7 @@ String getProjectAssetsPath(String ohosRootPath, OhosProject ohosProject) {
 String getAppSoPath(
     String ohosRootPath, OhosArch ohosArch, OhosProject ohosProject) {
   return globals.fs.path.join(ohosProject.flutterModuleDirectory.path, 'libs',
-      getNameForOhosArch(ohosArch), APP_SO);
+      ohosArch.archName, APP_SO);
 }
 
 String getHvigorwPath(String ohosRootPath, {bool checkMod = false}) {
