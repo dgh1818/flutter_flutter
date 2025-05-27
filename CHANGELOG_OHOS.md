@@ -1,4 +1,6 @@
 # Changelog
+## 6.0.0.301
+- flutter3.27.4适配鸿蒙(engine:[cea23e09](https://gitcode.com/openharmony-tpc/flutter_engine/commit/cea23e09695b1daabf7e01537ef653e2c76ef26e?ref=oh-3.27.4-dev), sdk:[223e96a7](https://gitcode.com/openharmony-tpc/flutter_flutter/commit/223e96a76fe57cc8630ac561de11b99bb8d6427f?ref=oh-3.27.4-dev))
 ## 5.1.0.403SP1
 - Window内存泄露修复 (3.7:[4942fe4f](https://gitcode.com/openharmony-sig/flutter_engine/commit/4942fe4f8214c1139c4c839c4e78d9e52c613759?ref=xcomponent&prId=817), 3.22:[15e9ff7f](https://gitcode.com/openharmony-sig/flutter_engine/commit/15e9ff7faaac99db25014d9a7b3d15a0050ef1ac?ref=fix_window_leak&prId=796))
 - 修改外接纹理的内容时重新调度一帧 (3.22:[1d86f339](https://gitcode.com/openharmony-sig/flutter_engine/commit/1d86f33900d8690d5f2802d09b9a161ad2459e4f?ref=oh-3.22.0))
