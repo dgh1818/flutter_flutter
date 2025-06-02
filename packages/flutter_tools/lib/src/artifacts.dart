@@ -829,8 +829,8 @@ class CachedArtifacts implements Artifacts {
   String _getHostArtifactPath(Artifact artifact, TargetPlatform platform, BuildMode? mode) {
     switch (artifact) {
       case Artifact.genSnapshot:
-        if (platform == TargetPlatform.ohos_arm64) {
-          return _getAndroidArtifactPath(artifact, TargetPlatform.ohos_arm64, mode!);
+        if (platform.isOhos) {
+          return _getAndroidArtifactPath(artifact, platform, mode!);
         }
         // For script snapshots any gen_snapshot binary will do. Returning gen_snapshot for
         // android_arm in profile mode because it is available on all supported host platforms.
