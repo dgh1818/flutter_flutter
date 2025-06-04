@@ -696,6 +696,16 @@ enum TargetPlatform {
         throw UnsupportedError('Unexpected target platform $this');
     }
   }
+
+  bool get isOhos {
+    if (this == TargetPlatform.ohos ||
+        this == TargetPlatform.ohos_arm ||
+        this == TargetPlatform.ohos_arm64 ||
+        this == TargetPlatform.ohos_x64) {
+      return true;
+    }
+    return false;
+  }
 }
 
 /// iOS and macOS target device architecture.
