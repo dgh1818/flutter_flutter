@@ -1,4 +1,8 @@
 # Changelog
+## 6.0.0.302
+- 优化帧率投票；新增纹理投票 (3.22:[22d6147c](https://gitcode.com/openharmony-tpc/flutter_engine/commit/22d6147c5fe71b23f16734652b82d45d65f946e6?ref=ltpo_code_0604&prId=855))
+- 重构轴事件处理，适配更多场景 (3.27:[bdcd16cd](https://gitcode.com/openharmony-tpc/flutter_engine/commit/bdcd16cd33b6cb565bf1be04752ff417e7d5bf54?ref=oh-3.27.4-dev))
+- 修复web应用启动时，平台识别异常 (3.27:[3654ae13](https://gitcode.com/openharmony-tpc/flutter_engine/commit/3654ae13f45755995bafe92566ec92aa775ab962?ref=oh-3.27.4-dev&prId=852))
 ## 6.0.0.301
 - flutter3.27.4适配鸿蒙(engine:[cea23e09](https://gitcode.com/openharmony-tpc/flutter_engine/commit/cea23e09695b1daabf7e01537ef653e2c76ef26e?ref=oh-3.27.4-dev), sdk:[223e96a7](https://gitcode.com/openharmony-tpc/flutter_flutter/commit/223e96a76fe57cc8630ac561de11b99bb8d6427f?ref=oh-3.27.4-dev))
 ## 5.1.0.403SP1
